@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANGY – Angelo Parodi Copywriter</title>
+  <style>
+    :root {
+      --blue: #003399;
+      --yellow: #FFD600;
+      --blue-light: #0044cc;
+      --blue-dark: #002277;
+      --gray-light: #f4f6fb;
+      --gray: #e2e6f0;
+      --text: #1a1a2e;
+      --text-muted: #6b7280;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(0,51,153,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--gray-light);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--blue);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .logo-badge {
+      background: var(--yellow);
+      color: var(--blue);
+      font-weight: 900;
+      font-size: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    header h1 { font-size: 18px; font-weight: 700; line-height: 1.2; }
+    header p { font-size: 12px; opacity: 0.75; }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* LOGIN */
+    #login-view h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--blue);
+    }
+
+    #login-view p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--gray);
+      border-radius: 8px;
+      font-size: 16px;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="password"]:focus,
+    select:focus { border-color: var(--blue); }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper::after {
+      content: "▾";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--blue);
+      font-size: 16px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 16px;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+    }
+
+    .btn-primary:hover { background: var(--blue-light); }
+    .btn-primary:disabled {
+      background: var(--gray);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-generate {
+      background: var(--yellow);
+      color: var(--blue);
+      margin-top: 24px;
+    }
+
+    .btn-generate:hover { background: #e6c200; }
+    .btn-generate:disabled {
+      background: var(--gray);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .error-msg {
+      background: #fff0f0;
+      color: #c00;
+      border: 1px solid #fcc;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .error-msg.show { display: block; }
+
+    /* MAIN APP */
+    #app-view { display: none; }
+
+    #app-view h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+
+    #app-view .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    .spinner-yellow {
+      border: 3px solid rgba(0,51,153,0.2);
+      border-top-color: var(--blue);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* RISULTATI */
+    #results { margin-top: 28px; display: none; }
+
+    .result-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .result-box {
+      background: var(--gray-light);
+      border: 1.5px solid var(--gray);
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 14px;
+      line-height: 1.6;
+      position: relative;
+      margin-bottom: 16px;
+      word-break: break-word;
+    }
+
+    .result-box.copy-box {
+      border-color: var(--blue);
+      background: #f0f4ff;
+    }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 1px solid var(--gray);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .copy-btn.copied { border-color: #16a34a; color: #16a34a; }
+
+    .char-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .char-count.warn { color: #dc2626; }
+
+    .obiettivo-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-Interazione { background: #dbeafe; color: #1d4ed8; }
+    .badge-Traffico { background: #fef3c7; color: #92400e; }
+    .badge-Copertura { background: #d1fae5; color: #065f46; }
+
+    .divider {
+      height: 1px;
+      background: var(--gray);
+      margin: 24px 0;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    .logout-btn:hover { color: var(--text); }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* LOADING OVERLAY */
+    #loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,51,153,0.07);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    #loading-overlay.show { display: flex; }
+
+    .loading-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px 40px;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,51,153,0.15);
+    }
+
+    .loading-card .big-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--gray);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    .loading-card p { font-size: 15px; font-weight: 600; color: var(--blue); }
+    .loading-card small { font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">AN</div>
+  <div>
+    <h1>ANGY</h1>
+    <p>Copywriter AI – Angelo Parodi</p>
+  </div>
+</header>
+
+<main>
+  <!-- LOGIN -->
+  <div class="card" id="login-view">
+    <h2>Accesso team</h2>
+    <p>Inserisci la password condivisa per accedere alla generazione dei contenuti.</p>
+
+    <label for="password-input">Password</label>
+    <input
+      type="password"
+      id="password-input"
+      placeholder="••••••••"
+      autocomplete="current-password"
+    />
+
+    <div class="error-msg" id="login-error"></div>
+
+    <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">
+      Accedi
+    </button>
+  </div>
+
+  <!-- APP -->
+  <div class="card" id="app-view">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+      <h2>Genera contenuto</h2>
+      <button class="logout-btn" onclick="handleLogout()">Esci</button>
+    </div>
+    <p class="subtitle">Angelo Parodi · Scegli il formato e genera il copy</p>
+
+    <div class="form-group">
+      <label for="formato-select">Formato post</label>
+      <div class="select-wrapper">
+        <select id="formato-select">
+          <option value="Singolo">📷 Singolo</option>
+          <option value="Carosello">🎴 Carosello</option>
+          <option value="Reel">🎬 Reel</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="error-msg" id="gen-error"></div>
+
+    <button class="btn btn-generate" id="gen-btn" onclick="handleGenerate()">
+      ✨ Genera
+    </button>
+
+    <div id="results">
+      <div class="divider"></div>
+
+      <div class="result-label">Copy Instagram/Facebook</div>
+      <div class="result-box copy-box" id="res-copy">–</div>
+      <div class="char-count" id="res-copy-count"></div>
+      <button class="copy-btn" onclick="copyText('res-copy', this)">
+        📋 Copia copy
+      </button>
+
+      <div style="margin-top: 20px;">
+        <div class="result-label">Obiettivo</div>
+        <div class="result-box" id="res-obiettivo" style="padding: 10px 14px;">–</div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <div class="result-label">Brief per il grafico</div>
+        <div class="result-box" id="res-visual">–</div>
+        <button class="copy-btn" onclick="copyText('res-visual', this)">
+          📋 Copia brief visual
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="loading-overlay">
+  <div class="loading-card">
+    <div class="big-spinner"></div>
+    <p>ANGY sta scrivendo…</p>
+    <small>Controllo storico e generazione copy</small>
+  </div>
+</div>
+
+<footer>ANGY · Angelo Parodi © 2024 · Solo uso interno team</footer>
+
+<script>
+  // Configurazione — imposta questi valori dopo il deploy
+  const CONFIG = {
+    supabaseUrl: "INSERISCI_SUPABASE_URL",          // es. https://xxxx.supabase.co
+    supabaseAnonKey: "INSERISCI_SUPABASE_ANON_KEY", // anon/public key
+  };
+
+  const AUTH_FUNCTION = `${CONFIG.supabaseUrl}/functions/v1/auth`;
+  const GENERATE_FUNCTION = `${CONFIG.supabaseUrl}/functions/v1/generate`;
+
+  let authToken = null;
+
+  // Controlla sessione salvata
+  (function initSession() {
+    const saved = sessionStorage.getItem("angy_token");
+    const expiry = sessionStorage.getItem("angy_token_expiry");
+    if (saved && expiry && Date.now() < parseInt(expiry)) {
+      authToken = saved;
+      showApp();
+    }
+  })();
+
+  async function handleLogin() {
+    const input = document.getElementById("password-input");
+    const btn = document.getElementById("login-btn");
+    const errorEl = document.getElementById("login-error");
+
+    const password = input.value.trim();
+    if (!password) {
+      showError(errorEl, "Inserisci la password.");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Accesso…';
+    hideError(errorEl);
+
+    try {
+      const res = await fetch(AUTH_FUNCTION, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": CONFIG.supabaseAnonKey,
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showError(errorEl, data.error || "Errore durante il login.");
+        return;
+      }
+
+      authToken = data.token;
+      sessionStorage.setItem("angy_token", data.token);
+      sessionStorage.setItem("angy_token_expiry", String(data.expiresAt));
+      input.value = "";
+      showApp();
+    } catch (err) {
+      showError(errorEl, "Impossibile contattare il server. Riprova.");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "Accedi";
+    }
+  }
+
+  async function handleGenerate() {
+    const formato = document.getElementById("formato-select").value;
+    const btn = document.getElementById("gen-btn");
+    const errorEl = document.getElementById("gen-error");
+    const overlay = document.getElementById("loading-overlay");
+
+    if (!authToken) {
+      handleLogout();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner spinner-yellow"></span>Generazione…';
+    hideError(errorEl);
+    overlay.classList.add("show");
+
+    try {
+      const res = await fetch(GENERATE_FUNCTION, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": CONFIG.supabaseAnonKey,
+          "Authorization": `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ formato, cliente: "Angelo Parodi" }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          handleLogout();
+          return;
+        }
+        showError(errorEl, data.error || "Errore durante la generazione.");
+        return;
+      }
+
+      displayResults(data, formato);
+    } catch (err) {
+      showError(errorEl, "Errore di rete. Controlla la connessione e riprova.");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "✨ Genera";
+      overlay.classList.remove("show");
+    }
+  }
+
+  function displayResults(data, formato) {
+    const results = document.getElementById("results");
+    const copyEl = document.getElementById("res-copy");
+    const countEl = document.getElementById("res-copy-count");
+    const obEl = document.getElementById("res-obiettivo");
+    const visualEl = document.getElementById("res-visual");
+
+    copyEl.textContent = data.copy;
+
+    const len = data.copy.length;
+    countEl.textContent = `${len}/220 caratteri`;
+    countEl.className = "char-count" + (len > 200 ? " warn" : "");
+
+    const badge = document.createElement("span");
+    badge.textContent = data.obiettivo;
+    badge.className = `obiettivo-badge badge-${data.obiettivo}`;
+    obEl.innerHTML = "";
+    obEl.appendChild(badge);
+
+    visualEl.textContent = data.brief_visual;
+
+    results.style.display = "block";
+    results.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  async function copyText(elementId, btn) {
+    const text = document.getElementById(elementId).textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = "✅ Copiato!";
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.innerHTML = elementId === "res-copy" ? "📋 Copia copy" : "📋 Copia brief visual";
+        btn.classList.remove("copied");
+      }, 2000);
+    } catch {
+      // Fallback per browser vecchi
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      btn.textContent = "✅ Copiato!";
+      setTimeout(() => {
+        btn.innerHTML = elementId === "res-copy" ? "📋 Copia copy" : "📋 Copia brief visual";
+      }, 2000);
+    }
+  }
+
+  function showApp() {
+    document.getElementById("login-view").style.display = "none";
+    document.getElementById("app-view").style.display = "block";
+  }
+
+  function handleLogout() {
+    authToken = null;
+    sessionStorage.removeItem("angy_token");
+    sessionStorage.removeItem("angy_token_expiry");
+    document.getElementById("app-view").style.display = "none";
+    document.getElementById("login-view").style.display = "block";
+    document.getElementById("results").style.display = "none";
+  }
+
+  function showError(el, msg) {
+    el.textContent = msg;
+    el.classList.add("show");
+  }
+
+  function hideError(el) {
+    el.classList.remove("show");
+    el.textContent = "";
+  }
+
+  // Enter per login
+  document.getElementById("password-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleLogin();
+  });
+</script>
+
+</body>
+</html>

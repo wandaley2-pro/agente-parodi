@@ -1,0 +1,15 @@
+# Configurazione Supabase locale (per sviluppo)
+# Non committare valori reali — usa variabili ambiente in produzione
+
+[api]
+port = 54321
+
+[db]
+port = 54322
+
+[studio]
+port = 54323
+
+[functions]
+# Le Edge Functions sono in supabase/functions/
+verify_jwt = false  # Usiamo il nostro sistema di auth
