@@ -14,6 +14,7 @@
 2. Appunta: URL del progetto e le chiavi API (Settings → API)
 3. Vai su **SQL Editor** e incolla il contenuto di `supabase/migrations/001_init.sql`
 4. Clicca **Run** — verifica che le tabelle siano state create in **Table Editor**
+5. Ripeti con `supabase/migrations/002_hashtags_framework.sql` (hashtag del team + framework tracking)
 
 ---
 
@@ -42,6 +43,8 @@ supabase secrets set GEMINI_KEY="AIzaSy..."
 ```bash
 supabase functions deploy auth
 supabase functions deploy generate
+supabase functions deploy history
+supabase functions deploy memoria
 ```
 
 ### Verifica
