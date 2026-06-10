@@ -32,8 +32,6 @@
       background: var(--gray-light);
       color: var(--text);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -42,12 +40,8 @@
       background: rgba(255,255,255,0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(0,51,153,0.08);
-      padding: 0 18px;
+      border-bottom: 1px solid rgba(0,51,153,0.10);
       height: 68px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
       position: sticky;
       top: 0;
       z-index: 50;
@@ -66,10 +60,9 @@
       flex-shrink: 0;
       letter-spacing: -0.5px;
     }
-    header .brand-name { font-size: 17px; font-weight: 800; color: var(--blue); tracking: -0.3px; }
+    header .brand-name { font-size: 17px; font-weight: 800; color: var(--blue); letter-spacing: -0.3px; }
     header .brand-tag { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 1px; }
     .logout-btn {
-      margin-left: auto;
       background: rgba(0,51,153,0.06);
       border: 1px solid rgba(0,51,153,0.12);
       color: var(--blue);
@@ -80,76 +73,79 @@
       border-radius: 20px;
       font-family: inherit;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     .logout-btn:hover { background: rgba(0,51,153,0.12); }
 
-    /* ── LAYOUT ── */
-    main {
-      flex: 1;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 20px 16px 32px;
-    }
-    .card {
-      background: white;
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,51,153,0.06);
-      padding: 24px 22px;
-      width: 100%;
-      max-width: 560px;
-    }
-
-    /* ── LOGIN ── */
-    #login-view { max-width: 400px; }
-    .login-icon {
-      width: 64px; height: 64px;
-      background: var(--blue);
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; font-weight: 900; color: white;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 24px rgba(0,51,153,0.25);
-    }
-    #login-view h2 { font-size: 26px; font-weight: 900; color: var(--blue); line-height: 1.1; margin-bottom: 4px; letter-spacing: -0.5px; }
-    #login-view .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 26px; font-weight: 500; line-height: 1.5; }
-    #login-view .subtitle strong { color: var(--blue); }
-
-    /* ── APP VIEW ── */
-    #app-view { display: none; width: 100%; max-width: 560px; }
-
-    /* ── TABS ── */
-    .tabs {
-      display: flex;
-      gap: 3px;
-      margin-bottom: 22px;
-      background: #EFF3FB;
-      border-radius: 16px;
-      padding: 5px;
-    }
-    .tab {
-      flex: 1;
-      padding: 9px 4px;
-      border: none;
-      background: transparent;
-      border-radius: 12px;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.2s;
+    /* Nav links header */
+    .nav-link {
+      position: relative; padding: 8px 4px; font-weight: 700; font-size: 14px;
+      color: #003399; opacity: 0.65; transition: opacity 0.2s;
+      background: none; border: none; cursor: pointer; font-family: inherit;
       white-space: nowrap;
-      font-family: inherit;
     }
-    .tab.active {
-      background: var(--blue);
-      color: white;
-      box-shadow: 0 3px 10px rgba(0,51,153,0.22);
+    .nav-link:hover, .nav-link.active { opacity: 1; }
+    .nav-link::after {
+      content: ''; position: absolute; left: 0; bottom: -4px;
+      width: 0; height: 3px; background: #FFD600; border-radius: 3px; transition: width 0.3s;
     }
-    .tab:hover:not(.active) { color: var(--blue); background: rgba(0,51,153,0.06); }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+    /* Mobile bottom nav */
+    .mobile-nav-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 6px 4px; background: none; border: none; cursor: pointer;
+      font-family: inherit; font-size: 10px; font-weight: 700; color: #64748b;
+      border-radius: 10px; transition: all 0.15s;
+    }
+    .mobile-nav-btn .nav-icon { font-size: 20px; line-height: 1; }
+    .mobile-nav-btn.active { color: #003399; }
+
+    /* Section cards per i tab */
+    .section-card {
+      background: white; border-radius: 24px; border: 1px solid rgba(0,51,153,0.07);
+      box-shadow: 0 4px 20px rgba(0,51,153,0.06); padding: 22px;
+    }
+    .section-card-header {
+      font-size: 15px; font-weight: 800; color: #003399; margin-bottom: 6px; letter-spacing: -0.3px;
+    }
+    .section-card-hint {
+      font-size: 12px; color: #64748b; margin-bottom: 14px; line-height: 1.55; font-weight: 500;
+    }
+
+    /* Results placeholder */
+    .results-placeholder {
+      background: white; border-radius: 24px; border: 2px dashed rgba(0,51,153,0.12);
+      padding: 48px 24px; text-align: center; min-height: 320px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    }
+    .results-placeholder .ph-icon { font-size: 48px; opacity: 0.3; }
+    .results-placeholder p { font-size: 15px; font-weight: 700; color: #003399; opacity: 0.5; }
+    .results-placeholder small { font-size: 13px; color: #64748b; font-weight: 500; }
+
+    /* Panel container */
+    .panel-container { max-width: 1280px; margin: 0 auto; padding: 28px 24px 48px; }
+    @media (max-width: 640px) { .panel-container { padding: 16px 14px 80px; } }
+
+    /* Storico list grid */
+    #storico-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+    @media (max-width: 640px) { #storico-list { grid-template-columns: 1fr; } }
+
+    /* Body with logged-in padding for mobile nav */
+    body.app-active { padding-bottom: 0; }
+    @media (max-width: 767px) { body.app-active { padding-bottom: 68px; } }
+
+    /* Genera: 2 col desktop → 1 col mobile */
+    .genera-grid { display: grid; grid-template-columns: 420px 1fr; gap: 28px; align-items: start; }
+    @media (max-width: 900px) { .genera-grid { grid-template-columns: 1fr; } }
+
+    /* Oggi: 3 col desktop → 1 col mobile */
+    .oggi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: start; }
+    @media (max-width: 900px) { .oggi-grid { grid-template-columns: 1fr; } }
+
+    /* Memoria: 2 col desktop → 1 col mobile */
+    .memoria-grid { display: grid; grid-template-columns: 1fr 360px; gap: 22px; align-items: start; }
+    @media (max-width: 900px) { .memoria-grid { grid-template-columns: 1fr; } }
 
     /* ── FORMS ── */
     label {
@@ -422,7 +418,7 @@
     .news-item .n-link:hover { border-color: var(--blue); color: var(--blue); }
 
     /* ── RESULTS ── */
-    #results { margin-top: 22px; display: none; }
+    #results { margin-top: 0; display: none; }
     .result-label {
       font-size: 11px;
       font-weight: 800;
@@ -511,7 +507,7 @@
       border: 1.5px solid rgba(0,51,153,0.08);
       border-radius: 18px;
       padding: 14px 15px;
-      margin-bottom: 12px;
+      margin-bottom: 0;
       background: white;
       box-shadow: var(--shadow-sm);
     }
@@ -710,15 +706,32 @@
       margin-bottom: 6px;
     }
 
-    /* ── FOOTER ── */
-    footer {
-      text-align: center;
-      padding: 14px;
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 600;
-      letter-spacing: 0.3px;
+    /* ── TAB PANELS ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── LOGIN CARD ── */
+    .login-card {
+      background: white;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,51,153,0.06);
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 400px;
     }
+    .login-icon {
+      width: 64px; height: 64px;
+      background: var(--blue);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 900; color: white;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0,51,153,0.25);
+    }
+    #login-view h2 { font-size: 26px; font-weight: 900; color: var(--blue); line-height: 1.1; margin-bottom: 4px; letter-spacing: -0.5px; }
+    #login-view .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 26px; font-weight: 500; line-height: 1.5; }
+    #login-view .subtitle strong { color: var(--blue); }
 
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; }
@@ -728,18 +741,32 @@
 </head>
 <body>
 
+<!-- ── HEADER ── -->
 <header>
-  <div class="logo-badge">AN</div>
-  <div>
-    <div class="brand-name">ANGY</div>
-    <div class="brand-tag">Copywriter AI · Angelo Parodi</div>
+  <div style="max-width:1280px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; justify-content:space-between; position:relative;">
+    <!-- Logo -->
+    <div style="display:flex; align-items:center; gap:12px; flex-shrink:0;">
+      <div class="logo-badge">AN</div>
+      <div>
+        <div class="brand-name">ANGY</div>
+        <div class="brand-tag">Copywriter AI · Angelo Parodi</div>
+      </div>
+    </div>
+    <!-- Desktop nav (centrata assoluta) -->
+    <nav style="display:none; position:absolute; left:50%; transform:translateX(-50%); gap:28px;" id="desktop-nav">
+      <button data-tab="genera" class="nav-link active" onclick="switchTab('genera')">✨ Genera</button>
+      <button data-tab="trend" class="nav-link" onclick="switchTab('trend')">📰 Oggi</button>
+      <button data-tab="storico" class="nav-link" onclick="switchTab('storico')">📋 Storico</button>
+      <button data-tab="memoria" class="nav-link" onclick="switchTab('memoria')">🧠 Memoria</button>
+    </nav>
+    <!-- Logout -->
+    <button class="logout-btn" id="header-logout" style="display:none;" onclick="handleLogout()">Esci</button>
   </div>
-  <button class="logout-btn" id="header-logout" style="display:none" onclick="handleLogout()">Esci</button>
 </header>
 
-<main>
-  <!-- ─── LOGIN ─── -->
-  <div class="card" id="login-view">
+<!-- ── LOGIN ── -->
+<div id="login-view" style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#F8FAFC; z-index:60; padding:20px;">
+  <div class="login-card">
     <div class="login-icon">AN</div>
     <h2>Ciao, team 👋</h2>
     <p class="subtitle">Inserisci la password condivisa per accedere ad <strong>ANGY</strong>, il tuo copywriter AI.</p>
@@ -751,200 +778,235 @@
       Angelo Parodi · Solo uso interno team · Dal 1888
     </p>
   </div>
+</div>
 
-  <!-- ─── APP ─── -->
-  <div id="app-view">
-    <div class="card">
-      <div class="tabs">
-        <button class="tab active" data-tab="genera" onclick="switchTab('genera')">✨ Genera</button>
-        <button class="tab" data-tab="trend" onclick="switchTab('trend')">📰 Oggi</button>
-        <button class="tab" data-tab="storico" onclick="switchTab('storico')">📋 Storico</button>
-        <button class="tab" data-tab="memoria" onclick="switchTab('memoria')">🧠 Memoria</button>
+<!-- ── APP ── -->
+<div id="app-view" style="display:none;">
+
+  <!-- ── TAB GENERA ── -->
+  <div class="tab-panel active" id="panel-genera">
+    <div class="panel-container">
+      <div class="genera-grid">
+
+        <!-- Colonna sinistra: form -->
+        <div>
+          <!-- Aforisma -->
+          <div class="aforisma-box" id="aforisma-box" style="display:none;">
+            <button class="next-btn" onclick="nextAforisma()" title="Prossimo">↻</button>
+            <div class="quote" id="aforisma-testo"></div>
+            <div class="autore" id="aforisma-autore"></div>
+          </div>
+
+          <!-- Promemoria giornata -->
+          <div id="giornata-banner" style="display:none; margin-bottom:16px; background:rgba(0,51,153,0.05); border:1.5px solid rgba(0,51,153,0.18); border-radius:18px; padding:14px 16px;">
+            <div style="font-size:13px; font-weight:800; color:var(--blue); margin-bottom:4px;" id="giornata-banner-title"></div>
+            <div style="font-size:13px; color:var(--text); line-height:1.5; margin-bottom:10px; font-weight:500;" id="giornata-banner-idea"></div>
+            <button class="btn-sm btn btn-primary" style="padding:8px 16px; margin:0;" onclick="useGiornataBanner()">✨ Usa per questo post</button>
+          </div>
+
+          <!-- Trend selezionato -->
+          <div id="trend-selected-bar" style="display:none; margin-bottom:16px;">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:7px;">Trend attivo per questa generazione</div>
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span class="trend-chip selected" id="trend-selected-chip" style="cursor:default; flex:1; font-family:inherit;"></span>
+              <button onclick="clearTrend()" style="background:rgba(0,51,153,0.06);border:1.5px solid rgba(0,51,153,0.12);cursor:pointer;color:var(--blue);font-size:16px;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;" title="Rimuovi trend">✕</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:18px;">
+            <label for="formato-select">Formato post</label>
+            <div class="select-wrap">
+              <select id="formato-select">
+                <option value="Singolo">📷 Singolo</option>
+                <option value="Carosello">🎴 Carosello</option>
+                <option value="Reel">🎬 Reel</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="msg msg-error" id="gen-error"></div>
+
+          <button class="btn btn-generate" id="gen-btn" onclick="handleGenerate(false)">✨ Genera il post</button>
+        </div>
+
+        <!-- Colonna destra: results -->
+        <div>
+          <div id="results-placeholder" class="results-placeholder">
+            <div class="ph-icon">✨</div>
+            <p>Premi Genera per il tuo prossimo post</p>
+            <small>ANGY leggerà la strategia, i trend e la memoria del brand</small>
+          </div>
+
+          <div id="results" style="display:none;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center;">
+              <span class="badge" id="res-ob-badge"></span>
+              <span class="badge badge-fw" id="res-fw-badge"></span>
+            </div>
+
+            <div class="result-label">Copy Instagram / Facebook</div>
+            <div class="result-box copy-box" id="res-copy">–</div>
+            <div class="char-count" id="res-copy-count"></div>
+            <button class="copy-btn" onclick="copyEl('res-copy', this, 'Copia copy')">📋 Copia copy</button>
+
+            <div style="margin-top:18px;">
+              <div class="result-label">Hashtag <span style="font-weight:500;text-transform:none;letter-spacing:0;font-size:11px;">(modificabili)</span></div>
+              <textarea id="res-hashtags" rows="2"></textarea>
+              <button class="copy-btn" onclick="copyTA('res-hashtags', this, 'Copia hashtag')">📋 Copia hashtag</button>
+            </div>
+
+            <div style="margin-top:18px;">
+              <div class="result-label">Brief per il grafico</div>
+              <div class="result-box" id="res-visual">–</div>
+              <button class="copy-btn" onclick="copyEl('res-visual', this, 'Copia brief')">📋 Copia brief visual</button>
+            </div>
+
+            <div style="margin-top:18px;">
+              <div class="result-label">Cerca ispirazione visiva 🔍</div>
+              <p style="font-size:12px; color:var(--text-muted); margin-bottom:9px; font-weight:500;">Clicca una keyword per cercare su Pinterest</p>
+              <div class="kw-chips" id="res-kw-chips"></div>
+            </div>
+
+            <button class="btn btn-rigenera" id="rigenera-btn" onclick="handleGenerate(true)" style="margin-top:20px;">
+              🔄 Non mi piace, rigenera
+            </button>
+            <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:7px; font-weight:500;">
+              Rigenerando, il post scartato viene sovrascritto — non sporca lo storico.
+            </p>
+          </div>
+        </div>
+
       </div>
-
-      <!-- ─── TAB GENERA ─── -->
-      <div class="tab-panel active" id="panel-genera">
-
-        <!-- Aforisma -->
-        <div class="aforisma-box" id="aforisma-box" style="display:none">
-          <button class="next-btn" onclick="nextAforisma()" title="Prossimo">↻</button>
-          <div class="quote" id="aforisma-testo"></div>
-          <div class="autore" id="aforisma-autore"></div>
-        </div>
-
-        <!-- Promemoria giornata -->
-        <div id="giornata-banner" style="display:none; margin-bottom:16px; background:rgba(0,51,153,0.05); border:1.5px solid rgba(0,51,153,0.18); border-radius:18px; padding:14px 16px">
-          <div style="font-size:13px; font-weight:800; color:var(--blue); margin-bottom:4px" id="giornata-banner-title"></div>
-          <div style="font-size:13px; color:var(--text); line-height:1.5; margin-bottom:10px; font-weight:500" id="giornata-banner-idea"></div>
-          <button class="btn-sm btn btn-primary" style="padding:8px 16px; margin:0" onclick="useGiornataBanner()">✨ Usa per questo post</button>
-        </div>
-
-        <!-- Trend selezionato -->
-        <div id="trend-selected-bar" style="display:none; margin-bottom:16px">
-          <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:7px">Trend attivo per questa generazione</div>
-          <div style="display:flex; align-items:center; gap:9px">
-            <span class="trend-chip selected" id="trend-selected-chip" style="cursor:default; flex:1; font-family:inherit"></span>
-            <button onclick="clearTrend()" style="background:rgba(0,51,153,0.06);border:1.5px solid rgba(0,51,153,0.12);cursor:pointer;color:var(--blue);font-size:16px;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;" title="Rimuovi trend">✕</button>
-          </div>
-        </div>
-
-        <div style="margin-bottom:18px">
-          <label for="formato-select">Formato post</label>
-          <div class="select-wrap">
-            <select id="formato-select">
-              <option value="Singolo">📷 Singolo</option>
-              <option value="Carosello">🎴 Carosello</option>
-              <option value="Reel">🎬 Reel</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="msg msg-error" id="gen-error"></div>
-
-        <button class="btn btn-generate" id="gen-btn" onclick="handleGenerate(false)">✨ Genera il post</button>
-
-        <!-- RESULTS -->
-        <div id="results">
-          <div class="divider"></div>
-
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center">
-            <span class="badge" id="res-ob-badge"></span>
-            <span class="badge badge-fw" id="res-fw-badge"></span>
-          </div>
-
-          <div class="result-label">Copy Instagram / Facebook</div>
-          <div class="result-box copy-box" id="res-copy">–</div>
-          <div class="char-count" id="res-copy-count"></div>
-          <button class="copy-btn" onclick="copyEl('res-copy', this, 'Copia copy')">📋 Copia copy</button>
-
-          <div style="margin-top:18px">
-            <div class="result-label">Hashtag <span style="font-weight:500;text-transform:none;letter-spacing:0;font-size:11px">(modificabili)</span></div>
-            <textarea id="res-hashtags" rows="2"></textarea>
-            <button class="copy-btn" onclick="copyTA('res-hashtags', this, 'Copia hashtag')">📋 Copia hashtag</button>
-          </div>
-
-          <div style="margin-top:18px">
-            <div class="result-label">Brief per il grafico</div>
-            <div class="result-box" id="res-visual">–</div>
-            <button class="copy-btn" onclick="copyEl('res-visual', this, 'Copia brief')">📋 Copia brief visual</button>
-          </div>
-
-          <div style="margin-top:18px">
-            <div class="result-label">Cerca ispirazione visiva 🔍</div>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:9px; font-weight:500">Clicca una keyword per cercare su Pinterest</p>
-            <div class="kw-chips" id="res-kw-chips"></div>
-          </div>
-
-          <button class="btn btn-rigenera" id="rigenera-btn" onclick="handleGenerate(true)" style="margin-top:20px">
-            🔄 Non mi piace, rigenera
-          </button>
-          <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:7px; font-weight:500">
-            Rigenerando, il post scartato viene sovrascritto — non sporca lo storico.
-          </p>
-        </div>
-      </div>
-
-      <!-- ─── TAB OGGI ─── -->
-      <div class="tab-panel" id="panel-trend">
-
-        <!-- GIORNATE -->
-        <div class="section-title">📅 Giornate da non perdere</div>
-        <p class="hint">Calendario delle giornate nazionali e internazionali rilevanti per Angelo Parodi. Clicca una giornata vicina per usarla come tema del prossimo post.</p>
-        <div id="giornate-oggi"></div>
-        <div id="giornate-list"><div class="empty-state">Caricamento…</div></div>
-        <button class="btn-sm btn btn-rigenera" id="giornate-toggle-btn" onclick="toggleCalendario()" style="margin-top:8px; padding:9px 16px">
-          📆 Mostra calendario completo
-        </button>
-
-        <div class="divider"></div>
-
-        <!-- NEWS -->
-        <div class="section-title">📰 News del giorno</div>
-        <p class="hint">Notizie verificate con link ufficiale da <strong>Gambero Rosso</strong>, <strong>Il Fatto Alimentare</strong> e <strong>Ninja Marketing</strong>. Filtrate da ANGY per rilevanza al brand.</p>
-        <div class="msg msg-error" id="news-error"></div>
-        <div id="news-list"><div class="empty-state">Premi "Aggiorna news" per le notizie di oggi.</div></div>
-        <button class="btn btn-primary" id="news-load-btn" onclick="loadNews()" style="margin-top:12px">
-          📡 Aggiorna news
-        </button>
-
-        <div class="divider"></div>
-
-        <!-- TREND -->
-        <div class="section-title">📈 Trend creativi</div>
-        <p class="hint">ANGY legge le fonti food italiane e identifica i trend da cavalcare. Seleziona un trend per usarlo nella prossima generazione.</p>
-        <div class="msg msg-error" id="trend-error"></div>
-        <div id="trend-list"><div class="empty-state">Premi "Aggiorna trend" per caricare i dati.</div></div>
-        <button class="btn btn-primary" id="trend-load-btn" onclick="loadTrends()" style="margin-top:12px">
-          📡 Aggiorna trend
-        </button>
-      </div>
-
-      <!-- ─── TAB STORICO ─── -->
-      <div class="tab-panel" id="panel-storico">
-        <p class="hint">Ultimi 20 post. Approva i pubblicati, scarta gli abbandonati: ANGY evita di ripetersi.</p>
-        <div class="msg msg-error" id="storico-error"></div>
-        <div id="storico-list"><div class="empty-state">Caricamento…</div></div>
-      </div>
-
-      <!-- ─── TAB MEMORIA ─── -->
-      <div class="tab-panel" id="panel-memoria">
-
-        <div style="background:#fefce8; border:1.5px solid #fde68a; border-radius:14px; padding:13px 15px; margin-bottom:18px; font-size:13px; color:#92400e; line-height:1.55; font-weight:500">
-          💡 <strong>Aforismi</strong>: ANGY ne ha 22 caricati — appaiono a rotazione nel tab Genera come spunto creativo. Per aggiungerne: Supabase → Table Editor → angy_aforismi.
-        </div>
-
-        <!-- STRATEGIA -->
-        <div class="section-title">Strategia editoriale</div>
-        <p class="hint">Queste linee guida vengono iniettate nel prompt di ANGY ad ogni generazione. Modificale per allinearle al piano operativo corrente.</p>
-        <div id="strat-list"><div class="empty-state">Caricamento…</div></div>
-
-        <div style="margin-top:14px; border:2px dashed rgba(0,51,153,0.15); border-radius:16px; padding:14px">
-          <div style="font-size:11px; font-weight:800; color:var(--text-muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.8px">Aggiungi sezione strategia</div>
-          <input type="text" id="new-strat-sezione" placeholder="Nome sezione (es. Campagna estiva)" style="margin-bottom:9px" />
-          <textarea id="new-strat-contenuto" placeholder="Contenuto della sezione strategica…" rows="3"></textarea>
-          <button class="btn btn-primary btn-sm" onclick="addStrategia()" style="margin-top:10px; padding:9px 18px">Aggiungi</button>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- REGOLE -->
-        <div class="section-title">Regole di ANGY</div>
-        <p class="hint">Tono, parole vietate, indicazioni di brand. Spegni una regola per sospenderla senza cancellarla.</p>
-        <div id="note-list"><div class="empty-state">Caricamento…</div></div>
-        <div class="add-row" style="margin-top:12px">
-          <input type="text" id="new-nota" placeholder="Nuova regola, es: cita sempre la pesca sostenibile" />
-        </div>
-        <div class="add-row">
-          <div class="select-wrap" style="flex:1">
-            <select id="new-nota-tipo">
-              <option value="tono">Tono</option>
-              <option value="brand">Brand</option>
-              <option value="compliance">Compliance</option>
-              <option value="da_ricordare">Da ricordare</option>
-            </select>
-          </div>
-          <button class="btn btn-primary" onclick="addNota()">Aggiungi</button>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- HASHTAG -->
-        <div class="section-title">Hashtag fissi del brand</div>
-        <p class="hint">Inclusi automaticamente in ogni post. I colleghi possono aggiungere variazioni qui.</p>
-        <div id="hashtag-list"><div class="empty-state">Caricamento…</div></div>
-        <div class="add-row" style="margin-top:12px">
-          <input type="text" id="new-hashtag" placeholder="#nuovohashtag" />
-          <button class="btn btn-primary" onclick="addHashtag()">Aggiungi</button>
-        </div>
-
-        <div class="msg msg-error" id="memoria-error"></div>
-        <div class="msg msg-success" id="memoria-success"></div>
-      </div>
-
     </div>
   </div>
-</main>
 
+  <!-- ── TAB OGGI ── -->
+  <div class="tab-panel" id="panel-trend">
+    <div class="panel-container">
+      <div class="oggi-grid">
+
+        <!-- Giornate -->
+        <div class="section-card">
+          <div class="section-card-header">📅 Giornate da non perdere</div>
+          <div class="section-card-hint">Calendario delle giornate nazionali e internazionali rilevanti per Angelo Parodi. Clicca una giornata vicina per usarla come tema del prossimo post.</div>
+          <div id="giornate-oggi"></div>
+          <div id="giornate-list"><div class="empty-state">Caricamento…</div></div>
+          <button class="btn-sm btn btn-rigenera" id="giornate-toggle-btn" onclick="toggleCalendario()" style="margin-top:12px; padding:9px 16px;">
+            📆 Mostra calendario completo
+          </button>
+        </div>
+
+        <!-- News -->
+        <div class="section-card">
+          <div class="section-card-header">📰 News del giorno</div>
+          <div class="section-card-hint">Notizie verificate con link ufficiale da <strong>Gambero Rosso</strong>, <strong>Il Fatto Alimentare</strong> e <strong>Ninja Marketing</strong>. Filtrate da ANGY per rilevanza al brand.</div>
+          <div class="msg msg-error" id="news-error"></div>
+          <div id="news-list"><div class="empty-state">Premi "Aggiorna news" per le notizie di oggi.</div></div>
+          <button class="btn btn-primary" id="news-load-btn" onclick="loadNews()" style="margin-top:12px;">
+            📡 Aggiorna news
+          </button>
+        </div>
+
+        <!-- Trend -->
+        <div class="section-card">
+          <div class="section-card-header">📈 Trend creativi</div>
+          <div class="section-card-hint">ANGY legge le fonti food italiane e identifica i trend da cavalcare. Seleziona un trend per usarlo nella prossima generazione.</div>
+          <div class="msg msg-error" id="trend-error"></div>
+          <div id="trend-list"><div class="empty-state">Premi "Aggiorna trend" per caricare i dati.</div></div>
+          <button class="btn btn-primary" id="trend-load-btn" onclick="loadTrends()" style="margin-top:12px;">
+            📡 Aggiorna trend
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB STORICO ── -->
+  <div class="tab-panel" id="panel-storico">
+    <div class="panel-container">
+      <p class="hint">Ultimi 20 post. Approva i pubblicati, scarta gli abbandonati: ANGY evita di ripetersi.</p>
+      <div class="msg msg-error" id="storico-error"></div>
+      <div id="storico-list"><div class="empty-state">Caricamento…</div></div>
+    </div>
+  </div>
+
+  <!-- ── TAB MEMORIA ── -->
+  <div class="tab-panel" id="panel-memoria">
+    <div class="panel-container">
+
+      <div style="background:#fefce8; border:1.5px solid #fde68a; border-radius:14px; padding:13px 15px; margin-bottom:18px; font-size:13px; color:#92400e; line-height:1.55; font-weight:500;">
+        💡 <strong>Aforismi</strong>: ANGY ne ha 22 caricati — appaiono a rotazione nel tab Genera come spunto creativo. Per aggiungerne: Supabase → Table Editor → angy_aforismi.
+      </div>
+
+      <div class="memoria-grid">
+
+        <!-- Sinistra: Strategia + form aggiungi -->
+        <div>
+          <div class="section-card" style="margin-bottom:22px;">
+            <div class="section-title">Strategia editoriale</div>
+            <p class="hint">Queste linee guida vengono iniettate nel prompt di ANGY ad ogni generazione. Modificale per allinearle al piano operativo corrente.</p>
+            <div id="strat-list"><div class="empty-state">Caricamento…</div></div>
+          </div>
+
+          <div class="section-card">
+            <div style="font-size:11px; font-weight:800; color:var(--text-muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.8px;">Aggiungi sezione strategia</div>
+            <input type="text" id="new-strat-sezione" placeholder="Nome sezione (es. Campagna estiva)" style="margin-bottom:9px;" />
+            <textarea id="new-strat-contenuto" placeholder="Contenuto della sezione strategica…" rows="3"></textarea>
+            <button class="btn btn-primary btn-sm" onclick="addStrategia()" style="margin-top:10px; padding:9px 18px;">Aggiungi</button>
+          </div>
+        </div>
+
+        <!-- Destra: Regole + Hashtag -->
+        <div>
+          <div class="section-card" style="margin-bottom:22px;">
+            <div class="section-title">Regole di ANGY</div>
+            <p class="hint">Tono, parole vietate, indicazioni di brand. Spegni una regola per sospenderla senza cancellarla.</p>
+            <div id="note-list"><div class="empty-state">Caricamento…</div></div>
+            <div class="add-row" style="margin-top:12px;">
+              <input type="text" id="new-nota" placeholder="Nuova regola, es: cita sempre la pesca sostenibile" />
+            </div>
+            <div class="add-row">
+              <div class="select-wrap" style="flex:1;">
+                <select id="new-nota-tipo">
+                  <option value="tono">Tono</option>
+                  <option value="brand">Brand</option>
+                  <option value="compliance">Compliance</option>
+                  <option value="da_ricordare">Da ricordare</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" onclick="addNota()">Aggiungi</button>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">Hashtag fissi del brand</div>
+            <p class="hint">Inclusi automaticamente in ogni post. I colleghi possono aggiungere variazioni qui.</p>
+            <div id="hashtag-list"><div class="empty-state">Caricamento…</div></div>
+            <div class="add-row" style="margin-top:12px;">
+              <input type="text" id="new-hashtag" placeholder="#nuovohashtag" />
+              <button class="btn btn-primary" onclick="addHashtag()">Aggiungi</button>
+            </div>
+          </div>
+
+          <div class="msg msg-error" id="memoria-error" style="margin-top:12px;"></div>
+          <div class="msg msg-success" id="memoria-success" style="margin-top:12px;"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app-view -->
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<nav id="mobile-nav" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:40; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-top:1px solid rgba(0,51,153,0.10); padding:8px 12px; grid-template-columns:repeat(4,1fr); gap:4px;">
+  <button data-tab="genera" class="mobile-nav-btn active" onclick="switchTab('genera')"><span class="nav-icon">✨</span><span>Genera</span></button>
+  <button data-tab="trend" class="mobile-nav-btn" onclick="switchTab('trend')"><span class="nav-icon">📰</span><span>Oggi</span></button>
+  <button data-tab="storico" class="mobile-nav-btn" onclick="switchTab('storico')"><span class="nav-icon">📋</span><span>Storico</span></button>
+  <button data-tab="memoria" class="mobile-nav-btn" onclick="switchTab('memoria')"><span class="nav-icon">🧠</span><span>Memoria</span></button>
+</nav>
+
+<!-- ── LOADING OVERLAY ── -->
 <div id="loading-overlay">
   <div class="loading-card">
     <div class="big-spinner"></div>
@@ -952,8 +1014,6 @@
     <small>Strategia · Framework · SEO · Memoria</small>
   </div>
 </div>
-
-<footer>ANGY · Angelo Parodi · Solo uso interno team · Dal 1888</footer>
 
 <script>
   const CONFIG = {
@@ -1024,6 +1084,10 @@
     document.getElementById("login-view").style.display = "none";
     document.getElementById("app-view").style.display = "block";
     document.getElementById("header-logout").style.display = "block";
+    document.getElementById("desktop-nav").style.display = "flex";
+    const mobileNav = document.getElementById("mobile-nav");
+    mobileNav.style.display = "grid";
+    document.body.classList.add("app-active");
     try {
       const data = await api("memoria", { action: "list" });
       aforismi = (data.aforismi || []).filter(a => a.testo);
@@ -1043,14 +1107,19 @@
     sessionStorage.clear();
     document.getElementById("app-view").style.display = "none";
     document.getElementById("header-logout").style.display = "none";
-    document.getElementById("login-view").style.display = "block";
+    document.getElementById("desktop-nav").style.display = "none";
+    document.getElementById("mobile-nav").style.display = "none";
+    document.body.classList.remove("app-active");
     document.getElementById("results").style.display = "none";
+    const ph = document.getElementById("results-placeholder");
+    if (ph) ph.style.display = "flex";
+    document.getElementById("login-view").style.display = "flex";
   }
 
   // ── TABS ──
 
   function switchTab(name) {
-    document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+    document.querySelectorAll("[data-tab]").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
     document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === `panel-${name}`));
     if (name === "storico") loadStorico();
     if (name === "memoria") loadMemoria();
@@ -1138,7 +1207,7 @@
         <div class="giornata-item ${isToday ? "is-today" : ""}" onclick="selectGiornata('${g.id}')" title="Clicca per usarla come tema">
           <span class="dot ${g.rilevanza === "alta" ? "alta" : ""}"></span>
           <span class="g-data">${quando}</span>
-          <span style="flex:1">
+          <span style="flex:1;">
             <span class="g-nome">${escHtml(g.nome)}</span>
             ${g.idea ? `<span class="g-idea">💡 ${escHtml(g.idea)}</span>` : ""}
           </span>
@@ -1183,7 +1252,7 @@
         return;
       }
       list.innerHTML = `
-        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px; font-weight:600">Aggiornato: ${escHtml(data.aggiornato || "")}</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px; font-weight:600;">Aggiornato: ${escHtml(data.aggiornato || "")}</div>
         ${news.map(n => `
           <div class="news-item">
             <div class="n-fonte">${escHtml(n.fonte)}</div>
@@ -1227,12 +1296,12 @@
       }
 
       list.innerHTML = `
-        <div style="font-size:11px; color:var(--text-muted); margin-bottom:11px; font-weight:600">Aggiornato: ${aggiornato} — clicca un trend per usarlo nella generazione</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:11px; font-weight:600;">Aggiornato: ${aggiornato} — clicca un trend per usarlo nella generazione</div>
         ${trendsCache.map((t, i) => `
-          <div class="trend-chip" id="trend-${i}" onclick="selectTrend(${i})" style="display:block; margin-bottom:9px; width:100%">
+          <div class="trend-chip" id="trend-${i}" onclick="selectTrend(${i})" style="display:block; margin-bottom:9px; width:100%;">
             <span class="chip-title">📌 ${escHtml(t.titolo)}</span>
             <span class="chip-angolo">${escHtml(t.spunto)}</span>
-            ${t.angolo ? `<span class="chip-angolo" style="color:rgba(0,51,153,0.7); margin-top:4px; font-style:italic">💡 ${escHtml(t.angolo)}</span>` : ""}
+            ${t.angolo ? `<span class="chip-angolo" style="color:rgba(0,51,153,0.7); margin-top:4px; font-style:italic;">💡 ${escHtml(t.angolo)}</span>` : ""}
           </div>
         `).join("")}
       `;
@@ -1296,6 +1365,10 @@
   }
 
   function displayResults(data) {
+    const ph = document.getElementById("results-placeholder");
+    if (ph) ph.style.display = "none";
+    document.getElementById("results").style.display = "block";
+
     document.getElementById("res-copy").textContent = data.copy;
     const len = data.copy.length;
     const countEl = document.getElementById("res-copy-count");
@@ -1316,8 +1389,9 @@
       return `<a class="kw-chip" href="${url}" target="_blank" rel="noopener">🔍 ${escHtml(kw)}</a>`;
     }).join("");
 
-    document.getElementById("results").style.display = "block";
-    document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (window.innerWidth < 768) {
+      document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 
   // ── STORICO ──
@@ -1377,7 +1451,7 @@
             <div class="strat-item ${s.attiva ? "" : "inactive"}" id="strat-${s.id}">
               <div class="strat-head">
                 <span class="strat-sezione">${escHtml(s.sezione)}</span>
-                <div style="display:flex;gap:6px;align-items:center">
+                <div style="display:flex;gap:6px;align-items:center;">
                   <button class="strat-btn" onclick="editStrategia('${s.id}')">Modifica</button>
                   <label class="toggle" title="${s.attiva ? "Disattiva" : "Attiva"}">
                     <input type="checkbox" ${s.attiva ? "checked" : ""} onchange="toggleStrategia('${s.id}', this.checked)" />
@@ -1386,7 +1460,7 @@
                 </div>
               </div>
               <div class="strat-contenuto" id="strat-content-${s.id}">${escHtml(s.contenuto)}</div>
-              <div class="strat-actions" id="strat-actions-${s.id}" style="display:none">
+              <div class="strat-actions" id="strat-actions-${s.id}" style="display:none;">
                 <button class="strat-btn save" onclick="saveStrategia('${s.id}')">Salva</button>
                 <button class="strat-btn" onclick="cancelEditStrategia('${s.id}')">Annulla</button>
               </div>
