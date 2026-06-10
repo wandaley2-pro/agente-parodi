@@ -3,178 +3,682 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ANGY – Angelo Parodi Copywriter</title>
+  <title>ANGY – Angelo Parodi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --blue: #003399;
       --yellow: #FFD600;
       --blue-light: #0044cc;
-      --gray-light: #f4f6fb;
-      --gray: #e2e6f0;
-      --text: #1a1a2e;
-      --text-muted: #6b7280;
+      --blue-dark: #001f6b;
+      --gray-light: #F8FAFC;
+      --gray: #e5e7eb;
+      --text: #0f172a;
+      --text-muted: #64748b;
       --green: #16a34a;
       --red: #dc2626;
       --purple: #5b21b6;
-      --radius: 12px;
-      --shadow: 0 4px 24px rgba(0,51,153,0.10);
+      --radius: 20px;
+      --shadow: 0 8px 32px rgba(0,51,153,0.08);
+      --shadow-sm: 0 2px 12px rgba(0,51,153,0.06);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       background: var(--gray-light);
       color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
+
+    /* ── HEADER ── */
     header {
-      background: var(--blue);
-      color: white;
-      padding: 13px 18px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,51,153,0.08);
+      padding: 0 18px;
+      height: 68px;
       display: flex;
       align-items: center;
       gap: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
       position: sticky;
       top: 0;
       z-index: 50;
     }
     .logo-badge {
-      background: var(--yellow);
-      color: var(--blue);
+      background: var(--blue);
+      color: white;
       font-weight: 900;
-      font-size: 17px;
+      font-size: 13px;
       width: 40px;
       height: 40px;
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      letter-spacing: -0.5px;
     }
-    header h1 { font-size: 17px; font-weight: 700; }
-    header p { font-size: 11px; opacity: 0.7; }
+    header .brand-name { font-size: 17px; font-weight: 800; color: var(--blue); tracking: -0.3px; }
+    header .brand-tag { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 1px; }
+    .logout-btn {
+      margin-left: auto;
+      background: rgba(0,51,153,0.06);
+      border: 1px solid rgba(0,51,153,0.12);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { background: rgba(0,51,153,0.12); }
+
+    /* ── LAYOUT ── */
     main {
       flex: 1;
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 16px;
+      padding: 20px 16px 32px;
     }
     .card {
       background: white;
-      border-radius: var(--radius);
+      border-radius: 28px;
       box-shadow: var(--shadow);
-      padding: 20px 18px;
+      border: 1px solid rgba(0,51,153,0.06);
+      padding: 24px 22px;
       width: 100%;
-      max-width: 540px;
+      max-width: 560px;
     }
+
+    /* ── LOGIN ── */
+    #login-view { max-width: 400px; }
+    .login-icon {
+      width: 64px; height: 64px;
+      background: var(--blue);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 900; color: white;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0,51,153,0.25);
+    }
+    #login-view h2 { font-size: 26px; font-weight: 900; color: var(--blue); line-height: 1.1; margin-bottom: 4px; letter-spacing: -0.5px; }
+    #login-view .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 26px; font-weight: 500; line-height: 1.5; }
+    #login-view .subtitle strong { color: var(--blue); }
+
+    /* ── APP VIEW ── */
+    #app-view { display: none; width: 100%; max-width: 560px; }
+
     /* ── TABS ── */
     .tabs {
       display: flex;
-      gap: 4px;
-      margin-bottom: 18px;
-      background: var(--gray-light);
-      border-radius: 10px;
-      padding: 4px;
+      gap: 3px;
+      margin-bottom: 22px;
+      background: #EFF3FB;
+      border-radius: 16px;
+      padding: 5px;
     }
     .tab {
       flex: 1;
-      padding: 8px 2px;
+      padding: 9px 4px;
       border: none;
       background: transparent;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 700;
       color: var(--text-muted);
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
+      font-family: inherit;
     }
-    .tab.active { background: var(--blue); color: white; }
+    .tab.active {
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 3px 10px rgba(0,51,153,0.22);
+    }
+    .tab:hover:not(.active) { color: var(--blue); background: rgba(0,51,153,0.06); }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
+
     /* ── FORMS ── */
     label {
       display: block;
       font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 5px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
     }
     input[type="password"], input[type="text"], select, textarea {
       width: 100%;
-      padding: 11px 13px;
-      border: 2px solid var(--gray);
-      border-radius: 8px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--gray);
+      border-radius: 12px;
       font-size: 15px;
       font-family: inherit;
       color: var(--text);
-      background: white;
+      background: #F8FAFC;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
       appearance: none;
       -webkit-appearance: none;
+      font-weight: 500;
     }
-    input:focus, select:focus, textarea:focus { border-color: var(--blue); }
-    textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--blue);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(0,51,153,0.08);
+    }
+    textarea { resize: vertical; min-height: 70px; line-height: 1.6; }
     .select-wrap { position: relative; }
     .select-wrap::after {
       content: "▾";
       position: absolute;
-      right: 13px;
-      top: 50%;
+      right: 14px; top: 50%;
       transform: translateY(-50%);
       pointer-events: none;
       color: var(--blue);
+      font-size: 13px;
     }
+
     /* ── BUTTONS ── */
     .btn {
       display: block;
       width: 100%;
       padding: 13px;
       border: none;
-      border-radius: 8px;
+      border-radius: 14px;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: all 0.15s;
       margin-top: 12px;
       font-family: inherit;
     }
     .btn:active { transform: scale(0.98); }
-    .btn:disabled { background: var(--gray) !important; color: var(--text-muted) !important; cursor: not-allowed; transform: none; }
-    .btn-primary { background: var(--blue); color: white; }
-    .btn-primary:hover:not(:disabled) { background: var(--blue-light); }
-    .btn-generate { background: var(--yellow); color: var(--blue); margin-top: 18px; }
-    .btn-generate:hover:not(:disabled) { background: #e6c200; }
-    .btn-rigenera { background: white; border: 2px solid var(--blue); color: var(--blue); }
-    .btn-rigenera:hover:not(:disabled) { background: #f0f4ff; }
+    .btn:disabled { background: var(--gray) !important; color: var(--text-muted) !important; cursor: not-allowed; transform: none; box-shadow: none !important; }
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 4px 16px rgba(0,51,153,0.22);
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--blue-dark); box-shadow: 0 6px 20px rgba(0,51,153,0.30); }
+    .btn-generate {
+      background: var(--yellow);
+      color: var(--blue);
+      margin-top: 18px;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(255,214,0,0.40);
+      border-radius: 16px;
+    }
+    .btn-generate:hover:not(:disabled) { background: #f5cc00; box-shadow: 0 6px 24px rgba(255,214,0,0.50); }
+    .btn-rigenera {
+      background: white;
+      border: 2px solid rgba(0,51,153,0.15);
+      color: var(--blue);
+      border-radius: 14px;
+    }
+    .btn-rigenera:hover:not(:disabled) { background: #f0f5ff; border-color: var(--blue); }
     .btn-sm {
       display: inline-block;
       width: auto;
-      padding: 6px 14px;
+      padding: 7px 16px;
       font-size: 13px;
       margin-top: 0;
-      border-radius: 6px;
+      border-radius: 10px;
     }
+
     /* ── MESSAGES ── */
     .msg {
-      border-radius: 8px;
-      padding: 9px 13px;
+      border-radius: 10px;
+      padding: 10px 14px;
       font-size: 13px;
       margin-top: 10px;
       display: none;
-      line-height: 1.4;
+      line-height: 1.5;
+      font-weight: 500;
     }
     .msg.show { display: block; }
-    .msg-error { background: #fff0f0; color: #c00; border: 1px solid #fcc; }
+    .msg-error { background: #fff5f5; color: #c53030; border: 1px solid #fed7d7; }
     .msg-success { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
-    /* ── LOGIN ── */
-    #login-view h2 { font-size: 20px; font-weight: 700; margin-bottom: 5px; color: var(--blue); }
-    #login-view .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; }
-    /* ── APP ── */
-    #app-view { display: none; width: 100%; max-width: 540px; }
+
+    /* ── AFORISMA ── */
+    .aforisma-box {
+      background: linear-gradient(135deg, #f0f5ff 0%, #fefce8 100%);
+      border: 1px solid rgba(0,51,153,0.10);
+      border-radius: 20px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .aforisma-box .quote {
+      font-size: 14px;
+      line-height: 1.65;
+      font-style: italic;
+      color: var(--text);
+      padding-right: 28px;
+      font-weight: 500;
+    }
+    .aforisma-box .autore {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 7px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .aforisma-box .next-btn {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: rgba(0,51,153,0.07);
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+      color: var(--blue);
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .aforisma-box .next-btn:hover { background: rgba(0,51,153,0.14); }
+
+    /* ── TREND CHIP ── */
+    .trend-section { margin-bottom: 18px; }
+    .trend-section .section-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .trend-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .trend-chip {
+      background: white;
+      border: 1.5px solid var(--gray);
+      border-radius: 12px;
+      padding: 9px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.15s;
+      line-height: 1.4;
+      text-align: left;
+      font-family: inherit;
+    }
+    .trend-chip:hover { border-color: var(--blue); color: var(--blue); background: rgba(0,51,153,0.04); }
+    .trend-chip.selected { border-color: var(--blue); background: var(--blue); color: white; box-shadow: 0 2px 10px rgba(0,51,153,0.25); }
+    .trend-chip .chip-title { font-weight: 700; display: block; }
+    .trend-chip .chip-angolo { font-size: 11px; opacity: 0.75; display: block; margin-top: 3px; }
+    .trend-load-btn {
+      background: none;
+      border: 1.5px solid var(--gray);
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .trend-load-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── GIORNATE ── */
+    .giornata-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 3px;
+    }
+    .giornata-item:hover { background: rgba(0,51,153,0.04); }
+    .giornata-item .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 4px;
+      background: var(--gray);
+    }
+    .giornata-item .dot.alta { background: var(--yellow); border: 1.5px solid #d4af00; }
+    .giornata-item.is-today {
+      background: rgba(0,51,153,0.05);
+      border: 1.5px solid rgba(0,51,153,0.15);
+      border-radius: 14px;
+    }
+    .giornata-item.is-today .dot { background: var(--blue); }
+    .giornata-item .g-data { font-weight: 800; color: var(--blue); white-space: nowrap; font-size: 12px; min-width: 50px; }
+    .giornata-item .g-nome { font-weight: 600; }
+    .giornata-item .g-idea { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; }
+
+    /* ── NEWS ── */
+    .news-item {
+      background: white;
+      border: 1.5px solid rgba(0,51,153,0.08);
+      border-radius: 16px;
+      padding: 14px 15px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .news-item .n-fonte {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--purple);
+      margin-bottom: 5px;
+    }
+    .news-item .n-titolo {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--text);
+      text-decoration: none;
+      display: block;
+    }
+    .news-item .n-titolo:hover { color: var(--blue); }
+    .news-item .n-perche { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+    .news-item .n-idea {
+      font-size: 12px;
+      color: var(--blue);
+      margin-top: 5px;
+      font-style: italic;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+    .news-item .n-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-top: 8px;
+      border: 1.5px solid var(--gray);
+      border-radius: 8px;
+      padding: 4px 11px;
+      transition: all 0.15s;
+    }
+    .news-item .n-link:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── RESULTS ── */
+    #results { margin-top: 22px; display: none; }
+    .result-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+    }
+    .result-box {
+      background: #F8FAFC;
+      border: 1.5px solid var(--gray);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 14px;
+      line-height: 1.65;
+      margin-bottom: 5px;
+      word-break: break-word;
+      font-weight: 500;
+    }
+    .result-box.copy-box {
+      border-color: rgba(0,51,153,0.2);
+      background: rgba(0,51,153,0.03);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: white;
+      border: 1.5px solid var(--gray);
+      border-radius: 9px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .copy-btn.copied { border-color: var(--green); color: var(--green); background: #f0fdf4; }
+    .char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 4px; font-weight: 600; }
+    .char-count.warn { color: var(--red); }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block;
+      padding: 4px 11px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-Interazione { background: #dbeafe; color: #1e40af; }
+    .badge-Traffico { background: #fef3c7; color: #92400e; }
+    .badge-Copertura { background: #d1fae5; color: #065f46; }
+    .badge-bozza { background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--gray); }
+    .badge-approvato { background: #d1fae5; color: #065f46; }
+    .badge-scartato { background: #fee2e2; color: #991b1b; }
+    .badge-fw { background: #ede9fe; color: var(--purple); }
+
+    /* ── KEYWORDS VISUAL ── */
+    .kw-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 7px; }
+    .kw-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fefce8;
+      border: 1.5px solid #fde68a;
+      color: #92400e;
+      border-radius: 20px;
+      padding: 5px 13px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .kw-chip:hover { background: #fde68a; }
+
+    /* ── STORICO ── */
+    .post-item {
+      border: 1.5px solid rgba(0,51,153,0.08);
+      border-radius: 18px;
+      padding: 14px 15px;
+      margin-bottom: 12px;
+      background: white;
+      box-shadow: var(--shadow-sm);
+    }
+    .post-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .post-copy { font-size: 14px; line-height: 1.6; margin-bottom: 8px; font-weight: 500; }
+    .post-hashtags { font-size: 12px; color: var(--blue); margin-bottom: 10px; word-break: break-word; font-weight: 600; }
+    .post-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action-btn {
+      border: 1.5px solid var(--gray);
+      background: white;
+      border-radius: 9px;
+      padding: 6px 13px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      color: var(--text-muted);
+    }
+    .action-btn.approve:hover { border-color: var(--green); color: var(--green); background: #f0fdf4; }
+    .action-btn.reject:hover { border-color: var(--red); color: var(--red); background: #fff5f5; }
+    .action-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── MEMORIA ── */
+    .section-title { font-size: 16px; font-weight: 800; color: var(--blue); margin: 4px 0 8px; letter-spacing: -0.3px; }
+    .hint { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; font-weight: 500; }
+    .mem-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,51,153,0.06);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .mem-item.inactive { opacity: 0.4; }
+    .mem-text { flex: 1; font-weight: 500; }
+    .mem-tipo { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; cursor: pointer; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle .slider { position: absolute; inset: 0; background: #e2e8f0; border-radius: 22px; transition: 0.25s; }
+    .toggle .slider::before {
+      content: "";
+      position: absolute;
+      width: 16px; height: 16px;
+      left: 3px; top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .toggle input:checked + .slider { background: var(--green); }
+    .toggle input:checked + .slider::before { transform: translateX(18px); }
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,51,153,0.06);
+      border: 1.5px solid rgba(0,51,153,0.15);
+      color: var(--blue);
+      border-radius: 20px;
+      padding: 5px 13px;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 5px 6px 0;
+    }
+    .tag-pill.inactive { background: #f1f5f9; border-color: var(--gray); color: var(--text-muted); text-decoration: line-through; }
+    .tag-pill button { background: none; border: none; cursor: pointer; font-size: 12px; color: inherit; padding: 0; opacity: 0.7; }
+    .tag-pill button:hover { opacity: 1; }
+    .add-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+    .add-row .btn { width: auto; margin-top: 0; padding: 11px 16px; flex-shrink: 0; }
+
+    /* ── STRATEGIA ── */
+    .strat-item {
+      border: 1.5px solid rgba(0,51,153,0.08);
+      border-radius: 16px;
+      padding: 13px 15px;
+      margin-bottom: 10px;
+      background: white;
+      box-shadow: var(--shadow-sm);
+    }
+    .strat-item.inactive { opacity: 0.4; }
+    .strat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+    .strat-sezione {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+    .strat-contenuto {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text);
+      cursor: text;
+      font-weight: 500;
+    }
+    .strat-contenuto[contenteditable="true"] {
+      outline: 2px solid var(--blue);
+      border-radius: 8px;
+      padding: 6px;
+      background: rgba(0,51,153,0.03);
+    }
+    .strat-actions { display: flex; gap: 7px; margin-top: 9px; }
+    .strat-btn {
+      border: 1.5px solid var(--gray);
+      background: white;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .strat-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .strat-btn.save { background: var(--blue); color: white; border-color: var(--blue); box-shadow: 0 2px 8px rgba(0,51,153,0.20); }
+
+    /* ── DIVIDERS & MISC ── */
+    .divider { height: 1px; background: rgba(0,51,153,0.07); margin: 20px 0; }
+
+    /* ── LOADING ── */
+    #loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(248,250,252,0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    #loading-overlay.show { display: flex; }
+    .loading-card {
+      background: white;
+      border-radius: 28px;
+      padding: 36px 44px;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,51,153,0.18);
+      border: 1px solid rgba(0,51,153,0.08);
+    }
+    .loading-card .big-spinner {
+      width: 48px; height: 48px;
+      border: 4px solid rgba(0,51,153,0.10);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    .loading-card p { font-size: 16px; font-weight: 800; color: var(--blue); margin-bottom: 4px; }
+    .loading-card small { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
     /* ── SPINNER ── */
     .spinner {
       display: inline-block;
@@ -186,412 +690,69 @@
       vertical-align: middle;
       margin-right: 7px;
     }
-    .spinner-blue { border-color: rgba(0,51,153,0.2); border-top-color: var(--blue); }
+    .spinner-blue { border-color: rgba(0,51,153,0.15); border-top-color: var(--blue); }
     @keyframes spin { to { transform: rotate(360deg); } }
-    /* ── AFORISMA ── */
-    .aforisma-box {
-      background: linear-gradient(135deg, #f0f4ff 0%, #fefce8 100%);
-      border: 1.5px solid var(--gray);
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      position: relative;
-    }
-    .aforisma-box .quote { font-size: 14px; line-height: 1.55; font-style: italic; color: var(--text); }
-    .aforisma-box .autore { font-size: 11px; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
-    .aforisma-box .next-btn {
-      position: absolute;
-      top: 10px; right: 10px;
-      background: none;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      color: var(--text-muted);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .aforisma-box .next-btn:hover { background: rgba(0,0,0,0.05); }
-    /* ── TREND ── */
-    .trend-section { margin-bottom: 18px; }
-    .trend-section .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .trend-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-    .trend-chip {
-      background: white;
-      border: 1.5px solid var(--gray);
-      border-radius: 8px;
-      padding: 7px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      color: var(--text);
-      transition: all 0.15s;
-      line-height: 1.3;
-      text-align: left;
-    }
-    .trend-chip:hover { border-color: var(--blue); color: var(--blue); background: #f0f4ff; }
-    .trend-chip.selected { border-color: var(--blue); background: #003399; color: white; }
-    .trend-chip .chip-title { font-weight: 700; display: block; }
-    .trend-chip .chip-angolo { font-size: 11px; opacity: 0.8; display: block; margin-top: 2px; }
-    .trend-load-btn {
-      background: none;
-      border: 1px solid var(--gray);
-      border-radius: 6px;
-      padding: 3px 10px;
-      font-size: 11px;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-family: inherit;
-      transition: all 0.15s;
-    }
-    .trend-load-btn:hover { border-color: var(--blue); color: var(--blue); }
-    /* ── GIORNATE ── */
-    .giornata-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 13px;
-      line-height: 1.4;
-      cursor: pointer;
-      transition: background 0.15s;
-      margin-bottom: 2px;
-    }
-    .giornata-item:hover { background: var(--gray-light); }
-    .giornata-item .dot {
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 5px;
-      background: var(--gray);
-    }
-    .giornata-item .dot.alta { background: var(--yellow); border: 1.5px solid #d4af00; }
-    .giornata-item.is-today { background: #f0f4ff; border: 1.5px solid var(--blue); }
-    .giornata-item.is-today .dot { background: var(--blue); }
-    .giornata-item .g-data { font-weight: 700; color: var(--blue); white-space: nowrap; font-size: 12px; min-width: 48px; }
-    .giornata-item .g-nome { font-weight: 600; }
-    .giornata-item .g-idea { font-size: 11px; color: var(--text-muted); display: block; margin-top: 1px; }
-    /* ── NEWS ── */
-    .news-item {
-      border: 1.5px solid var(--gray);
-      border-radius: 10px;
-      padding: 12px 13px;
-      margin-bottom: 9px;
-    }
-    .news-item .n-fonte {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--purple);
-      margin-bottom: 4px;
-    }
-    .news-item .n-titolo {
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1.4;
-      color: var(--text);
-      text-decoration: none;
-      display: block;
-    }
-    .news-item .n-titolo:hover { color: var(--blue); text-decoration: underline; }
-    .news-item .n-perche { font-size: 12px; color: var(--text-muted); margin-top: 5px; line-height: 1.4; }
-    .news-item .n-idea {
-      font-size: 12px;
-      color: var(--blue);
-      margin-top: 5px;
-      font-style: italic;
-      line-height: 1.4;
-    }
-    .news-item .n-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      color: var(--text-muted);
-      text-decoration: none;
-      margin-top: 6px;
-      border: 1px solid var(--gray);
-      border-radius: 5px;
-      padding: 3px 9px;
-      transition: all 0.15s;
-    }
-    .news-item .n-link:hover { border-color: var(--blue); color: var(--blue); }
-    /* ── RESULTS ── */
-    #results { margin-top: 22px; display: none; }
-    .result-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-muted);
-      margin-bottom: 5px;
-    }
-    .result-box {
-      background: var(--gray-light);
-      border: 1.5px solid var(--gray);
-      border-radius: 8px;
-      padding: 13px;
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 4px;
-      word-break: break-word;
-    }
-    .result-box.copy-box { border-color: var(--blue); background: #f0f4ff; }
-    .copy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: none;
-      border: 1px solid var(--gray);
-      border-radius: 6px;
-      padding: 5px 10px;
-      font-size: 12px;
-      cursor: pointer;
-      color: var(--text-muted);
-      margin-top: 5px;
-      font-family: inherit;
-      transition: all 0.15s;
-    }
-    .copy-btn:hover { border-color: var(--blue); color: var(--blue); }
-    .copy-btn.copied { border-color: var(--green); color: var(--green); }
-    .char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 3px; }
-    .char-count.warn { color: var(--red); }
-    /* BADGE */
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-    .badge-Interazione { background: #dbeafe; color: #1d4ed8; }
-    .badge-Traffico { background: #fef3c7; color: #92400e; }
-    .badge-Copertura { background: #d1fae5; color: #065f46; }
-    .badge-bozza { background: var(--gray-light); color: var(--text-muted); border: 1px solid var(--gray); }
-    .badge-approvato { background: #d1fae5; color: #065f46; }
-    .badge-scartato { background: #fee2e2; color: #991b1b; }
-    .badge-fw { background: #ede9fe; color: var(--purple); }
-    /* KEYWORDS VISUAL */
-    .kw-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .kw-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: #fef9c3;
-      border: 1px solid #fde68a;
-      color: #92400e;
-      border-radius: 20px;
-      padding: 4px 11px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .kw-chip:hover { background: #fde68a; }
-    /* ── STORICO ── */
-    .post-item {
-      border: 1.5px solid var(--gray);
-      border-radius: 10px;
-      padding: 13px;
-      margin-bottom: 10px;
-    }
-    .post-head {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      flex-wrap: wrap;
-      margin-bottom: 7px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .post-copy { font-size: 14px; line-height: 1.5; margin-bottom: 7px; }
-    .post-hashtags { font-size: 12px; color: var(--blue); margin-bottom: 9px; word-break: break-word; }
-    .post-actions { display: flex; gap: 7px; flex-wrap: wrap; }
-    .action-btn {
-      border: 1.5px solid var(--gray);
-      background: white;
-      border-radius: 6px;
-      padding: 5px 11px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.15s;
-    }
-    .action-btn.approve:hover { border-color: var(--green); color: var(--green); }
-    .action-btn.reject:hover { border-color: var(--red); color: var(--red); }
-    /* ── MEMORIA ── */
-    .section-title { font-size: 15px; font-weight: 700; color: var(--blue); margin: 4px 0 8px; }
-    .hint { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
-    .mem-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 1px solid var(--gray-light);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-    .mem-item.inactive { opacity: 0.4; }
-    .mem-text { flex: 1; }
-    .mem-tipo { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; }
-    .toggle { position: relative; width: 38px; height: 21px; flex-shrink: 0; cursor: pointer; }
-    .toggle input { opacity: 0; width: 0; height: 0; }
-    .toggle .slider { position: absolute; inset: 0; background: var(--gray); border-radius: 21px; transition: 0.2s; }
-    .toggle .slider::before {
-      content: "";
-      position: absolute;
-      width: 15px; height: 15px;
-      left: 3px; top: 3px;
-      background: white;
-      border-radius: 50%;
-      transition: 0.2s;
-    }
-    .toggle input:checked + .slider { background: var(--green); }
-    .toggle input:checked + .slider::before { transform: translateX(17px); }
-    .tag-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: #f0f4ff;
-      border: 1.5px solid var(--blue);
-      color: var(--blue);
-      border-radius: 20px;
-      padding: 4px 11px;
-      font-size: 13px;
-      font-weight: 600;
-      margin: 0 5px 5px 0;
-    }
-    .tag-pill.inactive { background: var(--gray-light); border-color: var(--gray); color: var(--text-muted); text-decoration: line-through; }
-    .tag-pill button { background: none; border: none; cursor: pointer; font-size: 12px; color: inherit; padding: 0; }
-    .add-row { display: flex; gap: 7px; margin-top: 9px; align-items: center; }
-    .add-row .btn { width: auto; margin-top: 0; padding: 10px 15px; flex-shrink: 0; }
-    /* STRATEGIA */
-    .strat-item {
-      border: 1.5px solid var(--gray);
-      border-radius: 8px;
-      padding: 11px 13px;
-      margin-bottom: 8px;
-    }
-    .strat-item.inactive { opacity: 0.4; }
-    .strat-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5px;
-    }
-    .strat-sezione { font-size: 12px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; }
-    .strat-contenuto {
-      font-size: 13px;
-      line-height: 1.5;
-      color: var(--text);
-      cursor: text;
-    }
-    .strat-contenuto[contenteditable="true"] {
-      outline: 2px solid var(--blue);
-      border-radius: 4px;
-      padding: 4px;
-      background: #f0f4ff;
-    }
-    .strat-actions { display: flex; gap: 6px; margin-top: 7px; }
-    .strat-btn {
-      border: 1px solid var(--gray);
-      background: white;
-      border-radius: 5px;
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      color: var(--text-muted);
-      transition: all 0.15s;
-    }
-    .strat-btn:hover { border-color: var(--blue); color: var(--blue); }
-    .strat-btn.save { background: var(--blue); color: white; border-color: var(--blue); }
-    /* DIVIDER */
-    .divider { height: 1px; background: var(--gray); margin: 18px 0; }
-    /* LOGOUT */
-    .logout-btn {
-      margin-left: auto;
-      background: rgba(255,255,255,0.15);
-      border: none;
-      color: white;
-      font-size: 12px;
-      cursor: pointer;
-      padding: 6px 11px;
-      border-radius: 6px;
-      font-family: inherit;
-    }
-    .logout-btn:hover { background: rgba(255,255,255,0.25); }
-    /* LOADING */
-    #loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,51,153,0.07);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-    #loading-overlay.show { display: flex; }
-    .loading-card {
-      background: white;
-      border-radius: 16px;
-      padding: 28px 36px;
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
       text-align: center;
-      box-shadow: 0 8px 40px rgba(0,51,153,0.15);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 24px 0;
     }
-    .loading-card .big-spinner {
-      width: 42px; height: 42px;
-      border: 4px solid var(--gray);
-      border-top-color: var(--blue);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 13px;
+
+    /* ── SECTION HEADER (Oggi tab) ── */
+    .section-block {
+      background: rgba(0,51,153,0.03);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 6px;
     }
-    .loading-card p { font-size: 15px; font-weight: 600; color: var(--blue); }
-    .loading-card small { font-size: 12px; color: var(--text-muted); }
-    .empty-state { text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px 0; }
-    footer { text-align: center; padding: 12px; font-size: 11px; color: var(--text-muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 14px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,51,153,0.15); border-radius: 3px; }
   </style>
 </head>
 <body>
-<script src="demo-mock.js"></script>
 
 <header>
   <div class="logo-badge">AN</div>
   <div>
-    <h1>ANGY</h1>
-    <p>Copywriter AI – Angelo Parodi</p>
+    <div class="brand-name">ANGY</div>
+    <div class="brand-tag">Copywriter AI · Angelo Parodi</div>
   </div>
   <button class="logout-btn" id="header-logout" style="display:none" onclick="handleLogout()">Esci</button>
 </header>
 
 <main>
-  <!-- LOGIN -->
+  <!-- ─── LOGIN ─── -->
   <div class="card" id="login-view">
-    <h2>Accesso team</h2>
-    <p class="subtitle">Inserisci la password condivisa per accedere.</p>
+    <div class="login-icon">AN</div>
+    <h2>Ciao, team 👋</h2>
+    <p class="subtitle">Inserisci la password condivisa per accedere ad <strong>ANGY</strong>, il tuo copywriter AI.</p>
     <label for="password-input">Password</label>
     <input type="password" id="password-input" placeholder="••••••••" autocomplete="current-password" />
     <div class="msg msg-error" id="login-error"></div>
-    <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Accedi</button>
+    <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Accedi →</button>
+    <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:14px; font-weight:500;">
+      Angelo Parodi · Solo uso interno team · Dal 1888
+    </p>
   </div>
 
-  <!-- APP -->
+  <!-- ─── APP ─── -->
   <div id="app-view">
     <div class="card">
       <div class="tabs">
@@ -612,22 +773,22 @@
         </div>
 
         <!-- Promemoria giornata -->
-        <div id="giornata-banner" style="display:none; margin-bottom:14px; background:#f0f4ff; border:1.5px solid var(--blue); border-radius:10px; padding:12px 14px">
-          <div style="font-size:13px; font-weight:700; color:var(--blue); margin-bottom:3px" id="giornata-banner-title"></div>
-          <div style="font-size:12px; color:var(--text); line-height:1.5; margin-bottom:8px" id="giornata-banner-idea"></div>
-          <button class="btn-sm btn btn-primary" style="padding:6px 14px; margin:0" onclick="useGiornataBanner()">✨ Usa per questo post</button>
+        <div id="giornata-banner" style="display:none; margin-bottom:16px; background:rgba(0,51,153,0.05); border:1.5px solid rgba(0,51,153,0.18); border-radius:18px; padding:14px 16px">
+          <div style="font-size:13px; font-weight:800; color:var(--blue); margin-bottom:4px" id="giornata-banner-title"></div>
+          <div style="font-size:13px; color:var(--text); line-height:1.5; margin-bottom:10px; font-weight:500" id="giornata-banner-idea"></div>
+          <button class="btn-sm btn btn-primary" style="padding:8px 16px; margin:0" onclick="useGiornataBanner()">✨ Usa per questo post</button>
         </div>
 
-        <!-- Trend selezionato (chip compatta) -->
-        <div id="trend-selected-bar" style="display:none; margin-bottom:14px">
-          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:5px">Trend attivo per questa generazione</div>
-          <div style="display:flex; align-items:center; gap:8px">
-            <span class="trend-chip selected" id="trend-selected-chip" style="cursor:default; flex:1"></span>
-            <button onclick="clearTrend()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px" title="Rimuovi trend">✕</button>
+        <!-- Trend selezionato -->
+        <div id="trend-selected-bar" style="display:none; margin-bottom:16px">
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:7px">Trend attivo per questa generazione</div>
+          <div style="display:flex; align-items:center; gap:9px">
+            <span class="trend-chip selected" id="trend-selected-chip" style="cursor:default; flex:1; font-family:inherit"></span>
+            <button onclick="clearTrend()" style="background:rgba(0,51,153,0.06);border:1.5px solid rgba(0,51,153,0.12);cursor:pointer;color:var(--blue);font-size:16px;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;" title="Rimuovi trend">✕</button>
           </div>
         </div>
 
-        <div style="margin-bottom:16px">
+        <div style="margin-bottom:18px">
           <label for="formato-select">Formato post</label>
           <div class="select-wrap">
             <select id="formato-select">
@@ -640,50 +801,50 @@
 
         <div class="msg msg-error" id="gen-error"></div>
 
-        <button class="btn btn-generate" id="gen-btn" onclick="handleGenerate(false)">✨ Genera</button>
+        <button class="btn btn-generate" id="gen-btn" onclick="handleGenerate(false)">✨ Genera il post</button>
 
         <!-- RESULTS -->
         <div id="results">
           <div class="divider"></div>
 
-          <div style="display:flex; gap:7px; flex-wrap:wrap; margin-bottom:14px">
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center">
             <span class="badge" id="res-ob-badge"></span>
             <span class="badge badge-fw" id="res-fw-badge"></span>
           </div>
 
-          <div class="result-label">Copy Instagram/Facebook</div>
+          <div class="result-label">Copy Instagram / Facebook</div>
           <div class="result-box copy-box" id="res-copy">–</div>
           <div class="char-count" id="res-copy-count"></div>
           <button class="copy-btn" onclick="copyEl('res-copy', this, 'Copia copy')">📋 Copia copy</button>
 
-          <div style="margin-top:16px">
-            <div class="result-label">Hashtag <span style="font-weight:400;text-transform:none;letter-spacing:0">(modificabili)</span></div>
+          <div style="margin-top:18px">
+            <div class="result-label">Hashtag <span style="font-weight:500;text-transform:none;letter-spacing:0;font-size:11px">(modificabili)</span></div>
             <textarea id="res-hashtags" rows="2"></textarea>
             <button class="copy-btn" onclick="copyTA('res-hashtags', this, 'Copia hashtag')">📋 Copia hashtag</button>
           </div>
 
-          <div style="margin-top:16px">
+          <div style="margin-top:18px">
             <div class="result-label">Brief per il grafico</div>
             <div class="result-box" id="res-visual">–</div>
             <button class="copy-btn" onclick="copyEl('res-visual', this, 'Copia brief')">📋 Copia brief visual</button>
           </div>
 
-          <div style="margin-top:16px">
+          <div style="margin-top:18px">
             <div class="result-label">Cerca ispirazione visiva 🔍</div>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:7px">Clicca una keyword per cercare su Pinterest</p>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:9px; font-weight:500">Clicca una keyword per cercare su Pinterest</p>
             <div class="kw-chips" id="res-kw-chips"></div>
           </div>
 
-          <button class="btn btn-rigenera" id="rigenera-btn" onclick="handleGenerate(true)" style="margin-top:18px">
+          <button class="btn btn-rigenera" id="rigenera-btn" onclick="handleGenerate(true)" style="margin-top:20px">
             🔄 Non mi piace, rigenera
           </button>
-          <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:6px">
+          <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:7px; font-weight:500">
             Rigenerando, il post scartato viene sovrascritto — non sporca lo storico.
           </p>
         </div>
       </div>
 
-      <!-- ─── TAB OGGI (giornate + news + trend) ─── -->
+      <!-- ─── TAB OGGI ─── -->
       <div class="tab-panel" id="panel-trend">
 
         <!-- GIORNATE -->
@@ -691,7 +852,7 @@
         <p class="hint">Calendario delle giornate nazionali e internazionali rilevanti per Angelo Parodi. Clicca una giornata vicina per usarla come tema del prossimo post.</p>
         <div id="giornate-oggi"></div>
         <div id="giornate-list"><div class="empty-state">Caricamento…</div></div>
-        <button class="btn-sm btn btn-rigenera" id="giornate-toggle-btn" onclick="toggleCalendario()" style="margin-top:6px; padding:7px 14px">
+        <button class="btn-sm btn btn-rigenera" id="giornate-toggle-btn" onclick="toggleCalendario()" style="margin-top:8px; padding:9px 16px">
           📆 Mostra calendario completo
         </button>
 
@@ -699,7 +860,7 @@
 
         <!-- NEWS -->
         <div class="section-title">📰 News del giorno</div>
-        <p class="hint">Notizie verificate con link ufficiale da <strong>Gambero Rosso</strong> (food), <strong>Il Fatto Alimentare</strong> (settore) e <strong>Ninja Marketing</strong> (social media). Filtrate da ANGY per rilevanza — niente politica, solo ciò che serve al team.</p>
+        <p class="hint">Notizie verificate con link ufficiale da <strong>Gambero Rosso</strong>, <strong>Il Fatto Alimentare</strong> e <strong>Ninja Marketing</strong>. Filtrate da ANGY per rilevanza al brand.</p>
         <div class="msg msg-error" id="news-error"></div>
         <div id="news-list"><div class="empty-state">Premi "Aggiorna news" per le notizie di oggi.</div></div>
         <button class="btn btn-primary" id="news-load-btn" onclick="loadNews()" style="margin-top:12px">
@@ -728,21 +889,20 @@
       <!-- ─── TAB MEMORIA ─── -->
       <div class="tab-panel" id="panel-memoria">
 
-        <!-- AFORISMI INFO -->
-        <div style="background:#fefce8; border:1px solid #fde68a; border-radius:8px; padding:11px 13px; margin-bottom:16px; font-size:13px; color:#92400e; line-height:1.5">
-          💡 <strong>Aforismi</strong>: ANGY ne ha 22 caricati — appaiono a rotazione nel tab Genera come spunto creativo. Vuoi aggiungerne? Scrivici su Supabase → Table Editor → angy_aforismi.
+        <div style="background:#fefce8; border:1.5px solid #fde68a; border-radius:14px; padding:13px 15px; margin-bottom:18px; font-size:13px; color:#92400e; line-height:1.55; font-weight:500">
+          💡 <strong>Aforismi</strong>: ANGY ne ha 22 caricati — appaiono a rotazione nel tab Genera come spunto creativo. Per aggiungerne: Supabase → Table Editor → angy_aforismi.
         </div>
 
         <!-- STRATEGIA -->
         <div class="section-title">Strategia editoriale</div>
-        <p class="hint">Queste linee guida vengono iniettate direttamente nel prompt di ANGY ad ogni generazione. Modificale per allinearle al piano operativo corrente.</p>
+        <p class="hint">Queste linee guida vengono iniettate nel prompt di ANGY ad ogni generazione. Modificale per allinearle al piano operativo corrente.</p>
         <div id="strat-list"><div class="empty-state">Caricamento…</div></div>
 
-        <div style="margin-top:12px; border:1.5px dashed var(--gray); border-radius:8px; padding:12px">
-          <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px">AGGIUNGI SEZIONE STRATEGIA</div>
-          <input type="text" id="new-strat-sezione" placeholder="Nome sezione (es. Campagna estiva)" style="margin-bottom:7px" />
+        <div style="margin-top:14px; border:2px dashed rgba(0,51,153,0.15); border-radius:16px; padding:14px">
+          <div style="font-size:11px; font-weight:800; color:var(--text-muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.8px">Aggiungi sezione strategia</div>
+          <input type="text" id="new-strat-sezione" placeholder="Nome sezione (es. Campagna estiva)" style="margin-bottom:9px" />
           <textarea id="new-strat-contenuto" placeholder="Contenuto della sezione strategica…" rows="3"></textarea>
-          <button class="btn btn-primary btn-sm" onclick="addStrategia()" style="margin-top:8px; padding:8px 16px">Aggiungi</button>
+          <button class="btn btn-primary btn-sm" onclick="addStrategia()" style="margin-top:10px; padding:9px 18px">Aggiungi</button>
         </div>
 
         <div class="divider"></div>
@@ -751,7 +911,7 @@
         <div class="section-title">Regole di ANGY</div>
         <p class="hint">Tono, parole vietate, indicazioni di brand. Spegni una regola per sospenderla senza cancellarla.</p>
         <div id="note-list"><div class="empty-state">Caricamento…</div></div>
-        <div class="add-row" style="margin-top:10px">
+        <div class="add-row" style="margin-top:12px">
           <input type="text" id="new-nota" placeholder="Nuova regola, es: cita sempre la pesca sostenibile" />
         </div>
         <div class="add-row">
@@ -772,7 +932,7 @@
         <div class="section-title">Hashtag fissi del brand</div>
         <p class="hint">Inclusi automaticamente in ogni post. I colleghi possono aggiungere variazioni qui.</p>
         <div id="hashtag-list"><div class="empty-state">Caricamento…</div></div>
-        <div class="add-row" style="margin-top:10px">
+        <div class="add-row" style="margin-top:12px">
           <input type="text" id="new-hashtag" placeholder="#nuovohashtag" />
           <button class="btn btn-primary" onclick="addHashtag()">Aggiungi</button>
         </div>
@@ -789,11 +949,11 @@
   <div class="loading-card">
     <div class="big-spinner"></div>
     <p>ANGY sta scrivendo…</p>
-    <small>Framework · SEO social · Strategia · Memoria</small>
+    <small>Strategia · Framework · SEO · Memoria</small>
   </div>
 </div>
 
-<footer>ANGY · Angelo Parodi · Solo uso interno team</footer>
+<footer>ANGY · Angelo Parodi · Solo uso interno team · Dal 1888</footer>
 
 <script>
   const CONFIG = {
@@ -856,7 +1016,7 @@
       showMsg(err, e.message || "Impossibile contattare il server.", "error");
     } finally {
       btn.disabled = false;
-      btn.innerHTML = "Accedi";
+      btn.innerHTML = "Accedi →";
     }
   }
 
@@ -864,7 +1024,6 @@
     document.getElementById("login-view").style.display = "none";
     document.getElementById("app-view").style.display = "block";
     document.getElementById("header-logout").style.display = "block";
-    // Carica aforismi + giornate in background
     try {
       const data = await api("memoria", { action: "list" });
       aforismi = (data.aforismi || []).filter(a => a.testo);
@@ -917,7 +1076,6 @@
 
   const MESI = ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
 
-  // Distanza in giorni dalla data odierna (gestisce il passaggio d'anno)
   function giorniMancanti(mese, giorno) {
     const oggi = new Date();
     const anno = oggi.getFullYear();
@@ -928,7 +1086,6 @@
   }
 
   function renderGiornataBanner() {
-    // Promemoria nel tab Genera: giornata di oggi o nei prossimi 3 giorni
     const imminenti = giornate
       .map(g => ({ ...g, mancano: giorniMancanti(g.mese, g.giorno) }))
       .filter(g => g.mancano <= 3)
@@ -1026,7 +1183,7 @@
         return;
       }
       list.innerHTML = `
-        <div style="font-size:11px; color:var(--text-muted); margin-bottom:9px">Aggiornato: ${escHtml(data.aggiornato || "")}</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px; font-weight:600">Aggiornato: ${escHtml(data.aggiornato || "")}</div>
         ${news.map(n => `
           <div class="news-item">
             <div class="n-fonte">${escHtml(n.fonte)}</div>
@@ -1070,12 +1227,12 @@
       }
 
       list.innerHTML = `
-        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px">Aggiornato: ${aggiornato} — clicca un trend per usarlo nella generazione</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:11px; font-weight:600">Aggiornato: ${aggiornato} — clicca un trend per usarlo nella generazione</div>
         ${trendsCache.map((t, i) => `
-          <div class="trend-chip" id="trend-${i}" onclick="selectTrend(${i})" style="display:block; margin-bottom:8px; width:100%">
+          <div class="trend-chip" id="trend-${i}" onclick="selectTrend(${i})" style="display:block; margin-bottom:9px; width:100%">
             <span class="chip-title">📌 ${escHtml(t.titolo)}</span>
             <span class="chip-angolo">${escHtml(t.spunto)}</span>
-            ${t.angolo ? `<span class="chip-angolo" style="color:var(--blue); margin-top:3px; font-style:italic">💡 ${escHtml(t.angolo)}</span>` : ""}
+            ${t.angolo ? `<span class="chip-angolo" style="color:rgba(0,51,153,0.7); margin-top:4px; font-style:italic">💡 ${escHtml(t.angolo)}</span>` : ""}
           </div>
         `).join("")}
       `;
@@ -1099,7 +1256,6 @@
     chip.innerHTML = `<span class="chip-title">${escHtml(t.titolo)}</span>`;
     bar.style.display = "block";
 
-    // Torna al tab Genera
     switchTab("genera");
   }
 
@@ -1130,7 +1286,6 @@
       const data = await api("generate", body);
       lastId = data.id;
       displayResults(data);
-      // Cambia aforisma ad ogni generazione
       nextAforisma();
     } catch (e) {
       showMsg(err, e.message || "Errore di rete. Riprova.", "error");
@@ -1155,7 +1310,6 @@
     document.getElementById("res-hashtags").value = (data.hashtags || []).join(" ");
     document.getElementById("res-visual").textContent = data.brief_visual;
 
-    // Keywords visual → link Pinterest
     const kwContainer = document.getElementById("res-kw-chips");
     kwContainer.innerHTML = (data.keywords_visual || []).map(kw => {
       const url = `https://www.pinterest.it/search/pins/?q=${encodeURIComponent(kw)}`;
@@ -1218,13 +1372,12 @@
       const data = await api("memoria", { action: "list" });
       aforismi = (data.aforismi || []).filter(a => a.testo);
 
-      // Strategia
       stratEl.innerHTML = (data.strategia || []).length
         ? data.strategia.map(s => `
             <div class="strat-item ${s.attiva ? "" : "inactive"}" id="strat-${s.id}">
               <div class="strat-head">
                 <span class="strat-sezione">${escHtml(s.sezione)}</span>
-                <div style="display:flex;gap:5px">
+                <div style="display:flex;gap:6px;align-items:center">
                   <button class="strat-btn" onclick="editStrategia('${s.id}')">Modifica</button>
                   <label class="toggle" title="${s.attiva ? "Disattiva" : "Attiva"}">
                     <input type="checkbox" ${s.attiva ? "checked" : ""} onchange="toggleStrategia('${s.id}', this.checked)" />
@@ -1241,7 +1394,6 @@
           `).join("")
         : '<div class="empty-state">Nessuna sezione strategica. Aggiungine una qui sotto.</div>';
 
-      // Note
       noteEl.innerHTML = (data.note || []).length
         ? data.note.map(n => `
             <div class="mem-item ${n.attiva ? "" : "inactive"}" id="nota-${n.id}">
@@ -1253,7 +1405,6 @@
             </div>`).join("")
         : '<div class="empty-state">Nessuna regola. Aggiungine una.</div>';
 
-      // Hashtag
       tagEl.innerHTML = (data.hashtags || []).length
         ? data.hashtags.map(h => `
             <span class="tag-pill ${h.attiva ? "" : "inactive"}">
@@ -1264,7 +1415,6 @@
     } catch (e) { showMsg(err, e.message, "error"); }
   }
 
-  // Strategia edit
   function editStrategia(id) {
     const el = document.getElementById(`strat-content-${id}`);
     const actions = document.getElementById(`strat-actions-${id}`);
@@ -1409,5 +1559,6 @@
   });
 </script>
 
+<script src="demo-mock.js"></script>
 </body>
 </html>
