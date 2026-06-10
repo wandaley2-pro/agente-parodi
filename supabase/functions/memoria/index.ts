@@ -59,17 +59,17 @@ serve(async (req) => {
     // ───── CARICAMENTO DATI ─────
 
     if (action === "list") {
-      const [note, hashtags, strategia, aforisma, giornate] = await Promise.all([
+      const [note, hashtags, strategia, aforisma, giornate, newsletter_esempi] = await Promise.all([
         supabase.from("angy_memoria").select("id, nota, tipo, attiva").eq("cliente", cliente).order("tipo"),
         supabase.from("angy_hashtags").select("id, tag, attiva").eq("cliente", cliente).order("created_at"),
         supabase.from("angy_strategia").select("id, sezione, contenuto, attiva, ordine").eq("cliente", cliente).order("ordine"),
         supabase.from("angy_aforismi").select("id, testo, autore, categoria").eq("attiva", true),
-        supabase.from("angy_giornate").select("id, mese, giorno, nome, idea, rilevanza").eq("attiva", true).order("mese").order("giorno"),
+        supabase.from("angy_giornate").select("id, mese, giorno, nome, idea, rilevanza, tipo").eq("attiva", true).order("mese").order("giorno"),
+        supabase.from("angy_newsletter_esempi").select("id, titolo, contenuto, tipo").eq("cliente", cliente).eq("attiva", true).order("created_at", { ascending: false }),
       ]);
       if (note.error) throw note.error;
       if (hashtags.error) throw hashtags.error;
 
-      // Aforisma casuale client-side (mandiamo tutti, il frontend pesca uno)
       return new Response(
         JSON.stringify({
           note: note.data,
@@ -77,6 +77,7 @@ serve(async (req) => {
           strategia: strategia.data ?? [],
           aforismi: aforisma.data ?? [],
           giornate: giornate.data ?? [],
+          newsletter_esempi: newsletter_esempi.data ?? [],
         }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -159,6 +160,32 @@ serve(async (req) => {
         return new Response(JSON.stringify({ error: "Sezione o contenuto mancante" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       const { error } = await supabase.from("angy_strategia").insert({ cliente, sezione: sezione.trim(), contenuto: contenuto.trim(), attiva: true });
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    // ───── NEWSLETTER ESEMPI ─────
+
+    if (action === "add_newsletter_esempio") {
+      const { titolo, contenuto, tipo: tipoNl = "generale" } = body;
+      if (!titolo || !contenuto || contenuto.trim().length < 10) {
+        return new Response(JSON.stringify({ error: "Titolo e contenuto obbligatori" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const { error } = await supabase.from("angy_newsletter_esempi").insert({
+        cliente, titolo: titolo.trim(), contenuto: contenuto.trim(), tipo: tipoNl, attiva: true,
+      });
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    if (action === "toggle_newsletter_esempio") {
+      const { id, attiva } = body;
+      if (!id || typeof attiva !== "boolean") {
+        return new Response(JSON.stringify({ error: "Parametri non validi" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      const { error } = await supabase.from("angy_newsletter_esempi").update({ attiva }).eq("id", id);
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }

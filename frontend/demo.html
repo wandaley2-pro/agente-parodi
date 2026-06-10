@@ -10,471 +10,141 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --blue: #003399;
-      --yellow: #FFD600;
-      --blue-light: #0044cc;
-      --blue-dark: #001f6b;
-      --gray-light: #F8FAFC;
-      --gray: #e5e7eb;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --green: #16a34a;
-      --red: #dc2626;
-      --purple: #5b21b6;
-      --radius: 20px;
-      --shadow: 0 8px 32px rgba(0,51,153,0.08);
-      --shadow-sm: 0 2px 12px rgba(0,51,153,0.06);
+      --blue: #003399; --yellow: #FFD600; --blue-light: #0044cc; --blue-dark: #001f6b;
+      --gray-light: #F8FAFC; --gray: #e5e7eb; --text: #0f172a; --text-muted: #64748b;
+      --green: #16a34a; --red: #dc2626; --purple: #5b21b6;
+      --radius: 20px; --shadow: 0 8px 32px rgba(0,51,153,0.08); --shadow-sm: 0 2px 12px rgba(0,51,153,0.06);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      background: var(--gray-light);
-      color: var(--text);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: var(--gray-light); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    body.app-active { padding-bottom: 74px; }
 
-    /* ── HEADER ── */
-    header {
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(0,51,153,0.10);
-      height: 68px;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .logo-badge {
-      background: var(--blue);
-      color: white;
-      font-weight: 900;
-      font-size: 13px;
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      letter-spacing: -0.5px;
-    }
-    header .brand-name { font-size: 17px; font-weight: 800; color: var(--blue); letter-spacing: -0.3px; }
-    header .brand-tag { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 1px; }
-    .logout-btn {
-      background: rgba(0,51,153,0.06);
-      border: 1px solid rgba(0,51,153,0.12);
-      color: var(--blue);
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 7px 14px;
-      border-radius: 20px;
-      font-family: inherit;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
+    /* HEADER */
+    header { background: rgba(255,255,255,0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,51,153,0.10); height: 64px; position: sticky; top: 0; z-index: 50; }
+    .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+    .logo-badge { background: var(--blue); color: white; font-weight: 900; font-size: 13px; width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .brand-name { font-size: 17px; font-weight: 800; color: var(--blue); letter-spacing: -0.3px; }
+    .brand-tag { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 1px; }
+    .logout-btn { background: rgba(0,51,153,0.06); border: 1px solid rgba(0,51,153,0.12); color: var(--blue); font-size: 12px; font-weight: 700; cursor: pointer; padding: 7px 14px; border-radius: 20px; font-family: inherit; transition: all 0.2s; }
     .logout-btn:hover { background: rgba(0,51,153,0.12); }
 
-    /* Nav links header */
-    .nav-link {
-      position: relative; padding: 8px 4px; font-weight: 700; font-size: 14px;
-      color: #003399; opacity: 0.65; transition: opacity 0.2s;
-      background: none; border: none; cursor: pointer; font-family: inherit;
-      white-space: nowrap;
-    }
-    .nav-link:hover, .nav-link.active { opacity: 1; }
-    .nav-link::after {
-      content: ''; position: absolute; left: 0; bottom: -4px;
-      width: 0; height: 3px; background: #FFD600; border-radius: 3px; transition: width 0.3s;
-    }
-    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+    /* BOTTOM NAV */
+    #main-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; background: rgba(255,255,255,0.97); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(0,51,153,0.10); padding: 6px 8px 8px; grid-template-columns: repeat(6,1fr); gap: 2px; }
+    .main-nav-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 5px 2px; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 10px; font-weight: 700; color: #64748b; border-radius: 10px; transition: all 0.15s; white-space: nowrap; }
+    .main-nav-btn .nav-icon { font-size: 20px; line-height: 1; }
+    .main-nav-btn.active { color: var(--blue); }
+    .main-nav-btn.active .nav-icon { transform: scale(1.1); }
+    @media (max-width: 480px) { .main-nav-btn { font-size: 9px; letter-spacing: -0.3px; } .main-nav-btn .nav-icon { font-size: 18px; } }
 
-    /* Mobile bottom nav */
-    .mobile-nav-btn {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      padding: 6px 4px; background: none; border: none; cursor: pointer;
-      font-family: inherit; font-size: 10px; font-weight: 700; color: #64748b;
-      border-radius: 10px; transition: all 0.15s;
-    }
-    .mobile-nav-btn .nav-icon { font-size: 20px; line-height: 1; }
-    .mobile-nav-btn.active { color: #003399; }
+    /* PANELS */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .panel-container { max-width: 1280px; margin: 0 auto; padding: 28px 24px 40px; }
+    @media (max-width: 640px) { .panel-container { padding: 14px 12px 32px; } }
 
-    /* Section cards per i tab */
-    .section-card {
-      background: white; border-radius: 24px; border: 1px solid rgba(0,51,153,0.07);
-      box-shadow: 0 4px 20px rgba(0,51,153,0.06); padding: 22px;
-    }
-    .section-card-header {
-      font-size: 15px; font-weight: 800; color: #003399; margin-bottom: 6px; letter-spacing: -0.3px;
-    }
-    .section-card-hint {
-      font-size: 12px; color: #64748b; margin-bottom: 14px; line-height: 1.55; font-weight: 500;
-    }
-
-    /* Results placeholder */
-    .results-placeholder {
-      background: white; border-radius: 24px; border: 2px dashed rgba(0,51,153,0.12);
-      padding: 48px 24px; text-align: center; min-height: 320px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-    }
-    .results-placeholder .ph-icon { font-size: 48px; opacity: 0.3; }
-    .results-placeholder p { font-size: 15px; font-weight: 700; color: #003399; opacity: 0.5; }
-    .results-placeholder small { font-size: 13px; color: #64748b; font-weight: 500; }
-
-    /* Panel container */
-    .panel-container { max-width: 1280px; margin: 0 auto; padding: 28px 24px 48px; }
-    @media (max-width: 640px) { .panel-container { padding: 16px 14px 80px; } }
-
-    /* Storico list grid */
-    #storico-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
-    @media (max-width: 640px) { #storico-list { grid-template-columns: 1fr; } }
-
-    /* Body with logged-in padding for mobile nav */
-    body.app-active { padding-bottom: 0; }
-    @media (max-width: 767px) { body.app-active { padding-bottom: 68px; } }
-
-    /* Genera: 2 col desktop → 1 col mobile */
+    /* GRIDS */
     .genera-grid { display: grid; grid-template-columns: 420px 1fr; gap: 28px; align-items: start; }
     @media (max-width: 900px) { .genera-grid { grid-template-columns: 1fr; } }
-
-    /* Oggi: 3 col desktop → 1 col mobile */
-    .oggi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: start; }
-    @media (max-width: 900px) { .oggi-grid { grid-template-columns: 1fr; } }
-
-    /* Memoria: 2 col desktop → 1 col mobile */
+    .oggi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; align-items: start; }
+    @media (max-width: 960px) { .oggi-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .oggi-grid { grid-template-columns: 1fr; } }
     .memoria-grid { display: grid; grid-template-columns: 1fr 360px; gap: 22px; align-items: start; }
     @media (max-width: 900px) { .memoria-grid { grid-template-columns: 1fr; } }
+    .ricette-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; align-items: start; }
+    @media (max-width: 960px) { .ricette-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .ricette-grid { grid-template-columns: 1fr; } }
+    #storico-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 14px; }
+    @media (max-width: 640px) { #storico-list { grid-template-columns: 1fr; } }
 
-    /* ── FORMS ── */
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-    input[type="password"], input[type="text"], select, textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid var(--gray);
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--text);
-      background: #F8FAFC;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      appearance: none;
-      -webkit-appearance: none;
-      font-weight: 500;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--blue);
-      background: white;
-      box-shadow: 0 0 0 3px rgba(0,51,153,0.08);
-    }
+    /* SECTION CARD */
+    .section-card { background: white; border-radius: 22px; border: 1px solid rgba(0,51,153,0.07); box-shadow: 0 4px 20px rgba(0,51,153,0.06); padding: 22px; }
+    .section-card-header { font-size: 15px; font-weight: 800; color: var(--blue); margin-bottom: 6px; letter-spacing: -0.3px; }
+    .section-card-hint { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.55; font-weight: 500; }
+
+    /* FORMS */
+    label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    input[type="password"], input[type="text"], select, textarea { width: 100%; padding: 11px 13px; border: 1.5px solid var(--gray); border-radius: 12px; font-size: 14px; font-family: inherit; color: var(--text); background: #F8FAFC; outline: none; transition: border-color 0.2s, box-shadow 0.2s; appearance: none; -webkit-appearance: none; font-weight: 500; }
+    input:focus, select:focus, textarea:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(0,51,153,0.08); }
     textarea { resize: vertical; min-height: 70px; line-height: 1.6; }
     .select-wrap { position: relative; }
-    .select-wrap::after {
-      content: "▾";
-      position: absolute;
-      right: 14px; top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      color: var(--blue);
-      font-size: 13px;
-    }
+    .select-wrap::after { content: "▾"; position: absolute; right: 13px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--blue); font-size: 12px; }
 
-    /* ── BUTTONS ── */
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 14px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-      margin-top: 12px;
-      font-family: inherit;
-    }
+    /* BUTTONS */
+    .btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 13px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s; margin-top: 12px; font-family: inherit; }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { background: var(--gray) !important; color: var(--text-muted) !important; cursor: not-allowed; transform: none; box-shadow: none !important; }
-    .btn-primary {
-      background: var(--blue);
-      color: white;
-      box-shadow: 0 4px 16px rgba(0,51,153,0.22);
-    }
+    .btn-primary { background: var(--blue); color: white; box-shadow: 0 4px 16px rgba(0,51,153,0.22); }
     .btn-primary:hover:not(:disabled) { background: var(--blue-dark); box-shadow: 0 6px 20px rgba(0,51,153,0.30); }
-    .btn-generate {
-      background: var(--yellow);
-      color: var(--blue);
-      margin-top: 18px;
-      font-size: 16px;
-      font-weight: 800;
-      padding: 16px;
-      box-shadow: 0 4px 20px rgba(255,214,0,0.40);
-      border-radius: 16px;
-    }
+    .btn-generate { background: var(--yellow); color: var(--blue); margin-top: 16px; font-size: 15px; font-weight: 800; padding: 15px; box-shadow: 0 4px 20px rgba(255,214,0,0.40); border-radius: 15px; }
     .btn-generate:hover:not(:disabled) { background: #f5cc00; box-shadow: 0 6px 24px rgba(255,214,0,0.50); }
-    .btn-rigenera {
-      background: white;
-      border: 2px solid rgba(0,51,153,0.15);
-      color: var(--blue);
-      border-radius: 14px;
-    }
+    .btn-rigenera { background: white; border: 2px solid rgba(0,51,153,0.15); color: var(--blue); border-radius: 13px; }
     .btn-rigenera:hover:not(:disabled) { background: #f0f5ff; border-color: var(--blue); }
-    .btn-sm {
-      display: inline-block;
-      width: auto;
-      padding: 7px 16px;
-      font-size: 13px;
-      margin-top: 0;
-      border-radius: 10px;
-    }
+    .btn-sm { display: inline-block; width: auto; padding: 7px 15px; font-size: 12px; margin-top: 0; border-radius: 9px; }
 
-    /* ── MESSAGES ── */
-    .msg {
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 13px;
-      margin-top: 10px;
-      display: none;
-      line-height: 1.5;
-      font-weight: 500;
-    }
+    /* MESSAGES */
+    .msg { border-radius: 10px; padding: 10px 13px; font-size: 13px; margin-top: 10px; display: none; line-height: 1.5; font-weight: 500; }
     .msg.show { display: block; }
     .msg-error { background: #fff5f5; color: #c53030; border: 1px solid #fed7d7; }
     .msg-success { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
 
-    /* ── AFORISMA ── */
-    .aforisma-box {
-      background: linear-gradient(135deg, #f0f5ff 0%, #fefce8 100%);
-      border: 1px solid rgba(0,51,153,0.10);
-      border-radius: 20px;
-      padding: 16px 18px;
-      margin-bottom: 18px;
-      position: relative;
-    }
-    .aforisma-box .quote {
-      font-size: 14px;
-      line-height: 1.65;
-      font-style: italic;
-      color: var(--text);
-      padding-right: 28px;
-      font-weight: 500;
-    }
-    .aforisma-box .autore {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 7px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-    }
-    .aforisma-box .next-btn {
-      position: absolute;
-      top: 12px; right: 12px;
-      background: rgba(0,51,153,0.07);
-      border: none;
-      font-size: 15px;
-      cursor: pointer;
-      color: var(--blue);
-      width: 28px; height: 28px;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s;
-    }
-    .aforisma-box .next-btn:hover { background: rgba(0,51,153,0.14); }
+    /* AFORISMA */
+    .aforisma-box { background: linear-gradient(135deg, #f0f5ff 0%, #fefce8 100%); border: 1px solid rgba(0,51,153,0.10); border-radius: 18px; padding: 14px 16px; margin-bottom: 16px; position: relative; }
+    .aforisma-box .quote { font-size: 13px; line-height: 1.65; font-style: italic; color: var(--text); padding-right: 26px; font-weight: 500; }
+    .aforisma-box .autore { font-size: 11px; color: var(--text-muted); margin-top: 6px; font-weight: 700; }
+    .aforisma-box .next-btn { position: absolute; top: 11px; right: 11px; background: rgba(0,51,153,0.07); border: none; font-size: 14px; cursor: pointer; color: var(--blue); width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
 
-    /* ── TREND CHIP ── */
-    .trend-section { margin-bottom: 18px; }
-    .trend-section .section-label {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    /* TREND CHIP */
     .trend-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-    .trend-chip {
-      background: white;
-      border: 1.5px solid var(--gray);
-      border-radius: 12px;
-      padding: 9px 14px;
-      font-size: 12px;
-      cursor: pointer;
-      color: var(--text);
-      transition: all 0.15s;
-      line-height: 1.4;
-      text-align: left;
-      font-family: inherit;
-    }
+    .trend-chip { background: white; border: 1.5px solid var(--gray); border-radius: 11px; padding: 8px 13px; font-size: 12px; cursor: pointer; color: var(--text); transition: all 0.15s; line-height: 1.4; text-align: left; font-family: inherit; }
     .trend-chip:hover { border-color: var(--blue); color: var(--blue); background: rgba(0,51,153,0.04); }
     .trend-chip.selected { border-color: var(--blue); background: var(--blue); color: white; box-shadow: 0 2px 10px rgba(0,51,153,0.25); }
     .trend-chip .chip-title { font-weight: 700; display: block; }
     .trend-chip .chip-angolo { font-size: 11px; opacity: 0.75; display: block; margin-top: 3px; }
-    .trend-load-btn {
-      background: none;
-      border: 1.5px solid var(--gray);
-      border-radius: 8px;
-      padding: 4px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-family: inherit;
-      transition: all 0.15s;
-    }
-    .trend-load-btn:hover { border-color: var(--blue); color: var(--blue); }
 
-    /* ── GIORNATE ── */
-    .giornata-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-      padding: 9px 12px;
-      border-radius: 12px;
-      font-size: 13px;
-      line-height: 1.4;
-      cursor: pointer;
-      transition: background 0.15s;
-      margin-bottom: 3px;
-    }
+    /* CALENDAR */
+    .month-group { margin-bottom: 18px; }
+    .month-header { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-muted); padding: 7px 10px; background: rgba(0,51,153,0.04); border-radius: 9px; margin-bottom: 3px; display: flex; justify-content: space-between; align-items: center; }
+    .month-header.current-month { background: var(--blue); color: white; }
+    .giornata-item { display: flex; align-items: flex-start; gap: 9px; padding: 8px 10px; border-radius: 11px; font-size: 12px; line-height: 1.4; cursor: pointer; transition: background 0.15s; margin-bottom: 2px; }
     .giornata-item:hover { background: rgba(0,51,153,0.04); }
-    .giornata-item .dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 4px;
-      background: var(--gray);
-    }
-    .giornata-item .dot.alta { background: var(--yellow); border: 1.5px solid #d4af00; }
-    .giornata-item.is-today {
-      background: rgba(0,51,153,0.05);
-      border: 1.5px solid rgba(0,51,153,0.15);
-      border-radius: 14px;
-    }
-    .giornata-item.is-today .dot { background: var(--blue); }
-    .giornata-item .g-data { font-weight: 800; color: var(--blue); white-space: nowrap; font-size: 12px; min-width: 50px; }
-    .giornata-item .g-nome { font-weight: 600; }
-    .giornata-item .g-idea { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; }
+    .giornata-item.is-today { background: rgba(0,51,153,0.06); border: 1.5px solid rgba(0,51,153,0.18); border-radius: 12px; }
+    .giornata-item.is-past { opacity: 0.45; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; background: var(--gray); }
+    .dot.alta { background: var(--yellow); border: 1.5px solid #d4af00; }
+    .dot.media { background: #93c5fd; border: 1.5px solid #60a5fa; }
+    .g-data { font-weight: 800; color: var(--blue); white-space: nowrap; font-size: 12px; min-width: 22px; }
+    .g-nome { font-weight: 600; }
+    .g-idea { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; }
+    .g-flag { font-size: 12px; margin-left: 3px; }
 
-    /* ── NEWS ── */
-    .news-item {
-      background: white;
-      border: 1.5px solid rgba(0,51,153,0.08);
-      border-radius: 16px;
-      padding: 14px 15px;
-      margin-bottom: 10px;
-      box-shadow: var(--shadow-sm);
-    }
-    .news-item .n-fonte {
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--purple);
-      margin-bottom: 5px;
-    }
-    .news-item .n-titolo {
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.45;
-      color: var(--text);
-      text-decoration: none;
-      display: block;
-    }
+    /* NEWS */
+    .news-item { background: white; border: 1.5px solid rgba(0,51,153,0.08); border-radius: 15px; padding: 13px 14px; margin-bottom: 9px; box-shadow: var(--shadow-sm); }
+    .news-item .n-fonte { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--purple); margin-bottom: 4px; }
+    .news-item .n-titolo { font-size: 13px; font-weight: 700; line-height: 1.45; color: var(--text); text-decoration: none; display: block; }
     .news-item .n-titolo:hover { color: var(--blue); }
-    .news-item .n-perche { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
-    .news-item .n-idea {
-      font-size: 12px;
-      color: var(--blue);
-      margin-top: 5px;
-      font-style: italic;
-      line-height: 1.5;
-      font-weight: 600;
-    }
-    .news-item .n-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-decoration: none;
-      margin-top: 8px;
-      border: 1.5px solid var(--gray);
-      border-radius: 8px;
-      padding: 4px 11px;
-      transition: all 0.15s;
-    }
+    .news-item .n-perche { font-size: 12px; color: var(--text-muted); margin-top: 5px; line-height: 1.5; }
+    .news-item .n-idea { font-size: 12px; color: var(--blue); margin-top: 4px; font-style: italic; line-height: 1.5; font-weight: 600; }
+    .news-item .n-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-decoration: none; margin-top: 7px; border: 1.5px solid var(--gray); border-radius: 7px; padding: 3px 10px; transition: all 0.15s; }
     .news-item .n-link:hover { border-color: var(--blue); color: var(--blue); }
 
-    /* ── RESULTS ── */
+    /* RESULTS */
     #results { margin-top: 0; display: none; }
-    .result-label {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-bottom: 7px;
-    }
-    .result-box {
-      background: #F8FAFC;
-      border: 1.5px solid var(--gray);
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 14px;
-      line-height: 1.65;
-      margin-bottom: 5px;
-      word-break: break-word;
-      font-weight: 500;
-    }
-    .result-box.copy-box {
-      border-color: rgba(0,51,153,0.2);
-      background: rgba(0,51,153,0.03);
-      font-size: 15px;
-      line-height: 1.7;
-    }
-    .copy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: white;
-      border: 1.5px solid var(--gray);
-      border-radius: 9px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      color: var(--text-muted);
-      margin-top: 6px;
-      font-family: inherit;
-      transition: all 0.15s;
-    }
+    .results-placeholder { background: white; border-radius: 22px; border: 2px dashed rgba(0,51,153,0.12); padding: 48px 24px; text-align: center; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+    .results-placeholder .ph-icon { font-size: 44px; opacity: 0.3; }
+    .results-placeholder p { font-size: 15px; font-weight: 700; color: var(--blue); opacity: 0.5; }
+    .results-placeholder small { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .result-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
+    .result-box { background: #F8FAFC; border: 1.5px solid var(--gray); border-radius: 13px; padding: 13px; font-size: 14px; line-height: 1.65; margin-bottom: 4px; word-break: break-word; font-weight: 500; }
+    .result-box.copy-box { border-color: rgba(0,51,153,0.2); background: rgba(0,51,153,0.03); font-size: 15px; line-height: 1.7; }
+    .copy-btn { display: inline-flex; align-items: center; gap: 4px; background: white; border: 1.5px solid var(--gray); border-radius: 8px; padding: 5px 11px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--text-muted); margin-top: 5px; font-family: inherit; transition: all 0.15s; }
     .copy-btn:hover { border-color: var(--blue); color: var(--blue); }
     .copy-btn.copied { border-color: var(--green); color: var(--green); background: #f0fdf4; }
-    .char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 4px; font-weight: 600; }
+    .char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 3px; font-weight: 600; }
     .char-count.warn { color: var(--red); }
 
-    /* ── BADGE ── */
-    .badge {
-      display: inline-block;
-      padding: 4px 11px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    /* BADGE */
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
     .badge-Interazione { background: #dbeafe; color: #1e40af; }
     .badge-Traffico { background: #fef3c7; color: #92400e; }
     .badge-Copertura { background: #d1fae5; color: #065f46; }
@@ -483,289 +153,137 @@
     .badge-scartato { background: #fee2e2; color: #991b1b; }
     .badge-fw { background: #ede9fe; color: var(--purple); }
 
-    /* ── KEYWORDS VISUAL ── */
-    .kw-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 7px; }
-    .kw-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: #fefce8;
-      border: 1.5px solid #fde68a;
-      color: #92400e;
-      border-radius: 20px;
-      padding: 5px 13px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
+    /* KW CHIPS */
+    .kw-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .kw-chip { display: inline-flex; align-items: center; gap: 4px; background: #fefce8; border: 1.5px solid #fde68a; color: #92400e; border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; transition: background 0.15s; }
     .kw-chip:hover { background: #fde68a; }
 
-    /* ── STORICO ── */
-    .post-item {
-      border: 1.5px solid rgba(0,51,153,0.08);
-      border-radius: 18px;
-      padding: 14px 15px;
-      margin-bottom: 0;
-      background: white;
-      box-shadow: var(--shadow-sm);
-    }
-    .post-head {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      flex-wrap: wrap;
-      margin-bottom: 8px;
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
+    /* STORICO */
+    .post-item { border: 1.5px solid rgba(0,51,153,0.08); border-radius: 17px; padding: 14px 15px; background: white; box-shadow: var(--shadow-sm); }
+    .post-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 7px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
     .post-copy { font-size: 14px; line-height: 1.6; margin-bottom: 8px; font-weight: 500; }
-    .post-hashtags { font-size: 12px; color: var(--blue); margin-bottom: 10px; word-break: break-word; font-weight: 600; }
-    .post-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .action-btn {
-      border: 1.5px solid var(--gray);
-      background: white;
-      border-radius: 9px;
-      padding: 6px 13px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.15s;
-      color: var(--text-muted);
-    }
+    .post-hashtags { font-size: 12px; color: var(--blue); margin-bottom: 9px; word-break: break-word; font-weight: 600; }
+    .post-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+    .action-btn { border: 1.5px solid var(--gray); background: white; border-radius: 8px; padding: 5px 12px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; color: var(--text-muted); }
     .action-btn.approve:hover { border-color: var(--green); color: var(--green); background: #f0fdf4; }
     .action-btn.reject:hover { border-color: var(--red); color: var(--red); background: #fff5f5; }
     .action-btn:hover { border-color: var(--blue); color: var(--blue); }
 
-    /* ── MEMORIA ── */
+    /* MEMORIA */
     .section-title { font-size: 16px; font-weight: 800; color: var(--blue); margin: 4px 0 8px; letter-spacing: -0.3px; }
     .hint { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; font-weight: 500; }
-    .mem-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(0,51,153,0.06);
-      font-size: 13px;
-      line-height: 1.5;
-    }
+    .mem-item { display: flex; align-items: flex-start; gap: 11px; padding: 9px 0; border-bottom: 1px solid rgba(0,51,153,0.06); font-size: 13px; line-height: 1.5; }
     .mem-item.inactive { opacity: 0.4; }
     .mem-text { flex: 1; font-weight: 500; }
     .mem-tipo { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; cursor: pointer; }
+    .toggle { position: relative; width: 38px; height: 21px; flex-shrink: 0; cursor: pointer; }
     .toggle input { opacity: 0; width: 0; height: 0; }
     .toggle .slider { position: absolute; inset: 0; background: #e2e8f0; border-radius: 22px; transition: 0.25s; }
-    .toggle .slider::before {
-      content: "";
-      position: absolute;
-      width: 16px; height: 16px;
-      left: 3px; top: 3px;
-      background: white;
-      border-radius: 50%;
-      transition: 0.25s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
+    .toggle .slider::before { content: ""; position: absolute; width: 15px; height: 15px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.25s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
     .toggle input:checked + .slider { background: var(--green); }
-    .toggle input:checked + .slider::before { transform: translateX(18px); }
-    .tag-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(0,51,153,0.06);
-      border: 1.5px solid rgba(0,51,153,0.15);
-      color: var(--blue);
-      border-radius: 20px;
-      padding: 5px 13px;
-      font-size: 13px;
-      font-weight: 700;
-      margin: 0 5px 6px 0;
-    }
+    .toggle input:checked + .slider::before { transform: translateX(17px); }
+    .tag-pill { display: inline-flex; align-items: center; gap: 5px; background: rgba(0,51,153,0.06); border: 1.5px solid rgba(0,51,153,0.15); color: var(--blue); border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 700; margin: 0 5px 6px 0; }
     .tag-pill.inactive { background: #f1f5f9; border-color: var(--gray); color: var(--text-muted); text-decoration: line-through; }
-    .tag-pill button { background: none; border: none; cursor: pointer; font-size: 12px; color: inherit; padding: 0; opacity: 0.7; }
-    .tag-pill button:hover { opacity: 1; }
+    .tag-pill button { background: none; border: none; cursor: pointer; font-size: 11px; color: inherit; padding: 0; opacity: 0.7; }
     .add-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
-    .add-row .btn { width: auto; margin-top: 0; padding: 11px 16px; flex-shrink: 0; }
-
-    /* ── STRATEGIA ── */
-    .strat-item {
-      border: 1.5px solid rgba(0,51,153,0.08);
-      border-radius: 16px;
-      padding: 13px 15px;
-      margin-bottom: 10px;
-      background: white;
-      box-shadow: var(--shadow-sm);
-    }
+    .add-row .btn { width: auto; margin-top: 0; padding: 10px 15px; flex-shrink: 0; }
+    .strat-item { border: 1.5px solid rgba(0,51,153,0.08); border-radius: 15px; padding: 12px 14px; margin-bottom: 9px; background: white; box-shadow: var(--shadow-sm); }
     .strat-item.inactive { opacity: 0.4; }
-    .strat-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 7px;
-    }
-    .strat-sezione {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--blue);
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-    }
-    .strat-contenuto {
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--text);
-      cursor: text;
-      font-weight: 500;
-    }
-    .strat-contenuto[contenteditable="true"] {
-      outline: 2px solid var(--blue);
-      border-radius: 8px;
-      padding: 6px;
-      background: rgba(0,51,153,0.03);
-    }
-    .strat-actions { display: flex; gap: 7px; margin-top: 9px; }
-    .strat-btn {
-      border: 1.5px solid var(--gray);
-      background: white;
-      border-radius: 8px;
-      padding: 5px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      color: var(--text-muted);
-      transition: all 0.15s;
-    }
+    .strat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .strat-sezione { font-size: 11px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.7px; }
+    .strat-contenuto { font-size: 13px; line-height: 1.6; color: var(--text); cursor: text; font-weight: 500; }
+    .strat-contenuto[contenteditable="true"] { outline: 2px solid var(--blue); border-radius: 7px; padding: 5px; background: rgba(0,51,153,0.03); }
+    .strat-actions { display: flex; gap: 7px; margin-top: 8px; }
+    .strat-btn { border: 1.5px solid var(--gray); background: white; border-radius: 7px; padding: 4px 11px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; color: var(--text-muted); transition: all 0.15s; }
     .strat-btn:hover { border-color: var(--blue); color: var(--blue); }
-    .strat-btn.save { background: var(--blue); color: white; border-color: var(--blue); box-shadow: 0 2px 8px rgba(0,51,153,0.20); }
+    .strat-btn.save { background: var(--blue); color: white; border-color: var(--blue); }
 
-    /* ── DIVIDERS & MISC ── */
-    .divider { height: 1px; background: rgba(0,51,153,0.07); margin: 20px 0; }
+    /* NEWSLETTER */
+    .nl-email-body { background: #F8FAFC; border: 1.5px solid rgba(0,51,153,0.12); border-radius: 16px; padding: 20px; font-size: 14px; line-height: 1.75; color: var(--text); }
+    .nl-saluto { font-weight: 700; margin-bottom: 14px; color: var(--blue); }
+    .nl-paragrafo { margin-bottom: 12px; font-weight: 500; }
+    .nl-cta { font-weight: 700; color: var(--blue); margin-top: 14px; padding: 10px 14px; background: rgba(0,51,153,0.06); border-radius: 10px; }
+    .nl-firma { font-size: 13px; color: var(--text-muted); margin-top: 14px; font-weight: 600; border-top: 1px solid var(--gray); padding-top: 10px; }
+    .nl-esempio-card { background: rgba(0,51,153,0.03); border: 1.5px solid rgba(0,51,153,0.10); border-radius: 14px; padding: 14px; font-size: 13px; line-height: 1.6; color: var(--text); max-height: 180px; overflow-y: auto; font-weight: 500; white-space: pre-wrap; word-break: break-word; }
+    .nl-esempio-titolo { font-size: 12px; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
 
-    /* ── LOADING ── */
-    #loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(248,250,252,0.75);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
+    /* RICETTE */
+    .ricetta-result { background: white; border: 1.5px solid rgba(0,51,153,0.08); border-radius: 18px; padding: 18px; box-shadow: var(--shadow-sm); margin-top: 12px; }
+    .ricetta-nome { font-size: 16px; font-weight: 900; color: var(--blue); letter-spacing: -0.3px; margin-bottom: 7px; }
+    .ricetta-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; font-style: italic; font-weight: 500; }
+    .ricetta-info-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; padding: 10px 12px; background: rgba(0,51,153,0.04); border-radius: 12px; }
+    .ricetta-info-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--text); }
+    .ricetta-info-item .info-label { color: var(--text-muted); font-weight: 600; }
+    .ricetta-section-title { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: var(--blue); margin-bottom: 8px; }
+    .ingredienti-list { list-style: none; padding: 0; margin-bottom: 16px; }
+    .ingredienti-list li { padding: 5px 0; border-bottom: 1px solid rgba(0,51,153,0.05); font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .ingredienti-list li::before { content: "•"; color: var(--blue); font-weight: 900; }
+    .preparazione-list { list-style: none; padding: 0; margin-bottom: 14px; counter-reset: step-counter; }
+    .preparazione-list li { padding: 8px 0 8px 32px; border-bottom: 1px solid rgba(0,51,153,0.05); font-size: 13px; font-weight: 500; line-height: 1.55; position: relative; counter-increment: step-counter; }
+    .preparazione-list li::before { content: counter(step-counter); position: absolute; left: 0; top: 7px; width: 22px; height: 22px; background: var(--blue); color: white; border-radius: 50%; font-size: 11px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+    .ricetta-consiglio { background: linear-gradient(135deg, #fefce8, #f0f5ff); border: 1px solid rgba(255,214,0,0.5); border-radius: 12px; padding: 11px 13px; font-size: 12px; line-height: 1.6; color: var(--text); margin-top: 14px; font-weight: 500; }
+    .idea-item { padding: 10px 12px; border: 1.5px solid rgba(0,51,153,0.08); border-radius: 12px; margin-bottom: 8px; background: white; cursor: pointer; transition: all 0.15s; }
+    .idea-item:hover { border-color: var(--blue); background: rgba(0,51,153,0.02); }
+    .idea-titolo { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .idea-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; line-height: 1.5; }
+    .idea-meta { display: flex; gap: 10px; font-size: 11px; color: var(--text-muted); font-weight: 700; }
+    .idea-meta span { background: #f1f5f9; padding: 2px 8px; border-radius: 6px; }
+    .usa-btn { float: right; background: var(--blue); color: white; border: none; border-radius: 8px; padding: 4px 11px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; margin-top: -2px; }
+    .usa-btn:hover { background: var(--blue-dark); }
+
+    /* UPLOAD ZONE */
+    .upload-zone { border: 2px dashed rgba(0,51,153,0.25); border-radius: 16px; padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: rgba(0,51,153,0.02); }
+    .upload-zone:hover, .upload-zone.drag-over { border-color: var(--blue); background: rgba(0,51,153,0.05); }
+    .upload-icon { font-size: 36px; margin-bottom: 8px; }
+    .upload-text { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+    .upload-hint { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+
+    /* LOADING */
+    #loading-overlay { position: fixed; inset: 0; background: rgba(248,250,252,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100; }
     #loading-overlay.show { display: flex; }
-    .loading-card {
-      background: white;
-      border-radius: 28px;
-      padding: 36px 44px;
-      text-align: center;
-      box-shadow: 0 24px 64px rgba(0,51,153,0.18);
-      border: 1px solid rgba(0,51,153,0.08);
-    }
-    .loading-card .big-spinner {
-      width: 48px; height: 48px;
-      border: 4px solid rgba(0,51,153,0.10);
-      border-top-color: var(--blue);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-    .loading-card p { font-size: 16px; font-weight: 800; color: var(--blue); margin-bottom: 4px; }
+    .loading-card { background: white; border-radius: 26px; padding: 34px 42px; text-align: center; box-shadow: 0 24px 64px rgba(0,51,153,0.18); border: 1px solid rgba(0,51,153,0.08); }
+    .loading-card .big-spinner { width: 44px; height: 44px; border: 4px solid rgba(0,51,153,0.10); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
+    .loading-card p { font-size: 16px; font-weight: 800; color: var(--blue); margin-bottom: 3px; }
     .loading-card small { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
-    /* ── SPINNER ── */
-    .spinner {
-      display: inline-block;
-      width: 15px; height: 15px;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 7px;
-    }
+    /* SPINNER */
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
     .spinner-blue { border-color: rgba(0,51,153,0.15); border-top-color: var(--blue); }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── EMPTY STATE ── */
-    .empty-state {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 500;
-      padding: 24px 0;
-    }
-
-    /* ── SECTION HEADER (Oggi tab) ── */
-    .section-block {
-      background: rgba(0,51,153,0.03);
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 6px;
-    }
-
-    /* ── TAB PANELS ── */
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* ── LOGIN CARD ── */
-    .login-card {
-      background: white;
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,51,153,0.06);
-      padding: 32px 28px;
-      width: 100%;
-      max-width: 400px;
-    }
-    .login-icon {
-      width: 64px; height: 64px;
-      background: var(--blue);
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; font-weight: 900; color: white;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 24px rgba(0,51,153,0.25);
-    }
-    #login-view h2 { font-size: 26px; font-weight: 900; color: var(--blue); line-height: 1.1; margin-bottom: 4px; letter-spacing: -0.5px; }
-    #login-view .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 26px; font-weight: 500; line-height: 1.5; }
-    #login-view .subtitle strong { color: var(--blue); }
-
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 6px; }
+    /* MISC */
+    .divider { height: 1px; background: rgba(0,51,153,0.07); margin: 18px 0; }
+    .empty-state { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 500; padding: 20px 0; }
+    .section-block { background: rgba(0,51,153,0.03); border-radius: 18px; padding: 14px; margin-bottom: 6px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(0,51,153,0.15); border-radius: 3px; }
+
+    /* LOGIN */
+    .login-card { background: white; border-radius: 26px; box-shadow: var(--shadow); border: 1px solid rgba(0,51,153,0.06); padding: 30px 26px; width: 100%; max-width: 400px; }
+    .login-icon { width: 60px; height: 60px; background: var(--blue); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: white; margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,51,153,0.25); }
+    #login-view h2 { font-size: 24px; font-weight: 900; color: var(--blue); line-height: 1.1; margin-bottom: 4px; letter-spacing: -0.5px; }
+    #login-view .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; font-weight: 500; line-height: 1.5; }
+    #login-view .subtitle strong { color: var(--blue); }
   </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
 <header>
-  <div style="max-width:1280px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; justify-content:space-between; position:relative;">
-    <!-- Logo -->
-    <div style="display:flex; align-items:center; gap:12px; flex-shrink:0;">
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:11px;">
       <div class="logo-badge">AN</div>
       <div>
         <div class="brand-name">ANGY</div>
         <div class="brand-tag">Copywriter AI · Angelo Parodi</div>
       </div>
     </div>
-    <!-- Desktop nav (centrata assoluta) -->
-    <nav style="display:none; position:absolute; left:50%; transform:translateX(-50%); gap:28px;" id="desktop-nav">
-      <button data-tab="genera" class="nav-link active" onclick="switchTab('genera')">✨ Genera</button>
-      <button data-tab="trend" class="nav-link" onclick="switchTab('trend')">📰 Oggi</button>
-      <button data-tab="storico" class="nav-link" onclick="switchTab('storico')">📋 Storico</button>
-      <button data-tab="memoria" class="nav-link" onclick="switchTab('memoria')">🧠 Memoria</button>
-    </nav>
-    <!-- Logout -->
     <button class="logout-btn" id="header-logout" style="display:none;" onclick="handleLogout()">Esci</button>
   </div>
 </header>
 
-<!-- ── LOGIN ── -->
-<div id="login-view" style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#F8FAFC; z-index:60; padding:20px;">
+<!-- LOGIN -->
+<div id="login-view" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#F8FAFC;z-index:60;padding:20px;">
   <div class="login-card">
     <div class="login-icon">AN</div>
     <h2>Ciao, team 👋</h2>
@@ -774,46 +292,38 @@
     <input type="password" id="password-input" placeholder="••••••••" autocomplete="current-password" />
     <div class="msg msg-error" id="login-error"></div>
     <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Accedi →</button>
-    <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:14px; font-weight:500;">
-      Angelo Parodi · Solo uso interno team · Dal 1888
+    <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;font-weight:500;">
+      ANGY · Angelo Parodi · Solo uso interno team
     </p>
   </div>
 </div>
 
-<!-- ── APP ── -->
+<!-- APP -->
 <div id="app-view" style="display:none;">
 
-  <!-- ── TAB GENERA ── -->
-  <div class="tab-panel active" id="panel-genera">
+  <!-- ── TAB SOCIAL ── -->
+  <div class="tab-panel active" id="panel-social">
     <div class="panel-container">
       <div class="genera-grid">
-
-        <!-- Colonna sinistra: form -->
         <div>
-          <!-- Aforisma -->
           <div class="aforisma-box" id="aforisma-box" style="display:none;">
             <button class="next-btn" onclick="nextAforisma()" title="Prossimo">↻</button>
             <div class="quote" id="aforisma-testo"></div>
             <div class="autore" id="aforisma-autore"></div>
           </div>
-
-          <!-- Promemoria giornata -->
-          <div id="giornata-banner" style="display:none; margin-bottom:16px; background:rgba(0,51,153,0.05); border:1.5px solid rgba(0,51,153,0.18); border-radius:18px; padding:14px 16px;">
-            <div style="font-size:13px; font-weight:800; color:var(--blue); margin-bottom:4px;" id="giornata-banner-title"></div>
-            <div style="font-size:13px; color:var(--text); line-height:1.5; margin-bottom:10px; font-weight:500;" id="giornata-banner-idea"></div>
-            <button class="btn-sm btn btn-primary" style="padding:8px 16px; margin:0;" onclick="useGiornataBanner()">✨ Usa per questo post</button>
+          <div id="giornata-banner" style="display:none;margin-bottom:14px;background:rgba(0,51,153,0.05);border:1.5px solid rgba(0,51,153,0.18);border-radius:16px;padding:13px 15px;">
+            <div style="font-size:12px;font-weight:800;color:var(--blue);margin-bottom:3px;" id="giornata-banner-title"></div>
+            <div style="font-size:13px;color:var(--text);line-height:1.5;margin-bottom:8px;font-weight:500;" id="giornata-banner-idea"></div>
+            <button class="btn-sm btn btn-primary" style="padding:7px 14px;margin:0;" onclick="useGiornataBanner()">✨ Usa per questo post</button>
           </div>
-
-          <!-- Trend selezionato -->
-          <div id="trend-selected-bar" style="display:none; margin-bottom:16px;">
-            <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:7px;">Trend attivo per questa generazione</div>
-            <div style="display:flex; align-items:center; gap:9px;">
-              <span class="trend-chip selected" id="trend-selected-chip" style="cursor:default; flex:1; font-family:inherit;"></span>
-              <button onclick="clearTrend()" style="background:rgba(0,51,153,0.06);border:1.5px solid rgba(0,51,153,0.12);cursor:pointer;color:var(--blue);font-size:16px;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;" title="Rimuovi trend">✕</button>
+          <div id="trend-selected-bar" style="display:none;margin-bottom:14px;">
+            <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Trend attivo per questa generazione</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="trend-chip selected" id="trend-selected-chip" style="cursor:default;flex:1;font-family:inherit;"></span>
+              <button onclick="clearTrend()" style="background:rgba(0,51,153,0.06);border:1.5px solid rgba(0,51,153,0.12);cursor:pointer;color:var(--blue);font-size:15px;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;" title="Rimuovi">✕</button>
             </div>
           </div>
-
-          <div style="margin-bottom:18px;">
+          <div style="margin-bottom:16px;">
             <label for="formato-select">Formato post</label>
             <div class="select-wrap">
               <select id="formato-select">
@@ -823,98 +333,280 @@
               </select>
             </div>
           </div>
-
           <div class="msg msg-error" id="gen-error"></div>
-
           <button class="btn btn-generate" id="gen-btn" onclick="handleGenerate(false)">✨ Genera il post</button>
         </div>
-
-        <!-- Colonna destra: results -->
         <div>
           <div id="results-placeholder" class="results-placeholder">
             <div class="ph-icon">✨</div>
             <p>Premi Genera per il tuo prossimo post</p>
-            <small>ANGY leggerà la strategia, i trend e la memoria del brand</small>
+            <small>ANGY leggerà strategia, trend e memoria del brand</small>
           </div>
-
           <div id="results" style="display:none;">
-            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center;">
+            <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
               <span class="badge" id="res-ob-badge"></span>
               <span class="badge badge-fw" id="res-fw-badge"></span>
             </div>
-
             <div class="result-label">Copy Instagram / Facebook</div>
             <div class="result-box copy-box" id="res-copy">–</div>
             <div class="char-count" id="res-copy-count"></div>
-            <button class="copy-btn" onclick="copyEl('res-copy', this, 'Copia copy')">📋 Copia copy</button>
-
-            <div style="margin-top:18px;">
+            <button class="copy-btn" onclick="copyEl('res-copy',this,'Copia copy')">📋 Copia copy</button>
+            <div style="margin-top:16px;">
               <div class="result-label">Hashtag <span style="font-weight:500;text-transform:none;letter-spacing:0;font-size:11px;">(modificabili)</span></div>
               <textarea id="res-hashtags" rows="2"></textarea>
-              <button class="copy-btn" onclick="copyTA('res-hashtags', this, 'Copia hashtag')">📋 Copia hashtag</button>
+              <button class="copy-btn" onclick="copyTA('res-hashtags',this,'Copia hashtag')">📋 Copia hashtag</button>
             </div>
-
-            <div style="margin-top:18px;">
+            <div style="margin-top:16px;">
               <div class="result-label">Brief per il grafico</div>
               <div class="result-box" id="res-visual">–</div>
-              <button class="copy-btn" onclick="copyEl('res-visual', this, 'Copia brief')">📋 Copia brief visual</button>
+              <button class="copy-btn" onclick="copyEl('res-visual',this,'Copia brief')">📋 Copia brief visual</button>
             </div>
-
-            <div style="margin-top:18px;">
+            <div style="margin-top:16px;">
               <div class="result-label">Cerca ispirazione visiva 🔍</div>
-              <p style="font-size:12px; color:var(--text-muted); margin-bottom:9px; font-weight:500;">Clicca una keyword per cercare su Pinterest</p>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;font-weight:500;">Clicca una keyword per cercare su Pinterest</p>
               <div class="kw-chips" id="res-kw-chips"></div>
             </div>
-
-            <button class="btn btn-rigenera" id="rigenera-btn" onclick="handleGenerate(true)" style="margin-top:20px;">
-              🔄 Non mi piace, rigenera
-            </button>
-            <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:7px; font-weight:500;">
-              Rigenerando, il post scartato viene sovrascritto — non sporca lo storico.
-            </p>
+            <button class="btn btn-rigenera" id="rigenera-btn" onclick="handleGenerate(true)" style="margin-top:18px;">🔄 Non mi piace, rigenera</button>
+            <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:6px;font-weight:500;">Rigenerando, il post scartato viene sovrascritto — non sporca lo storico.</p>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB NEWSLETTER ── -->
+  <div class="tab-panel" id="panel-newsletter">
+    <div class="panel-container">
+      <div class="genera-grid">
+        <div>
+          <!-- Esempio newsletter -->
+          <div class="section-card" style="margin-bottom:20px;">
+            <div class="section-card-header">📌 Stile di riferimento</div>
+            <div class="section-card-hint">ANGY analizzerà questi esempi per adattare tono e struttura. Aggiungi una newsletter già scritta come modello.</div>
+            <div id="nl-esempio-display">
+              <div class="empty-state" style="padding:12px 0;">Nessun esempio ancora — aggiungine uno qui sotto</div>
+            </div>
+            <div id="nl-esempio-nav" style="display:none;align-items:center;gap:8px;margin-top:9px;">
+              <button class="action-btn" onclick="prevNlEsempio()">← Prec.</button>
+              <span id="nl-esempio-counter" style="font-size:12px;color:var(--text-muted);font-weight:600;flex:1;text-align:center;"></span>
+              <button class="action-btn" onclick="nextNlEsempio()">Succ. →</button>
+            </div>
+          </div>
+          <!-- Aggiungi esempio -->
+          <div class="section-card" style="margin-bottom:20px;">
+            <div style="font-size:11px;font-weight:800;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.8px;">+ Aggiungi esempio newsletter</div>
+            <input type="text" id="nl-add-titolo" placeholder="Titolo esempio (es. Newsletter giugno 2026)" style="margin-bottom:8px;" />
+            <textarea id="nl-add-contenuto" rows="5" placeholder="Incolla qui il corpo di una newsletter già scritta…"></textarea>
+            <div class="select-wrap" style="margin-top:8px;">
+              <select id="nl-add-tipo">
+                <option value="generale">Generale</option>
+                <option value="ricetta">Centrata su ricetta</option>
+                <option value="promo">Promozionale</option>
+                <option value="stagionale">Stagionale</option>
+              </select>
+            </div>
+            <div class="msg msg-error" id="nl-add-error"></div>
+            <div class="msg msg-success" id="nl-add-ok"></div>
+            <button class="btn btn-primary btn-sm" onclick="handleAddNlEsempio()" style="margin-top:10px;padding:9px 16px;">Aggiungi</button>
+          </div>
+          <!-- Parametri generazione -->
+          <div class="section-card">
+            <div class="section-card-header">✉️ Parametri newsletter</div>
+            <div style="margin-bottom:13px;">
+              <label>Tema / Argomento *</label>
+              <input type="text" id="nl-tema" placeholder="es. Ricette estive, Lancio prodotto, Giornata del tonno" />
+            </div>
+            <div style="margin-bottom:13px;">
+              <label>Prodotto in primo piano *</label>
+              <div class="select-wrap">
+                <select id="nl-prodotto">
+                  <option value="Filetti di Tonno all'Olio Extravergine">Tonno OE</option>
+                  <option value="Filetti di Tonno al Naturale">Tonno al naturale</option>
+                  <option value="Filetti di Sgombro">Sgombro</option>
+                  <option value="Acciughe">Acciughe</option>
+                  <option value="Salmone Affumicato">Salmone affumicato</option>
+                  <option value="Polpa di Granchio">Polpa di granchio</option>
+                  <option value="Mix prodotti Angelo Parodi">Mix prodotti</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-bottom:13px;">
+              <label>Stagione / Occasione</label>
+              <input type="text" id="nl-stagione" placeholder="es. Estate, Natale, Pasqua, Lancio nuovo prodotto" />
+            </div>
+            <div style="margin-bottom:13px;">
+              <label>Tono</label>
+              <div class="select-wrap">
+                <select id="nl-tono">
+                  <option value="Caldo e narrativo">Caldo e narrativo</option>
+                  <option value="Informativo e utile">Informativo e utile</option>
+                  <option value="Centrato sulla ricetta">Centrato sulla ricetta</option>
+                  <option value="Promozionale con offerta">Promozionale con offerta</option>
+                </select>
+              </div>
+            </div>
+            <div class="msg msg-error" id="nl-error"></div>
+            <button class="btn btn-generate" id="nl-gen-btn" onclick="handleGenerateNewsletter()">✉️ Genera newsletter</button>
+          </div>
+        </div>
+        <div>
+          <div id="nl-results-placeholder" class="results-placeholder">
+            <div class="ph-icon">✉️</div>
+            <p>Premi Genera per la tua newsletter</p>
+            <small>ANGY scriverà oggetto, corpo e CTA su misura per Angelo Parodi</small>
+          </div>
+          <div id="nl-results" style="display:none;">
+            <div style="margin-bottom:16px;">
+              <div class="result-label">Oggetto email</div>
+              <div class="result-box" id="nl-res-oggetto" style="font-size:15px;font-weight:700;"></div>
+              <button class="copy-btn" onclick="copyEl('nl-res-oggetto',this,'Copia oggetto')">📋 Copia oggetto</button>
+            </div>
+            <div style="margin-bottom:16px;">
+              <div class="result-label">Preview text</div>
+              <div class="result-box" id="nl-res-preview" style="font-size:13px;color:var(--text-muted);"></div>
+              <button class="copy-btn" onclick="copyEl('nl-res-preview',this,'Copia preview')">📋 Copia preview</button>
+            </div>
+            <div style="margin-bottom:16px;">
+              <div class="result-label">Corpo email</div>
+              <div class="nl-email-body">
+                <div class="nl-saluto" id="nl-res-saluto"></div>
+                <div id="nl-res-paragrafi"></div>
+                <div class="nl-cta" id="nl-res-cta"></div>
+                <div class="nl-firma" id="nl-res-firma"></div>
+              </div>
+              <button class="copy-btn" onclick="copyNlBody(this)" style="margin-top:8px;">📋 Copia corpo email</button>
+            </div>
+            <button class="btn btn-rigenera" onclick="handleGenerateNewsletter()" style="margin-top:4px;">🔄 Rigenera newsletter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB RICETTE ── -->
+  <div class="tab-panel" id="panel-ricette">
+    <div class="panel-container">
+      <div class="ricette-grid">
+
+        <!-- Spunti -->
+        <div class="section-card">
+          <div class="section-card-header">💡 Spunti ricette</div>
+          <div class="section-card-hint">Genera idee originali da sviluppare per sito e social.</div>
+          <div style="margin-bottom:12px;">
+            <label>Prodotto principale</label>
+            <div class="select-wrap">
+              <select id="idee-prodotto">
+                <option value="Filetti di Tonno Angelo Parodi all'Olio Extravergine">Tonno OE</option>
+                <option value="Filetti di Tonno Angelo Parodi al Naturale">Tonno al naturale</option>
+                <option value="Filetti di Sgombro Angelo Parodi">Sgombro</option>
+                <option value="Acciughe Angelo Parodi">Acciughe</option>
+                <option value="Salmone Affumicato Angelo Parodi">Salmone affumicato</option>
+                <option value="Polpa di Granchio Angelo Parodi">Polpa di granchio</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label>Occasione / Stagione</label>
+            <div class="select-wrap">
+              <select id="idee-occasione">
+                <option value="pranzo veloce di settimana">Pranzo veloce</option>
+                <option value="aperitivo e antipasto">Aperitivo / Antipasto</option>
+                <option value="cena romantica o festiva">Cena romantica / Festiva</option>
+                <option value="estate e picnic">Estate / Picnic</option>
+                <option value="autunno e comfort food">Autunno / Comfort food</option>
+                <option value="natale e feste invernali">Natale / Feste invernali</option>
+                <option value="pranzo al sacco e meal prep">Meal prep / Pranzo al sacco</option>
+                <option value="ricetta per bambini">Per bambini</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:14px;display:flex;gap:16px;align-items:center;">
+            <label style="display:inline;margin:0;font-size:13px;font-weight:700;">N. idee:</label>
+            <label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;cursor:pointer;margin:0;"><input type="radio" name="n-idee" value="3" checked style="width:auto;"> 3</label>
+            <label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;cursor:pointer;margin:0;"><input type="radio" name="n-idee" value="5" style="width:auto;"> 5</label>
+          </div>
+          <div class="msg msg-error" id="idee-error"></div>
+          <button class="btn btn-generate" id="idee-btn" onclick="handleGeneraIdee()">💡 Genera idee</button>
+          <div id="idee-results" style="margin-top:14px;display:none;"></div>
+        </div>
+
+        <!-- Scrivi ricetta -->
+        <div class="section-card">
+          <div class="section-card-header">🍝 Scrivi ricetta</div>
+          <div class="section-card-hint">Ricetta completa nel formato editoriale Angelo Parodi.</div>
+          <div style="margin-bottom:12px;">
+            <label>Nome ricetta *</label>
+            <input type="text" id="ricetta-titolo" placeholder="es. Linguine con pesto di acciughe e pinoli" />
+            <small style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block;">💡 Clicca "Usa questa" su un'idea per compilarlo automaticamente</small>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label>Note chef (opzionale)</label>
+            <textarea id="ricetta-note" rows="3" placeholder="es. Versione senza glutine, servire con... variante con..."></textarea>
+          </div>
+          <div class="msg msg-error" id="ricetta-error"></div>
+          <button class="btn btn-generate" id="ricetta-btn" onclick="handleScriviRicetta()">🍝 Scrivi ricetta completa</button>
+          <div id="ricetta-results" style="margin-top:14px;display:none;"></div>
+        </div>
+
+        <!-- Video transcription -->
+        <div class="section-card">
+          <div class="section-card-header">🎬 Trascrivi video</div>
+          <div class="section-card-hint">Carica un video del tuo chef: ANGY lo analizza e scrive la ricetta completa.</div>
+          <div style="background:rgba(0,51,153,0.04);border-radius:12px;padding:12px 13px;margin-bottom:14px;font-size:12px;line-height:1.65;color:var(--text);">
+            <strong>Come funziona</strong><br>
+            1. Filma uno chef mentre cucina (anche con smartphone)<br>
+            2. Carica il video — MP4, MOV, AVI, max 200MB<br>
+            3. ANGY guarda il video e trascrive ingredienti e procedimento<br>
+            4. Ottieni la ricetta pronta per sito e social
+          </div>
+          <div class="upload-zone" id="upload-zone" onclick="document.getElementById('video-input').click()" ondragover="uploadDragOver(event)" ondragleave="uploadDragLeave(event)" ondrop="uploadDrop(event)">
+            <div class="upload-icon">🎬</div>
+            <div class="upload-text">Clicca o trascina il video</div>
+            <div class="upload-hint">MP4 · MOV · AVI · max 200MB</div>
+          </div>
+          <input type="file" id="video-input" accept="video/*" style="display:none;" onchange="handleVideoSelect(event)" />
+          <div id="video-info" style="display:none;margin-top:10px;font-size:12px;padding:9px 12px;background:rgba(0,51,153,0.04);border-radius:10px;display:flex;align-items:center;">
+            <span id="video-name" style="font-weight:700;color:var(--blue);flex:1;"></span>
+            <span id="video-size" style="color:var(--text-muted);margin-right:8px;"></span>
+            <button onclick="clearVideo()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:13px;padding:0;" title="Rimuovi">✕</button>
+          </div>
+          <div class="msg msg-error" id="trascrivi-error"></div>
+          <button class="btn btn-generate" id="trascrivi-btn" onclick="handleTrascriviVideo()" disabled>🎬 Trascrivi con AI</button>
+          <div id="trascrivi-results" style="margin-top:14px;display:none;"></div>
         </div>
 
       </div>
     </div>
   </div>
 
-  <!-- ── TAB OGGI ── -->
-  <div class="tab-panel" id="panel-trend">
+  <!-- ── TAB CALENDARIO ── -->
+  <div class="tab-panel" id="panel-calendario">
     <div class="panel-container">
       <div class="oggi-grid">
 
-        <!-- Giornate -->
+        <!-- Calendario giornate -->
         <div class="section-card">
-          <div class="section-card-header">📅 Giornate da non perdere</div>
-          <div class="section-card-hint">Calendario delle giornate nazionali e internazionali rilevanti per Angelo Parodi. Clicca una giornata vicina per usarla come tema del prossimo post.</div>
-          <div id="giornate-oggi"></div>
-          <div id="giornate-list"><div class="empty-state">Caricamento…</div></div>
-          <button class="btn-sm btn btn-rigenera" id="giornate-toggle-btn" onclick="toggleCalendario()" style="margin-top:12px; padding:9px 16px;">
-            📆 Mostra calendario completo
-          </button>
+          <div class="section-card-header">📅 Calendario annuale</div>
+          <div class="section-card-hint">Tutte le giornate nazionali e internazionali rilevanti. <span style="font-weight:700;">🇮🇹</span> = solo Italia. Clicca una giornata per usarla come tema.</div>
+          <div id="calendario-list"><div class="empty-state">Caricamento…</div></div>
         </div>
 
         <!-- News -->
         <div class="section-card">
           <div class="section-card-header">📰 News del giorno</div>
-          <div class="section-card-hint">Notizie verificate con link ufficiale da <strong>Gambero Rosso</strong>, <strong>Il Fatto Alimentare</strong> e <strong>Ninja Marketing</strong>. Filtrate da ANGY per rilevanza al brand.</div>
+          <div class="section-card-hint">Notizie da <strong>Gambero Rosso</strong>, <strong>Il Fatto Alimentare</strong> e <strong>Ninja Marketing</strong>. Filtrate da ANGY per rilevanza.</div>
           <div class="msg msg-error" id="news-error"></div>
           <div id="news-list"><div class="empty-state">Premi "Aggiorna news" per le notizie di oggi.</div></div>
-          <button class="btn btn-primary" id="news-load-btn" onclick="loadNews()" style="margin-top:12px;">
-            📡 Aggiorna news
-          </button>
+          <button class="btn btn-primary" id="news-load-btn" onclick="loadNews()" style="margin-top:12px;">📡 Aggiorna news</button>
         </div>
 
         <!-- Trend -->
         <div class="section-card">
           <div class="section-card-header">📈 Trend creativi</div>
-          <div class="section-card-hint">ANGY legge le fonti food italiane e identifica i trend da cavalcare. Seleziona un trend per usarlo nella prossima generazione.</div>
+          <div class="section-card-hint">ANGY legge le fonti food e identifica i trend da cavalcare. Seleziona un trend per usarlo nella generazione.</div>
           <div class="msg msg-error" id="trend-error"></div>
           <div id="trend-list"><div class="empty-state">Premi "Aggiorna trend" per caricare i dati.</div></div>
-          <button class="btn btn-primary" id="trend-load-btn" onclick="loadTrends()" style="margin-top:12px;">
-            📡 Aggiorna trend
-          </button>
+          <button class="btn btn-primary" id="trend-load-btn" onclick="loadTrends()" style="margin-top:12px;">📡 Aggiorna trend</button>
         </div>
 
       </div>
@@ -933,32 +625,22 @@
   <!-- ── TAB MEMORIA ── -->
   <div class="tab-panel" id="panel-memoria">
     <div class="panel-container">
-
-      <div style="background:#fefce8; border:1.5px solid #fde68a; border-radius:14px; padding:13px 15px; margin-bottom:18px; font-size:13px; color:#92400e; line-height:1.55; font-weight:500;">
-        💡 <strong>Aforismi</strong>: ANGY ne ha 22 caricati — appaiono a rotazione nel tab Genera come spunto creativo. Per aggiungerne: Supabase → Table Editor → angy_aforismi.
-      </div>
-
       <div class="memoria-grid">
-
-        <!-- Sinistra: Strategia + form aggiungi -->
         <div>
-          <div class="section-card" style="margin-bottom:22px;">
+          <div class="section-card" style="margin-bottom:20px;">
             <div class="section-title">Strategia editoriale</div>
             <p class="hint">Queste linee guida vengono iniettate nel prompt di ANGY ad ogni generazione. Modificale per allinearle al piano operativo corrente.</p>
             <div id="strat-list"><div class="empty-state">Caricamento…</div></div>
           </div>
-
           <div class="section-card">
-            <div style="font-size:11px; font-weight:800; color:var(--text-muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.8px;">Aggiungi sezione strategia</div>
-            <input type="text" id="new-strat-sezione" placeholder="Nome sezione (es. Campagna estiva)" style="margin-bottom:9px;" />
+            <div style="font-size:11px;font-weight:800;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.8px;">Aggiungi sezione strategia</div>
+            <input type="text" id="new-strat-sezione" placeholder="Nome sezione (es. Campagna estiva)" style="margin-bottom:8px;" />
             <textarea id="new-strat-contenuto" placeholder="Contenuto della sezione strategica…" rows="3"></textarea>
-            <button class="btn btn-primary btn-sm" onclick="addStrategia()" style="margin-top:10px; padding:9px 18px;">Aggiungi</button>
+            <button class="btn btn-primary btn-sm" onclick="addStrategia()" style="margin-top:9px;padding:9px 16px;">Aggiungi</button>
           </div>
         </div>
-
-        <!-- Destra: Regole + Hashtag -->
         <div>
-          <div class="section-card" style="margin-bottom:22px;">
+          <div class="section-card" style="margin-bottom:20px;">
             <div class="section-title">Regole di ANGY</div>
             <p class="hint">Tono, parole vietate, indicazioni di brand. Spegni una regola per sospenderla senza cancellarla.</p>
             <div id="note-list"><div class="empty-state">Caricamento…</div></div>
@@ -977,41 +659,40 @@
               <button class="btn btn-primary" onclick="addNota()">Aggiungi</button>
             </div>
           </div>
-
           <div class="section-card">
             <div class="section-title">Hashtag fissi del brand</div>
-            <p class="hint">Inclusi automaticamente in ogni post. I colleghi possono aggiungere variazioni qui.</p>
+            <p class="hint">Inclusi automaticamente in ogni post.</p>
             <div id="hashtag-list"><div class="empty-state">Caricamento…</div></div>
             <div class="add-row" style="margin-top:12px;">
               <input type="text" id="new-hashtag" placeholder="#nuovohashtag" />
               <button class="btn btn-primary" onclick="addHashtag()">Aggiungi</button>
             </div>
           </div>
-
           <div class="msg msg-error" id="memoria-error" style="margin-top:12px;"></div>
           <div class="msg msg-success" id="memoria-success" style="margin-top:12px;"></div>
         </div>
-
       </div>
     </div>
   </div>
 
 </div><!-- /app-view -->
 
-<!-- ── MOBILE BOTTOM NAV ── -->
-<nav id="mobile-nav" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:40; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-top:1px solid rgba(0,51,153,0.10); padding:8px 12px; grid-template-columns:repeat(4,1fr); gap:4px;">
-  <button data-tab="genera" class="mobile-nav-btn active" onclick="switchTab('genera')"><span class="nav-icon">✨</span><span>Genera</span></button>
-  <button data-tab="trend" class="mobile-nav-btn" onclick="switchTab('trend')"><span class="nav-icon">📰</span><span>Oggi</span></button>
-  <button data-tab="storico" class="mobile-nav-btn" onclick="switchTab('storico')"><span class="nav-icon">📋</span><span>Storico</span></button>
-  <button data-tab="memoria" class="mobile-nav-btn" onclick="switchTab('memoria')"><span class="nav-icon">🧠</span><span>Memoria</span></button>
+<!-- BOTTOM NAV -->
+<nav id="main-nav">
+  <button data-tab="social"      class="main-nav-btn active" onclick="switchTab('social')"><span class="nav-icon">📱</span><span>Social</span></button>
+  <button data-tab="newsletter"  class="main-nav-btn"        onclick="switchTab('newsletter')"><span class="nav-icon">📧</span><span>Newsletter</span></button>
+  <button data-tab="ricette"     class="main-nav-btn"        onclick="switchTab('ricette')"><span class="nav-icon">🍝</span><span>Ricette</span></button>
+  <button data-tab="calendario"  class="main-nav-btn"        onclick="switchTab('calendario')"><span class="nav-icon">📅</span><span>Calendario</span></button>
+  <button data-tab="storico"     class="main-nav-btn"        onclick="switchTab('storico')"><span class="nav-icon">📋</span><span>Storico</span></button>
+  <button data-tab="memoria"     class="main-nav-btn"        onclick="switchTab('memoria')"><span class="nav-icon">🧠</span><span>Memoria</span></button>
 </nav>
 
-<!-- ── LOADING OVERLAY ── -->
+<!-- LOADING OVERLAY -->
 <div id="loading-overlay">
   <div class="loading-card">
     <div class="big-spinner"></div>
-    <p>ANGY sta scrivendo…</p>
-    <small>Strategia · Framework · SEO · Memoria</small>
+    <p id="loading-p">ANGY sta scrivendo…</p>
+    <small id="loading-s">Strategia · Framework · SEO · Memoria</small>
   </div>
 </div>
 
@@ -1020,7 +701,6 @@
     supabaseUrl: "INSERISCI_SUPABASE_URL",
     supabaseAnonKey: "INSERISCI_SUPABASE_ANON_KEY",
   };
-
   const FN = (n) => `${CONFIG.supabaseUrl}/functions/v1/${n}`;
 
   let authToken = null;
@@ -1029,8 +709,13 @@
   let aforismaIdx = 0;
   let selectedTrend = null;
   let giornate = [];
-  let calendarioEsteso = false;
   let giornataOggi = null;
+  let trendsCache = null;
+  let nlEsempi = [];
+  let nlEsempioIdx = 0;
+  let lastRicettaData = null;
+  let lastNlData = null;
+  let videoFile = null;
 
   // ── SESSIONE ──
 
@@ -1084,9 +769,7 @@
     document.getElementById("login-view").style.display = "none";
     document.getElementById("app-view").style.display = "block";
     document.getElementById("header-logout").style.display = "block";
-    document.getElementById("desktop-nav").style.display = "flex";
-    const mobileNav = document.getElementById("mobile-nav");
-    mobileNav.style.display = "grid";
+    document.getElementById("main-nav").style.display = "grid";
     document.body.classList.add("app-active");
     try {
       const data = await api("memoria", { action: "list" });
@@ -1097,8 +780,10 @@
         document.getElementById("aforisma-box").style.display = "block";
       }
       giornate = data.giornate || [];
+      nlEsempi = data.newsletter_esempi || [];
       renderGiornataBanner();
-      renderGiornate();
+      renderCalendario();
+      renderNlEsempio();
     } catch (_) {}
   }
 
@@ -1107,8 +792,7 @@
     sessionStorage.clear();
     document.getElementById("app-view").style.display = "none";
     document.getElementById("header-logout").style.display = "none";
-    document.getElementById("desktop-nav").style.display = "none";
-    document.getElementById("mobile-nav").style.display = "none";
+    document.getElementById("main-nav").style.display = "none";
     document.body.classList.remove("app-active");
     document.getElementById("results").style.display = "none";
     const ph = document.getElementById("results-placeholder");
@@ -1123,7 +807,7 @@
     document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === `panel-${name}`));
     if (name === "storico") loadStorico();
     if (name === "memoria") loadMemoria();
-    if (name === "trend") renderGiornate();
+    if (name === "calendario") renderCalendario();
   }
 
   // ── AFORISMI ──
@@ -1134,24 +818,24 @@
     document.getElementById("aforisma-testo").textContent = `"${a.testo}"`;
     document.getElementById("aforisma-autore").textContent = `— ${a.autore || "Anonimo"}`;
   }
-
   function nextAforisma() {
     if (!aforismi.length) return;
     aforismaIdx = (aforismaIdx + 1) % aforismi.length;
     renderAforisma();
   }
 
-  // ── GIORNATE ──
+  // ── CALENDARIO ──
 
-  const MESI = ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
+  const MESI_FULL = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
+  const MESI_SHORT = ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
 
   function giorniMancanti(mese, giorno) {
     const oggi = new Date();
     const anno = oggi.getFullYear();
     let target = new Date(anno, mese - 1, giorno);
-    const oggiMezzanotte = new Date(anno, oggi.getMonth(), oggi.getDate());
-    if (target < oggiMezzanotte) target = new Date(anno + 1, mese - 1, giorno);
-    return Math.round((target - oggiMezzanotte) / 86400000);
+    const oggiMn = new Date(anno, oggi.getMonth(), oggi.getDate());
+    if (target < oggiMn) target = new Date(anno + 1, mese - 1, giorno);
+    return Math.round((target - oggiMn) / 86400000);
   }
 
   function renderGiornataBanner() {
@@ -1159,78 +843,86 @@
       .map(g => ({ ...g, mancano: giorniMancanti(g.mese, g.giorno) }))
       .filter(g => g.mancano <= 3)
       .sort((a, b) => a.mancano - b.mancano);
-
     if (!imminenti.length) return;
     giornataOggi = imminenti[0];
-
     const banner = document.getElementById("giornata-banner");
-    const title = document.getElementById("giornata-banner-title");
-    const idea = document.getElementById("giornata-banner-idea");
-
-    const quando = giornataOggi.mancano === 0 ? "OGGI è" :
-                   giornataOggi.mancano === 1 ? "DOMANI è" :
-                   `Tra ${giornataOggi.mancano} giorni:`;
-    title.textContent = `📅 ${quando} ${giornataOggi.nome}`;
-    idea.textContent = giornataOggi.idea || "";
+    const quando = giornataOggi.mancano === 0 ? "OGGI è" : giornataOggi.mancano === 1 ? "DOMANI è" : `Tra ${giornataOggi.mancano} giorni:`;
+    const flag = giornataOggi.tipo === "italiana" ? " 🇮🇹" : "";
+    document.getElementById("giornata-banner-title").textContent = `📅 ${quando} ${giornataOggi.nome}${flag}`;
+    document.getElementById("giornata-banner-idea").textContent = giornataOggi.idea || "";
     banner.style.display = "block";
   }
 
   function useGiornataBanner() {
     if (!giornataOggi) return;
     selectedTrend = `Giornata: ${giornataOggi.nome} — ${giornataOggi.idea || ""}`;
-    const bar = document.getElementById("trend-selected-bar");
     const chip = document.getElementById("trend-selected-chip");
     chip.innerHTML = `<span class="chip-title">📅 ${escHtml(giornataOggi.nome)}</span>`;
-    bar.style.display = "block";
+    document.getElementById("trend-selected-bar").style.display = "block";
     document.getElementById("giornata-banner").style.display = "none";
   }
 
-  function renderGiornate() {
-    const oggiEl = document.getElementById("giornate-oggi");
-    const listEl = document.getElementById("giornate-list");
+  function renderCalendario() {
+    const el = document.getElementById("calendario-list");
     if (!giornate.length) {
-      listEl.innerHTML = '<div class="empty-state">Calendario non caricato. Esegui la migrazione 004 su Supabase.</div>';
+      el.innerHTML = '<div class="empty-state">Calendario non caricato. Esegui la migrazione 005 su Supabase.</div>';
       return;
     }
+    const oggi = new Date();
+    const meseOggi = oggi.getMonth() + 1;
+    const giornoOggi = oggi.getDate();
 
-    const conDistanza = giornate
-      .map(g => ({ ...g, mancano: giorniMancanti(g.mese, g.giorno) }))
-      .sort((a, b) => a.mancano - b.mancano);
+    // Raggruppa per mese
+    const byMese = {};
+    for (const g of giornate) {
+      if (!byMese[g.mese]) byMese[g.mese] = [];
+      byMese[g.mese].push(g);
+    }
 
-    const visibili = calendarioEsteso ? conDistanza : conDistanza.slice(0, 5);
+    // Ordina mesi partendo da quello corrente
+    const ordine = [];
+    for (let i = 0; i < 12; i++) ordine.push(((meseOggi - 1 + i) % 12) + 1);
 
-    oggiEl.innerHTML = "";
-    listEl.innerHTML = visibili.map(g => {
-      const isToday = g.mancano === 0;
-      const quando = isToday ? "OGGI" : g.mancano === 1 ? "domani" : `${String(g.giorno).padStart(2,"0")} ${MESI[g.mese-1]}`;
-      return `
-        <div class="giornata-item ${isToday ? "is-today" : ""}" onclick="selectGiornata('${g.id}')" title="Clicca per usarla come tema">
-          <span class="dot ${g.rilevanza === "alta" ? "alta" : ""}"></span>
-          <span class="g-data">${quando}</span>
-          <span style="flex:1;">
-            <span class="g-nome">${escHtml(g.nome)}</span>
-            ${g.idea ? `<span class="g-idea">💡 ${escHtml(g.idea)}</span>` : ""}
-          </span>
+    let html = "";
+    for (const mese of ordine) {
+      if (!byMese[mese]) continue;
+      const isCurrentMese = mese === meseOggi;
+      const giorni = [...byMese[mese]].sort((a, b) => a.giorno - b.giorno);
+      const countAlta = giorni.filter(g => g.rilevanza === "alta").length;
+      html += `<div class="month-group">
+        <div class="month-header ${isCurrentMese ? "current-month" : ""}">
+          <span>${MESI_FULL[mese - 1]}</span>
+          <span style="font-weight:600;opacity:0.7;">${giorni.length} date${countAlta ? ` · ${countAlta} ★` : ""}</span>
         </div>`;
-    }).join("");
-  }
-
-  function toggleCalendario() {
-    calendarioEsteso = !calendarioEsteso;
-    document.getElementById("giornate-toggle-btn").textContent =
-      calendarioEsteso ? "📆 Mostra solo le prossime" : "📆 Mostra calendario completo";
-    renderGiornate();
+      for (const g of giorni) {
+        const isToday = g.giorno === giornoOggi && mese === meseOggi;
+        const isPast = !isToday && (mese < meseOggi || (mese === meseOggi && g.giorno < giornoOggi));
+        const flag = g.tipo === "italiana" ? '<span class="g-flag">🇮🇹</span>' : "";
+        const dotCls = g.rilevanza === "alta" ? "alta" : g.rilevanza === "media" ? "media" : "";
+        html += `
+          <div class="giornata-item ${isToday ? "is-today" : ""} ${isPast ? "is-past" : ""}" onclick="selectGiornata('${g.id}')" title="Clicca per usarla come tema">
+            <span class="dot ${dotCls}"></span>
+            <span class="g-data">${String(g.giorno).padStart(2,"0")}</span>
+            <span style="flex:1;">
+              <span class="g-nome">${escHtml(g.nome)}${flag}</span>
+              ${g.idea ? `<span class="g-idea">💡 ${escHtml(g.idea)}</span>` : ""}
+            </span>
+          </div>`;
+      }
+      html += `</div>`;
+    }
+    el.innerHTML = html;
   }
 
   function selectGiornata(id) {
     const g = giornate.find(x => x.id === id);
     if (!g) return;
     selectedTrend = `Giornata: ${g.nome} — ${g.idea || ""}`;
-    const bar = document.getElementById("trend-selected-bar");
     const chip = document.getElementById("trend-selected-chip");
-    chip.innerHTML = `<span class="chip-title">📅 ${escHtml(g.nome)}</span>`;
-    bar.style.display = "block";
-    switchTab("genera");
+    const flag = g.tipo === "italiana" ? " 🇮🇹" : "";
+    chip.innerHTML = `<span class="chip-title">📅 ${escHtml(g.nome)}${flag}</span>`;
+    document.getElementById("trend-selected-bar").style.display = "block";
+    switchTab("social");
   }
 
   // ── NEWS ──
@@ -1243,26 +935,18 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Lettura fonti…';
     list.innerHTML = '<div class="empty-state">Interrogo Gambero Rosso, Il Fatto Alimentare, Ninja Marketing…</div>';
-
     try {
       const data = await api("trends", { action: "news" });
       const news = data.news || [];
-      if (!news.length) {
-        list.innerHTML = `<div class="empty-state">${escHtml(data.errore || "Nessuna news rilevante trovata ora. Riprova più tardi.")}</div>`;
-        return;
-      }
-      list.innerHTML = `
-        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px; font-weight:600;">Aggiornato: ${escHtml(data.aggiornato || "")}</div>
-        ${news.map(n => `
-          <div class="news-item">
-            <div class="n-fonte">${escHtml(n.fonte)}</div>
-            <a class="n-titolo" href="${encodeURI(n.link)}" target="_blank" rel="noopener noreferrer">${escHtml(n.titolo)}</a>
-            ${n.perche ? `<div class="n-perche">📌 ${escHtml(n.perche)}</div>` : ""}
-            ${n.idea_post ? `<div class="n-idea">💡 ${escHtml(n.idea_post)}</div>` : ""}
-            <a class="n-link" href="${encodeURI(n.link)}" target="_blank" rel="noopener noreferrer">🔗 Leggi la fonte ufficiale</a>
-          </div>
-        `).join("")}
-      `;
+      if (!news.length) { list.innerHTML = `<div class="empty-state">${escHtml(data.errore || "Nessuna news rilevante. Riprova più tardi.")}</div>`; return; }
+      list.innerHTML = `<div style="font-size:11px;color:var(--text-muted);margin-bottom:9px;font-weight:600;">Aggiornato: ${escHtml(data.aggiornato || "")}</div>` +
+        news.map(n => `<div class="news-item">
+          <div class="n-fonte">${escHtml(n.fonte)}</div>
+          <a class="n-titolo" href="${encodeURI(n.link)}" target="_blank" rel="noopener noreferrer">${escHtml(n.titolo)}</a>
+          ${n.perche ? `<div class="n-perche">📌 ${escHtml(n.perche)}</div>` : ""}
+          ${n.idea_post ? `<div class="n-idea">💡 ${escHtml(n.idea_post)}</div>` : ""}
+          <a class="n-link" href="${encodeURI(n.link)}" target="_blank" rel="noopener noreferrer">🔗 Leggi la fonte</a>
+        </div>`).join("");
     } catch (e) {
       showMsg(err, e.message, "error");
       list.innerHTML = "";
@@ -1274,8 +958,6 @@
 
   // ── TREND ──
 
-  let trendsCache = null;
-
   async function loadTrends() {
     const btn = document.getElementById("trend-load-btn");
     const list = document.getElementById("trend-list");
@@ -1283,28 +965,18 @@
     hideMsg(err);
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Lettura feed…';
-    list.innerHTML = '<div class="empty-state">Interrogo Gambero Rosso, Dissapore, Il Fatto Alimentare…</div>';
-
+    list.innerHTML = '<div class="empty-state">Interrogo le fonti food…</div>';
     try {
       const data = await api("trends", {});
       trendsCache = data.trends || [];
-      const aggiornato = data.data_aggiornamento || new Date().toLocaleDateString("it-IT");
-
-      if (!trendsCache.length) {
-        list.innerHTML = '<div class="empty-state">Nessun trend recuperato. Riprova tra un momento.</div>';
-        return;
-      }
-
-      list.innerHTML = `
-        <div style="font-size:11px; color:var(--text-muted); margin-bottom:11px; font-weight:600;">Aggiornato: ${aggiornato} — clicca un trend per usarlo nella generazione</div>
-        ${trendsCache.map((t, i) => `
-          <div class="trend-chip" id="trend-${i}" onclick="selectTrend(${i})" style="display:block; margin-bottom:9px; width:100%;">
+      if (!trendsCache.length) { list.innerHTML = '<div class="empty-state">Nessun trend. Riprova tra un momento.</div>'; return; }
+      list.innerHTML = `<div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;font-weight:600;">Aggiornato: ${escHtml(data.data_aggiornamento || "")} — clicca per usarlo nella generazione</div>` +
+        trendsCache.map((t, i) => `
+          <div class="trend-chip" id="trend-${i}" onclick="selectTrend(${i})" style="display:block;margin-bottom:8px;width:100%;">
             <span class="chip-title">📌 ${escHtml(t.titolo)}</span>
             <span class="chip-angolo">${escHtml(t.spunto)}</span>
-            ${t.angolo ? `<span class="chip-angolo" style="color:rgba(0,51,153,0.7); margin-top:4px; font-style:italic;">💡 ${escHtml(t.angolo)}</span>` : ""}
-          </div>
-        `).join("")}
-      `;
+            ${t.angolo ? `<span class="chip-angolo" style="color:rgba(0,51,153,0.75);margin-top:3px;font-style:italic;">💡 ${escHtml(t.angolo)}</span>` : ""}
+          </div>`).join("");
     } catch (e) {
       showMsg(err, e.message, "error");
       list.innerHTML = "";
@@ -1318,14 +990,11 @@
     const t = trendsCache?.[idx];
     if (!t) return;
     selectedTrend = t.titolo + ": " + t.spunto + (t.angolo ? " — " + t.angolo : "");
-    document.querySelectorAll(".trend-chip").forEach((c, i) => c.classList.toggle("selected", i === idx));
-
-    const bar = document.getElementById("trend-selected-bar");
+    document.querySelectorAll("#trend-list .trend-chip").forEach((c, i) => c.classList.toggle("selected", i === idx));
     const chip = document.getElementById("trend-selected-chip");
     chip.innerHTML = `<span class="chip-title">${escHtml(t.titolo)}</span>`;
-    bar.style.display = "block";
-
-    switchTab("genera");
+    document.getElementById("trend-selected-bar").style.display = "block";
+    switchTab("social");
   }
 
   function clearTrend() {
@@ -1334,7 +1003,7 @@
     document.querySelectorAll(".trend-chip").forEach(c => c.classList.remove("selected"));
   }
 
-  // ── GENERA ──
+  // ── SOCIAL GENERA ──
 
   async function handleGenerate(rigenera) {
     const formato = document.getElementById("formato-select").value;
@@ -1342,16 +1011,13 @@
     const rigBtn = document.getElementById("rigenera-btn");
     const err = document.getElementById("gen-error");
     const overlay = document.getElementById("loading-overlay");
-
     genBtn.disabled = true; rigBtn.disabled = true;
     hideMsg(err);
-    overlay.classList.add("show");
-
+    setLoading(true, "ANGY sta scrivendo…", "Strategia · Framework · SEO · Memoria");
     try {
-      const body = { formato, cliente: "Angelo Parodi" };
+      const body = { tipo: "social", formato, cliente: "Angelo Parodi" };
       if (rigenera && lastId) body.rigenera_id = lastId;
       if (selectedTrend) body.trend_selezionato = selectedTrend;
-
       const data = await api("generate", body);
       lastId = data.id;
       displayResults(data);
@@ -1360,38 +1026,280 @@
       showMsg(err, e.message || "Errore di rete. Riprova.", "error");
     } finally {
       genBtn.disabled = false; rigBtn.disabled = false;
-      overlay.classList.remove("show");
+      setLoading(false);
     }
   }
 
   function displayResults(data) {
-    const ph = document.getElementById("results-placeholder");
-    if (ph) ph.style.display = "none";
+    document.getElementById("results-placeholder").style.display = "none";
     document.getElementById("results").style.display = "block";
-
     document.getElementById("res-copy").textContent = data.copy;
     const len = data.copy.length;
     const countEl = document.getElementById("res-copy-count");
     countEl.textContent = `${len}/220 caratteri`;
     countEl.className = "char-count" + (len > 200 ? " warn" : "");
-
     const ob = document.getElementById("res-ob-badge");
     ob.textContent = data.obiettivo;
     ob.className = `badge badge-${data.obiettivo}`;
-
-    document.getElementById("res-fw-badge").textContent = `${data.framework}`;
+    document.getElementById("res-fw-badge").textContent = data.framework;
     document.getElementById("res-hashtags").value = (data.hashtags || []).join(" ");
     document.getElementById("res-visual").textContent = data.brief_visual;
-
     const kwContainer = document.getElementById("res-kw-chips");
     kwContainer.innerHTML = (data.keywords_visual || []).map(kw => {
       const url = `https://www.pinterest.it/search/pins/?q=${encodeURIComponent(kw)}`;
       return `<a class="kw-chip" href="${url}" target="_blank" rel="noopener">🔍 ${escHtml(kw)}</a>`;
     }).join("");
+    if (window.innerWidth < 768) document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
-    if (window.innerWidth < 768) {
-      document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+  // ── NEWSLETTER ──
+
+  function renderNlEsempio() {
+    const displayEl = document.getElementById("nl-esempio-display");
+    const navEl = document.getElementById("nl-esempio-nav");
+    if (!nlEsempi.length) {
+      displayEl.innerHTML = '<div class="empty-state" style="padding:12px 0;">Nessun esempio ancora — aggiungine uno qui sotto</div>';
+      navEl.style.display = "none";
+      return;
     }
+    const e = nlEsempi[nlEsempioIdx];
+    displayEl.innerHTML = `
+      <div class="nl-esempio-titolo">${escHtml(e.titolo)} <span style="font-size:11px;color:var(--text-muted);font-weight:500;">(${escHtml(e.tipo || "")})</span></div>
+      <div class="nl-esempio-card">${escHtml(e.contenuto)}</div>`;
+    navEl.style.display = nlEsempi.length > 1 ? "flex" : "none";
+    document.getElementById("nl-esempio-counter").textContent = `${nlEsempioIdx + 1} / ${nlEsempi.length}`;
+  }
+
+  function prevNlEsempio() { nlEsempioIdx = (nlEsempioIdx - 1 + nlEsempi.length) % nlEsempi.length; renderNlEsempio(); }
+  function nextNlEsempio() { nlEsempioIdx = (nlEsempioIdx + 1) % nlEsempi.length; renderNlEsempio(); }
+
+  async function handleAddNlEsempio() {
+    const titolo = document.getElementById("nl-add-titolo").value.trim();
+    const contenuto = document.getElementById("nl-add-contenuto").value.trim();
+    const tipo = document.getElementById("nl-add-tipo").value;
+    const err = document.getElementById("nl-add-error");
+    const ok = document.getElementById("nl-add-ok");
+    hideMsg(err); hideMsg(ok);
+    if (!titolo) { showMsg(err, "Inserisci un titolo.", "error"); return; }
+    if (contenuto.length < 20) { showMsg(err, "Il contenuto è troppo corto.", "error"); return; }
+    try {
+      await api("memoria", { action: "add_newsletter_esempio", titolo, contenuto, tipo });
+      document.getElementById("nl-add-titolo").value = "";
+      document.getElementById("nl-add-contenuto").value = "";
+      nlEsempi.unshift({ id: Date.now().toString(), titolo, contenuto, tipo });
+      nlEsempioIdx = 0;
+      renderNlEsempio();
+      flashSuccess(ok, "Esempio aggiunto. ANGY lo userà come riferimento di stile.");
+    } catch (e) { showMsg(err, e.message, "error"); }
+  }
+
+  async function handleGenerateNewsletter() {
+    const tema = document.getElementById("nl-tema").value.trim();
+    const prodotto = document.getElementById("nl-prodotto").value;
+    const stagione = document.getElementById("nl-stagione").value.trim();
+    const tono_newsletter = document.getElementById("nl-tono").value;
+    const err = document.getElementById("nl-error");
+    hideMsg(err);
+    if (!tema) { showMsg(err, "Inserisci il tema della newsletter.", "error"); return; }
+    const btn = document.getElementById("nl-gen-btn");
+    btn.disabled = true;
+    setLoading(true, "ANGY sta scrivendo…", "Newsletter · Stile · Struttura");
+    try {
+      const data = await api("generate", { tipo: "newsletter", tema, prodotto, stagione, tono_newsletter });
+      lastNlData = data;
+      displayNewsletter(data);
+    } catch (e) { showMsg(err, e.message || "Errore di rete.", "error"); }
+    finally { btn.disabled = false; setLoading(false); }
+  }
+
+  function displayNewsletter(data) {
+    document.getElementById("nl-results-placeholder").style.display = "none";
+    document.getElementById("nl-results").style.display = "block";
+    document.getElementById("nl-res-oggetto").textContent = data.oggetto || "";
+    document.getElementById("nl-res-preview").textContent = data.preview_text || "";
+    document.getElementById("nl-res-saluto").textContent = data.saluto || "";
+    document.getElementById("nl-res-paragrafi").innerHTML = (data.paragrafi || []).map(p => `<div class="nl-paragrafo">${escHtml(p)}</div>`).join("");
+    document.getElementById("nl-res-cta").textContent = data.cta_testo || "";
+    document.getElementById("nl-res-firma").textContent = data.firma || "";
+    if (window.innerWidth < 768) document.getElementById("nl-results").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function copyNlBody(btn) {
+    if (!lastNlData) return;
+    const d = lastNlData;
+    const testo = [d.saluto, "", ...(d.paragrafi || []).map(p => p), "", d.cta_testo, "", d.firma].join("\n");
+    clipboardCopy(testo);
+    feedbackBtn(btn, "Copia corpo email");
+  }
+
+  // ── RICETTE ──
+
+  async function handleGeneraIdee() {
+    const prodotto = document.getElementById("idee-prodotto").value;
+    const occasione = document.getElementById("idee-occasione").value;
+    const n_idee = parseInt(document.querySelector('input[name="n-idee"]:checked')?.value || "3");
+    const err = document.getElementById("idee-error");
+    hideMsg(err);
+    const btn = document.getElementById("idee-btn");
+    btn.disabled = true;
+    setLoading(true, "ANGY genera idee…", "Creatività · Prodotto · Stagione");
+    try {
+      const data = await api("generate", { tipo: "ricetta_idea", prodotto, occasione, n_idee });
+      displayIdee(data.idee || []);
+    } catch (e) { showMsg(err, e.message || "Errore di rete.", "error"); }
+    finally { btn.disabled = false; setLoading(false); }
+  }
+
+  function displayIdee(idee) {
+    const el = document.getElementById("idee-results");
+    el.style.display = idee.length ? "block" : "none";
+    el.innerHTML = idee.map((idea, i) => `
+      <div class="idea-item">
+        <div>
+          <button class="usa-btn" onclick="usaIdea(${i})">Usa questa →</button>
+          <div class="idea-titolo">${escHtml(idea.titolo)}</div>
+        </div>
+        <div class="idea-desc">${escHtml(idea.descrizione)}</div>
+        <div class="idea-meta">
+          <span>⏱ ${idea.tempo_minuti} min</span>
+          <span>📊 ${escHtml(idea.difficolta)}</span>
+          ${idea.angolo ? `<span style="background:#e0f2fe;color:#0369a1;">💡 ${escHtml(idea.angolo)}</span>` : ""}
+        </div>
+      </div>`).join("");
+    window._ideeCache = idee;
+  }
+
+  function usaIdea(idx) {
+    const idea = window._ideeCache?.[idx];
+    if (!idea) return;
+    document.getElementById("ricetta-titolo").value = idea.titolo;
+    document.getElementById("ricetta-note").value = idea.angolo ? `Angolo: ${idea.angolo}` : "";
+    document.getElementById("ricetta-titolo").focus();
+  }
+
+  async function handleScriviRicetta() {
+    const titolo_ricetta = document.getElementById("ricetta-titolo").value.trim();
+    const note_chef = document.getElementById("ricetta-note").value.trim();
+    const err = document.getElementById("ricetta-error");
+    hideMsg(err);
+    if (!titolo_ricetta) { showMsg(err, "Inserisci il nome della ricetta.", "error"); return; }
+    const btn = document.getElementById("ricetta-btn");
+    btn.disabled = true;
+    setLoading(true, "ANGY scrive la ricetta…", "Ingredienti · Procedimento · Stile AP");
+    try {
+      const data = await api("generate", { tipo: "ricetta", titolo_ricetta, note_chef });
+      lastRicettaData = data;
+      displayRicetta(data, "ricetta-results");
+    } catch (e) { showMsg(err, e.message || "Errore di rete.", "error"); }
+    finally { btn.disabled = false; setLoading(false); }
+  }
+
+  function displayRicetta(data, containerId) {
+    const el = document.getElementById(containerId);
+    el.style.display = "block";
+    el.innerHTML = `
+      <div class="ricetta-result">
+        <div class="ricetta-nome">${escHtml(data.nome || "")}</div>
+        <div class="ricetta-desc">${escHtml(data.descrizione_breve || "")}</div>
+        <div class="ricetta-info-row">
+          <div class="ricetta-info-item">⏱ <span class="info-label">Tempo:</span> <strong>${escHtml(data.tempo_preparazione || "")}</strong></div>
+          <div class="ricetta-info-item">📊 <span class="info-label">Difficoltà:</span> <strong>${escHtml(data.difficolta || "")}</strong></div>
+          <div class="ricetta-info-item">👥 <span class="info-label">Porzioni:</span> <strong>${escHtml(data.porzioni || "")}</strong></div>
+        </div>
+        <div class="ricetta-section-title">Ingredienti</div>
+        <ul class="ingredienti-list">${(data.ingredienti || []).map(i => `<li>${escHtml(i)}</li>`).join("")}</ul>
+        <div class="ricetta-section-title">Preparazione</div>
+        <ol class="preparazione-list">${(data.preparazione || []).map(s => `<li>${escHtml(s)}</li>`).join("")}</ol>
+        ${data.consiglio_chef ? `<div class="ricetta-consiglio">💡 <strong>Consiglio dello chef:</strong> ${escHtml(data.consiglio_chef)}</div>` : ""}
+        <button class="copy-btn" onclick="copyRicettaFull(${containerId === 'ricetta-results' ? 'lastRicettaData' : 'lastTrascrizioneData'})" style="margin-top:12px;width:100%;justify-content:center;">📋 Copia ricetta completa</button>
+      </div>`;
+  }
+
+  function copyRicettaFull(data) {
+    if (!data) return;
+    const testo = [
+      `🍽️ ${data.nome}`,
+      data.descrizione_breve,
+      "",
+      `⏱ ${data.tempo_preparazione} · 📊 ${data.difficolta} · 👥 ${data.porzioni}`,
+      "",
+      "📝 INGREDIENTI:",
+      ...(data.ingredienti || []).map(i => `• ${i}`),
+      "",
+      "👨‍🍳 PREPARAZIONE:",
+      ...(data.preparazione || []).map((s, i) => `${i + 1}. ${s}`),
+      "",
+      data.consiglio_chef ? `💡 CONSIGLIO CHEF:\n${data.consiglio_chef}` : "",
+    ].filter(l => l !== undefined).join("\n");
+    clipboardCopy(testo);
+  }
+
+  // ── VIDEO TRANSCRIPTION ──
+
+  function uploadDragOver(e) { e.preventDefault(); document.getElementById("upload-zone").classList.add("drag-over"); }
+  function uploadDragLeave(e) { document.getElementById("upload-zone").classList.remove("drag-over"); }
+  function uploadDrop(e) {
+    e.preventDefault();
+    document.getElementById("upload-zone").classList.remove("drag-over");
+    const file = e.dataTransfer?.files?.[0];
+    if (file) setVideoFile(file);
+  }
+  function handleVideoSelect(e) { const file = e.target.files?.[0]; if (file) setVideoFile(file); }
+
+  function setVideoFile(file) {
+    if (!file.type.startsWith("video/")) {
+      showMsg(document.getElementById("trascrivi-error"), "Seleziona un file video (MP4, MOV, AVI).", "error");
+      return;
+    }
+    if (file.size > 200 * 1024 * 1024) {
+      showMsg(document.getElementById("trascrivi-error"), "File troppo grande. Massimo 200MB.", "error");
+      return;
+    }
+    videoFile = file;
+    const mb = (file.size / 1024 / 1024).toFixed(1);
+    document.getElementById("video-name").textContent = file.name;
+    document.getElementById("video-size").textContent = `${mb} MB`;
+    document.getElementById("video-info").style.display = "flex";
+    document.getElementById("trascrivi-btn").disabled = false;
+    hideMsg(document.getElementById("trascrivi-error"));
+  }
+
+  function clearVideo() {
+    videoFile = null;
+    document.getElementById("video-input").value = "";
+    document.getElementById("video-info").style.display = "none";
+    document.getElementById("trascrivi-btn").disabled = true;
+  }
+
+  async function handleTrascriviVideo() {
+    if (!videoFile) return;
+    const btn = document.getElementById("trascrivi-btn");
+    const err = document.getElementById("trascrivi-error");
+    hideMsg(err);
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Lettura video…';
+    try {
+      const base64 = await fileToBase64(videoFile);
+      btn.innerHTML = '<span class="spinner"></span>Trascrizione AI in corso…';
+      const data = await api("transcribe", { video_base64: base64, mime_type: videoFile.type });
+      window.lastTrascrizioneData = data;
+      displayRicetta(data, "trascrivi-results");
+      if (window.innerWidth < 768) document.getElementById("trascrivi-results").scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (e) {
+      showMsg(err, e.message || "Errore durante la trascrizione.", "error");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "🎬 Trascrivi con AI";
+    }
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   }
 
   // ── STORICO ──
@@ -1418,10 +1326,9 @@
           <div class="post-actions">
             <button class="action-btn approve" onclick="setStatus('${p.id}','approvato')">✅ Approva</button>
             <button class="action-btn reject" onclick="setStatus('${p.id}','scartato')">❌ Scarta</button>
-            <button class="action-btn" onclick="copyRaw('${escHtml(p.copy || "").replace(/'/g,"\\'")}', this)">📋 Copia</button>
+            <button class="action-btn" onclick="copyRaw('${escHtml(p.copy || "").replace(/'/g,"\\'")}',this)">📋 Copia</button>
           </div>
-        </div>
-      `).join("");
+        </div>`).join("");
     } catch (e) { showMsg(err, e.message, "error"); list.innerHTML = ""; }
   }
 
@@ -1444,7 +1351,6 @@
     hideMsg(err);
     try {
       const data = await api("memoria", { action: "list" });
-      aforismi = (data.aforismi || []).filter(a => a.testo);
 
       stratEl.innerHTML = (data.strategia || []).length
         ? data.strategia.map(s => `
@@ -1454,7 +1360,7 @@
                 <div style="display:flex;gap:6px;align-items:center;">
                   <button class="strat-btn" onclick="editStrategia('${s.id}')">Modifica</button>
                   <label class="toggle" title="${s.attiva ? "Disattiva" : "Attiva"}">
-                    <input type="checkbox" ${s.attiva ? "checked" : ""} onchange="toggleStrategia('${s.id}', this.checked)" />
+                    <input type="checkbox" ${s.attiva ? "checked" : ""} onchange="toggleStrategia('${s.id}',this.checked)" />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -1464,8 +1370,7 @@
                 <button class="strat-btn save" onclick="saveStrategia('${s.id}')">Salva</button>
                 <button class="strat-btn" onclick="cancelEditStrategia('${s.id}')">Annulla</button>
               </div>
-            </div>
-          `).join("")
+            </div>`).join("")
         : '<div class="empty-state">Nessuna sezione strategica. Aggiungine una qui sotto.</div>';
 
       noteEl.innerHTML = (data.note || []).length
@@ -1473,7 +1378,7 @@
             <div class="mem-item ${n.attiva ? "" : "inactive"}" id="nota-${n.id}">
               <div class="mem-text">${escHtml(n.nota)}<span class="mem-tipo">${escHtml(n.tipo)}</span></div>
               <label class="toggle">
-                <input type="checkbox" ${n.attiva ? "checked" : ""} onchange="toggleNota('${n.id}', this.checked)" />
+                <input type="checkbox" ${n.attiva ? "checked" : ""} onchange="toggleNota('${n.id}',this.checked)" />
                 <span class="slider"></span>
               </label>
             </div>`).join("")
@@ -1483,7 +1388,7 @@
         ? data.hashtags.map(h => `
             <span class="tag-pill ${h.attiva ? "" : "inactive"}">
               ${escHtml(h.tag)}
-              <button onclick="toggleHashtag('${h.id}', ${!h.attiva})" title="${h.attiva ? "Disattiva" : "Riattiva"}">${h.attiva ? "✕" : "↺"}</button>
+              <button onclick="toggleHashtag('${h.id}',${!h.attiva})" title="${h.attiva ? "Disattiva" : "Riattiva"}">${h.attiva ? "✕" : "↺"}</button>
             </span>`).join("")
         : '<div class="empty-state">Nessun hashtag fisso.</div>';
     } catch (e) { showMsg(err, e.message, "error"); }
@@ -1491,38 +1396,32 @@
 
   function editStrategia(id) {
     const el = document.getElementById(`strat-content-${id}`);
-    const actions = document.getElementById(`strat-actions-${id}`);
     el.setAttribute("contenteditable", "true");
     el.dataset.original = el.textContent;
     el.focus();
-    actions.style.display = "flex";
+    document.getElementById(`strat-actions-${id}`).style.display = "flex";
   }
-
   async function saveStrategia(id) {
     const el = document.getElementById(`strat-content-${id}`);
     const err = document.getElementById("memoria-error");
     const ok = document.getElementById("memoria-success");
-    const contenuto = el.textContent.trim();
     try {
-      await api("memoria", { action: "update_strategia", id, contenuto });
+      await api("memoria", { action: "update_strategia", id, contenuto: el.textContent.trim() });
       el.removeAttribute("contenteditable");
       document.getElementById(`strat-actions-${id}`).style.display = "none";
-      flashSuccess(ok, "Sezione strategica aggiornata. ANGY la userà dal prossimo post.");
+      flashSuccess(ok, "Sezione strategica aggiornata.");
     } catch (e) { showMsg(err, e.message, "error"); }
   }
-
   function cancelEditStrategia(id) {
     const el = document.getElementById(`strat-content-${id}`);
     el.textContent = el.dataset.original || el.textContent;
     el.removeAttribute("contenteditable");
     document.getElementById(`strat-actions-${id}`).style.display = "none";
   }
-
   async function toggleStrategia(id, attiva) {
     try { await api("memoria", { action: "toggle_strategia", id, attiva }); }
     catch (e) { showMsg(document.getElementById("memoria-error"), e.message, "error"); }
   }
-
   async function addStrategia() {
     const sezione = document.getElementById("new-strat-sezione").value.trim();
     const contenuto = document.getElementById("new-strat-contenuto").value.trim();
@@ -1538,7 +1437,6 @@
       loadMemoria();
     } catch (e) { showMsg(err, e.message, "error"); }
   }
-
   async function addNota() {
     const nota = document.getElementById("new-nota").value.trim();
     const tipo = document.getElementById("new-nota-tipo").value;
@@ -1553,14 +1451,12 @@
       loadMemoria();
     } catch (e) { showMsg(err, e.message, "error"); }
   }
-
   async function toggleNota(id, attiva) {
     try {
       await api("memoria", { action: "toggle_nota", id, attiva });
       document.getElementById(`nota-${id}`).classList.toggle("inactive", !attiva);
     } catch (e) { showMsg(document.getElementById("memoria-error"), e.message, "error"); }
   }
-
   async function addHashtag() {
     const tag = document.getElementById("new-hashtag").value.trim();
     const err = document.getElementById("memoria-error");
@@ -1570,14 +1466,26 @@
     try {
       await api("memoria", { action: "add_hashtag", tag });
       document.getElementById("new-hashtag").value = "";
-      flashSuccess(ok, "Hashtag aggiunto: verrà incluso nei prossimi post.");
+      flashSuccess(ok, "Hashtag aggiunto.");
       loadMemoria();
     } catch (e) { showMsg(err, e.message, "error"); }
   }
-
   async function toggleHashtag(id, attiva) {
     try { await api("memoria", { action: "toggle_hashtag", id, attiva }); loadMemoria(); }
     catch (e) { showMsg(document.getElementById("memoria-error"), e.message, "error"); }
+  }
+
+  // ── LOADING ──
+
+  function setLoading(show, title, subtitle) {
+    const overlay = document.getElementById("loading-overlay");
+    if (show) {
+      if (title) document.getElementById("loading-p").textContent = title;
+      if (subtitle) document.getElementById("loading-s").textContent = subtitle;
+      overlay.classList.add("show");
+    } else {
+      overlay.classList.remove("show");
+    }
   }
 
   // ── UTILITY ──
@@ -1591,13 +1499,11 @@
       document.execCommand("copy"); document.body.removeChild(ta);
     }
   }
-
   function feedbackBtn(btn, label) {
     const orig = btn.innerHTML;
     btn.innerHTML = "✅ Copiato!"; btn.classList.add("copied");
     setTimeout(() => { btn.innerHTML = `📋 ${label}`; btn.classList.remove("copied"); }, 2000);
   }
-
   async function copyEl(id, btn, label) { await clipboardCopy(document.getElementById(id).textContent); feedbackBtn(btn, label); }
   async function copyTA(id, btn, label) { await clipboardCopy(document.getElementById(id).value); feedbackBtn(btn, label); }
   async function copyRaw(text, btn) {
@@ -1606,33 +1512,19 @@
     const orig = btn.textContent; btn.textContent = "✅ Copiato!";
     setTimeout(() => { btn.textContent = orig; }, 1500);
   }
-
   function fmtDate(iso) {
     if (!iso) return "";
     const d = new Date(iso);
     return d.toLocaleDateString("it-IT", { day: "2-digit", month: "short" }) + " " +
       d.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
   }
-
-  function escHtml(s) {
-    const d = document.createElement("div"); d.textContent = s ?? ""; return d.innerHTML;
-  }
-
-  function showMsg(el, msg, type) {
-    el.textContent = msg;
-    el.className = `msg msg-${type} show`;
-  }
+  function escHtml(s) { const d = document.createElement("div"); d.textContent = s ?? ""; return d.innerHTML; }
+  function showMsg(el, msg, type) { el.textContent = msg; el.className = `msg msg-${type} show`; }
   function hideMsg(el) { el.className = "msg"; el.textContent = ""; }
-  function flashSuccess(el, msg) {
-    showMsg(el, msg, "success");
-    setTimeout(() => hideMsg(el), 4000);
-  }
+  function flashSuccess(el, msg) { showMsg(el, msg, "success"); setTimeout(() => hideMsg(el), 4000); }
 
-  document.getElementById("password-input").addEventListener("keydown", e => {
-    if (e.key === "Enter") handleLogin();
-  });
+  document.getElementById("password-input").addEventListener("keydown", e => { if (e.key === "Enter") handleLogin(); });
 </script>
-
 <script src="demo-mock.js"></script>
 </body>
 </html>
