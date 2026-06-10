@@ -45,6 +45,7 @@ supabase functions deploy auth
 supabase functions deploy generate
 supabase functions deploy history
 supabase functions deploy memoria
+supabase functions deploy trends
 ```
 
 ### Verifica

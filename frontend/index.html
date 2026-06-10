@@ -15,12 +15,11 @@
       --text-muted: #6b7280;
       --green: #16a34a;
       --red: #dc2626;
+      --purple: #5b21b6;
       --radius: 12px;
       --shadow: 0 4px 24px rgba(0,51,153,0.10);
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--gray-light);
@@ -29,35 +28,33 @@
       display: flex;
       flex-direction: column;
     }
-
     header {
       background: var(--blue);
       color: white;
-      padding: 14px 20px;
+      padding: 13px 18px;
       display: flex;
       align-items: center;
       gap: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-
     .logo-badge {
       background: var(--yellow);
       color: var(--blue);
       font-weight: 900;
-      font-size: 18px;
-      width: 42px;
-      height: 42px;
+      font-size: 17px;
+      width: 40px;
+      height: 40px;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
-
-    header h1 { font-size: 18px; font-weight: 700; line-height: 1.2; }
-    header p { font-size: 12px; opacity: 0.75; }
-    header .logout-btn { margin-left: auto; }
-
+    header h1 { font-size: 17px; font-weight: 700; }
+    header p { font-size: 11px; opacity: 0.7; }
     main {
       flex: 1;
       display: flex;
@@ -65,65 +62,52 @@
       justify-content: center;
       padding: 16px;
     }
-
     .card {
       background: white;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 24px 20px;
+      padding: 20px 18px;
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
     }
-
-    /* TABS */
+    /* ── TABS ── */
     .tabs {
       display: flex;
-      gap: 6px;
-      margin-bottom: 20px;
+      gap: 4px;
+      margin-bottom: 18px;
       background: var(--gray-light);
       border-radius: 10px;
       padding: 4px;
     }
-
     .tab {
       flex: 1;
-      padding: 9px 4px;
+      padding: 8px 2px;
       border: none;
       background: transparent;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
-
-    .tab.active {
-      background: var(--blue);
-      color: white;
-    }
-
+    .tab.active { background: var(--blue); color: white; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
-
-    /* FORM */
+    /* ── FORMS ── */
     label {
       display: block;
       font-size: 13px;
       font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text);
+      margin-bottom: 5px;
     }
-
-    input[type="password"],
-    input[type="text"],
-    select,
-    textarea {
+    input[type="password"], input[type="text"], select, textarea {
       width: 100%;
-      padding: 12px 14px;
+      padding: 11px 13px;
       border: 2px solid var(--gray);
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 15px;
       font-family: inherit;
       color: var(--text);
       background: white;
@@ -132,148 +116,168 @@
       appearance: none;
       -webkit-appearance: none;
     }
-
     input:focus, select:focus, textarea:focus { border-color: var(--blue); }
-
     textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
-
-    .select-wrapper { position: relative; }
-    .select-wrapper::after {
+    .select-wrap { position: relative; }
+    .select-wrap::after {
       content: "▾";
       position: absolute;
-      right: 14px;
+      right: 13px;
       top: 50%;
       transform: translateY(-50%);
       pointer-events: none;
       color: var(--blue);
-      font-size: 16px;
     }
-
+    /* ── BUTTONS ── */
     .btn {
       display: block;
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 14px;
+      transition: background 0.15s, transform 0.1s;
+      margin-top: 12px;
+      font-family: inherit;
     }
-
     .btn:active { transform: scale(0.98); }
-    .btn:disabled {
-      background: var(--gray) !important;
-      color: var(--text-muted) !important;
-      cursor: not-allowed;
-      transform: none;
-    }
-
+    .btn:disabled { background: var(--gray) !important; color: var(--text-muted) !important; cursor: not-allowed; transform: none; }
     .btn-primary { background: var(--blue); color: white; }
-    .btn-primary:hover { background: var(--blue-light); }
-    .btn-generate { background: var(--yellow); color: var(--blue); margin-top: 20px; }
-    .btn-generate:hover { background: #e6c200; }
-
-    .btn-small {
+    .btn-primary:hover:not(:disabled) { background: var(--blue-light); }
+    .btn-generate { background: var(--yellow); color: var(--blue); margin-top: 18px; }
+    .btn-generate:hover:not(:disabled) { background: #e6c200; }
+    .btn-rigenera { background: white; border: 2px solid var(--blue); color: var(--blue); }
+    .btn-rigenera:hover:not(:disabled) { background: #f0f4ff; }
+    .btn-sm {
       display: inline-block;
       width: auto;
-      padding: 7px 14px;
+      padding: 6px 14px;
       font-size: 13px;
       margin-top: 0;
       border-radius: 6px;
     }
-
-    .btn-outline {
-      background: white;
-      border: 1.5px solid var(--gray);
-      color: var(--text-muted);
-    }
-    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
-
-    .btn-rigenera {
-      background: white;
-      border: 2px solid var(--blue);
-      color: var(--blue);
-    }
-    .btn-rigenera:hover { background: #f0f4ff; }
-
-    .error-msg {
-      background: #fff0f0;
-      color: #c00;
-      border: 1px solid #fcc;
+    /* ── MESSAGES ── */
+    .msg {
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 9px 13px;
       font-size: 13px;
-      margin-top: 12px;
+      margin-top: 10px;
       display: none;
+      line-height: 1.4;
     }
-
-    .error-msg.show { display: block; }
-
-    .success-msg {
-      background: #f0fdf4;
-      color: var(--green);
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      margin-top: 12px;
-      display: none;
-    }
-
-    .success-msg.show { display: block; }
-
-    #app-view { display: none; width: 100%; max-width: 520px; }
-
+    .msg.show { display: block; }
+    .msg-error { background: #fff0f0; color: #c00; border: 1px solid #fcc; }
+    .msg-success { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
+    /* ── LOGIN ── */
+    #login-view h2 { font-size: 20px; font-weight: 700; margin-bottom: 5px; color: var(--blue); }
+    #login-view .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; }
+    /* ── APP ── */
+    #app-view { display: none; width: 100%; max-width: 540px; }
+    /* ── SPINNER ── */
     .spinner {
       display: inline-block;
-      width: 16px;
-      height: 16px;
+      width: 15px; height: 15px;
       border: 3px solid rgba(255,255,255,0.3);
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       vertical-align: middle;
-      margin-right: 8px;
+      margin-right: 7px;
     }
-
     .spinner-blue { border-color: rgba(0,51,153,0.2); border-top-color: var(--blue); }
-
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* RISULTATI */
-    #results { margin-top: 24px; display: none; }
-
+    /* ── AFORISMA ── */
+    .aforisma-box {
+      background: linear-gradient(135deg, #f0f4ff 0%, #fefce8 100%);
+      border: 1.5px solid var(--gray);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .aforisma-box .quote { font-size: 14px; line-height: 1.55; font-style: italic; color: var(--text); }
+    .aforisma-box .autore { font-size: 11px; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
+    .aforisma-box .next-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .aforisma-box .next-btn:hover { background: rgba(0,0,0,0.05); }
+    /* ── TREND ── */
+    .trend-section { margin-bottom: 18px; }
+    .trend-section .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .trend-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .trend-chip {
+      background: white;
+      border: 1.5px solid var(--gray);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.15s;
+      line-height: 1.3;
+      text-align: left;
+    }
+    .trend-chip:hover { border-color: var(--blue); color: var(--blue); background: #f0f4ff; }
+    .trend-chip.selected { border-color: var(--blue); background: #003399; color: white; }
+    .trend-chip .chip-title { font-weight: 700; display: block; }
+    .trend-chip .chip-angolo { font-size: 11px; opacity: 0.8; display: block; margin-top: 2px; }
+    .trend-load-btn {
+      background: none;
+      border: 1px solid var(--gray);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .trend-load-btn:hover { border-color: var(--blue); color: var(--blue); }
+    /* ── RESULTS ── */
+    #results { margin-top: 22px; display: none; }
     .result-label {
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       color: var(--text-muted);
-      margin-bottom: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      margin-bottom: 5px;
     }
-
     .result-box {
       background: var(--gray-light);
       border: 1.5px solid var(--gray);
       border-radius: 8px;
-      padding: 14px;
+      padding: 13px;
       font-size: 14px;
       line-height: 1.6;
       margin-bottom: 4px;
       word-break: break-word;
     }
-
     .result-box.copy-box { border-color: var(--blue); background: #f0f4ff; }
-
     .copy-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: none;
       border: 1px solid var(--gray);
       border-radius: 6px;
@@ -281,180 +285,185 @@
       font-size: 12px;
       cursor: pointer;
       color: var(--text-muted);
-      margin-top: 6px;
-      transition: all 0.2s;
+      margin-top: 5px;
+      font-family: inherit;
+      transition: all 0.15s;
     }
-
     .copy-btn:hover { border-color: var(--blue); color: var(--blue); }
     .copy-btn.copied { border-color: var(--green); color: var(--green); }
-
-    .char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 4px; }
+    .char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 3px; }
     .char-count.warn { color: var(--red); }
-
+    /* BADGE */
     .badge {
       display: inline-block;
-      padding: 4px 12px;
+      padding: 3px 10px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
-
     .badge-Interazione { background: #dbeafe; color: #1d4ed8; }
     .badge-Traffico { background: #fef3c7; color: #92400e; }
     .badge-Copertura { background: #d1fae5; color: #065f46; }
     .badge-bozza { background: var(--gray-light); color: var(--text-muted); border: 1px solid var(--gray); }
     .badge-approvato { background: #d1fae5; color: #065f46; }
     .badge-scartato { background: #fee2e2; color: #991b1b; }
-    .badge-framework { background: #ede9fe; color: #5b21b6; }
-
-    .divider { height: 1px; background: var(--gray); margin: 20px 0; }
-
+    .badge-fw { background: #ede9fe; color: var(--purple); }
+    /* KEYWORDS VISUAL */
+    .kw-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .kw-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #fef9c3;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      border-radius: 20px;
+      padding: 4px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .kw-chip:hover { background: #fde68a; }
+    /* ── STORICO ── */
+    .post-item {
+      border: 1.5px solid var(--gray);
+      border-radius: 10px;
+      padding: 13px;
+      margin-bottom: 10px;
+    }
+    .post-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 7px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .post-copy { font-size: 14px; line-height: 1.5; margin-bottom: 7px; }
+    .post-hashtags { font-size: 12px; color: var(--blue); margin-bottom: 9px; word-break: break-word; }
+    .post-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+    .action-btn {
+      border: 1.5px solid var(--gray);
+      background: white;
+      border-radius: 6px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .action-btn.approve:hover { border-color: var(--green); color: var(--green); }
+    .action-btn.reject:hover { border-color: var(--red); color: var(--red); }
+    /* ── MEMORIA ── */
+    .section-title { font-size: 15px; font-weight: 700; color: var(--blue); margin: 4px 0 8px; }
+    .hint { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
+    .mem-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--gray-light);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .mem-item.inactive { opacity: 0.4; }
+    .mem-text { flex: 1; }
+    .mem-tipo { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; }
+    .toggle { position: relative; width: 38px; height: 21px; flex-shrink: 0; cursor: pointer; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle .slider { position: absolute; inset: 0; background: var(--gray); border-radius: 21px; transition: 0.2s; }
+    .toggle .slider::before {
+      content: "";
+      position: absolute;
+      width: 15px; height: 15px;
+      left: 3px; top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+    .toggle input:checked + .slider { background: var(--green); }
+    .toggle input:checked + .slider::before { transform: translateX(17px); }
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #f0f4ff;
+      border: 1.5px solid var(--blue);
+      color: var(--blue);
+      border-radius: 20px;
+      padding: 4px 11px;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 5px 5px 0;
+    }
+    .tag-pill.inactive { background: var(--gray-light); border-color: var(--gray); color: var(--text-muted); text-decoration: line-through; }
+    .tag-pill button { background: none; border: none; cursor: pointer; font-size: 12px; color: inherit; padding: 0; }
+    .add-row { display: flex; gap: 7px; margin-top: 9px; align-items: center; }
+    .add-row .btn { width: auto; margin-top: 0; padding: 10px 15px; flex-shrink: 0; }
+    /* STRATEGIA */
+    .strat-item {
+      border: 1.5px solid var(--gray);
+      border-radius: 8px;
+      padding: 11px 13px;
+      margin-bottom: 8px;
+    }
+    .strat-item.inactive { opacity: 0.4; }
+    .strat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .strat-sezione { font-size: 12px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; }
+    .strat-contenuto {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
+      cursor: text;
+    }
+    .strat-contenuto[contenteditable="true"] {
+      outline: 2px solid var(--blue);
+      border-radius: 4px;
+      padding: 4px;
+      background: #f0f4ff;
+    }
+    .strat-actions { display: flex; gap: 6px; margin-top: 7px; }
+    .strat-btn {
+      border: 1px solid var(--gray);
+      background: white;
+      border-radius: 5px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .strat-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .strat-btn.save { background: var(--blue); color: white; border-color: var(--blue); }
+    /* DIVIDER */
+    .divider { height: 1px; background: var(--gray); margin: 18px 0; }
+    /* LOGOUT */
     .logout-btn {
+      margin-left: auto;
       background: rgba(255,255,255,0.15);
       border: none;
       color: white;
       font-size: 12px;
       cursor: pointer;
-      padding: 6px 12px;
+      padding: 6px 11px;
       border-radius: 6px;
+      font-family: inherit;
     }
-
     .logout-btn:hover { background: rgba(255,255,255,0.25); }
-
-    /* STORICO */
-    .post-item {
-      border: 1.5px solid var(--gray);
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .post-item-head {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 8px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .post-copy { font-size: 14px; line-height: 1.5; margin-bottom: 8px; }
-    .post-hashtags { font-size: 12px; color: var(--blue); margin-bottom: 10px; word-break: break-word; }
-
-    .post-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    .action-btn {
-      border: 1.5px solid var(--gray);
-      background: white;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .action-btn.approve:hover { border-color: var(--green); color: var(--green); }
-    .action-btn.reject:hover { border-color: var(--red); color: var(--red); }
-
-    /* MEMORIA */
-    .mem-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--gray-light);
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .mem-item.inactive { opacity: 0.45; }
-    .mem-item .mem-text { flex: 1; }
-    .mem-item .mem-tipo { font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px; }
-
-    .toggle {
-      position: relative;
-      width: 40px;
-      height: 22px;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .toggle input { opacity: 0; width: 0; height: 0; }
-
-    .toggle .slider {
-      position: absolute;
-      inset: 0;
-      background: var(--gray);
-      border-radius: 22px;
-      transition: 0.2s;
-    }
-
-    .toggle .slider::before {
-      content: "";
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      left: 3px;
-      top: 3px;
-      background: white;
-      border-radius: 50%;
-      transition: 0.2s;
-    }
-
-    .toggle input:checked + .slider { background: var(--green); }
-    .toggle input:checked + .slider::before { transform: translateX(18px); }
-
-    .tag-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #f0f4ff;
-      border: 1.5px solid var(--blue);
-      color: var(--blue);
-      border-radius: 20px;
-      padding: 5px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      margin: 0 6px 6px 0;
-    }
-
-    .tag-pill.inactive {
-      background: var(--gray-light);
-      border-color: var(--gray);
-      color: var(--text-muted);
-      text-decoration: line-through;
-    }
-
-    .tag-pill button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      color: inherit;
-      padding: 0;
-      line-height: 1;
-    }
-
-    .add-row { display: flex; gap: 8px; margin-top: 10px; }
-    .add-row input, .add-row select { flex: 1; }
-    .add-row .btn { width: auto; margin-top: 0; padding: 10px 16px; flex-shrink: 0; }
-
-    .section-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--blue);
-      margin: 4px 0 10px;
-    }
-
-    .hint { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
-
-    footer { text-align: center; padding: 14px; font-size: 11px; color: var(--text-muted); }
-
-    /* LOADING OVERLAY */
+    /* LOADING */
     #loading-overlay {
       position: fixed;
       inset: 0;
@@ -464,31 +473,26 @@
       justify-content: center;
       z-index: 100;
     }
-
     #loading-overlay.show { display: flex; }
-
     .loading-card {
       background: white;
       border-radius: 16px;
-      padding: 30px 38px;
+      padding: 28px 36px;
       text-align: center;
       box-shadow: 0 8px 40px rgba(0,51,153,0.15);
     }
-
     .loading-card .big-spinner {
-      width: 44px;
-      height: 44px;
+      width: 42px; height: 42px;
       border: 4px solid var(--gray);
       border-top-color: var(--blue);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-      margin: 0 auto 14px;
+      margin: 0 auto 13px;
     }
-
     .loading-card p { font-size: 15px; font-weight: 600; color: var(--blue); }
     .loading-card small { font-size: 12px; color: var(--text-muted); }
-
-    .empty-state { text-align: center; color: var(--text-muted); font-size: 14px; padding: 24px 0; }
+    .empty-state { text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px 0; }
+    footer { text-align: center; padding: 12px; font-size: 11px; color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -505,16 +509,11 @@
 <main>
   <!-- LOGIN -->
   <div class="card" id="login-view">
-    <h2 style="font-size:20px; font-weight:700; margin-bottom:6px; color:var(--blue)">Accesso team</h2>
-    <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px">
-      Inserisci la password condivisa per accedere.
-    </p>
-
+    <h2>Accesso team</h2>
+    <p class="subtitle">Inserisci la password condivisa per accedere.</p>
     <label for="password-input">Password</label>
     <input type="password" id="password-input" placeholder="••••••••" autocomplete="current-password" />
-
-    <div class="error-msg" id="login-error"></div>
-
+    <div class="msg msg-error" id="login-error"></div>
     <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Accedi</button>
   </div>
 
@@ -523,15 +522,33 @@
     <div class="card">
       <div class="tabs">
         <button class="tab active" data-tab="genera" onclick="switchTab('genera')">✨ Genera</button>
+        <button class="tab" data-tab="trend" onclick="switchTab('trend')">📈 Trend</button>
         <button class="tab" data-tab="storico" onclick="switchTab('storico')">📋 Storico</button>
         <button class="tab" data-tab="memoria" onclick="switchTab('memoria')">🧠 Memoria</button>
       </div>
 
-      <!-- TAB GENERA -->
+      <!-- ─── TAB GENERA ─── -->
       <div class="tab-panel active" id="panel-genera">
-        <div class="form-group" style="margin-bottom:16px">
+
+        <!-- Aforisma -->
+        <div class="aforisma-box" id="aforisma-box" style="display:none">
+          <button class="next-btn" onclick="nextAforisma()" title="Prossimo">↻</button>
+          <div class="quote" id="aforisma-testo"></div>
+          <div class="autore" id="aforisma-autore"></div>
+        </div>
+
+        <!-- Trend selezionato (chip compatta) -->
+        <div id="trend-selected-bar" style="display:none; margin-bottom:14px">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:5px">Trend attivo per questa generazione</div>
+          <div style="display:flex; align-items:center; gap:8px">
+            <span class="trend-chip selected" id="trend-selected-chip" style="cursor:default; flex:1"></span>
+            <button onclick="clearTrend()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px" title="Rimuovi trend">✕</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px">
           <label for="formato-select">Formato post</label>
-          <div class="select-wrapper">
+          <div class="select-wrap">
             <select id="formato-select">
               <option value="Singolo">📷 Singolo</option>
               <option value="Carosello">🎴 Carosello</option>
@@ -540,63 +557,105 @@
           </div>
         </div>
 
-        <div class="error-msg" id="gen-error"></div>
+        <div class="msg msg-error" id="gen-error"></div>
 
         <button class="btn btn-generate" id="gen-btn" onclick="handleGenerate(false)">✨ Genera</button>
 
+        <!-- RESULTS -->
         <div id="results">
           <div class="divider"></div>
 
-          <div style="margin-bottom:14px; display:flex; gap:8px; flex-wrap:wrap">
-            <span class="badge" id="res-obiettivo-badge"></span>
-            <span class="badge badge-framework" id="res-framework"></span>
+          <div style="display:flex; gap:7px; flex-wrap:wrap; margin-bottom:14px">
+            <span class="badge" id="res-ob-badge"></span>
+            <span class="badge badge-fw" id="res-fw-badge"></span>
           </div>
 
           <div class="result-label">Copy Instagram/Facebook</div>
           <div class="result-box copy-box" id="res-copy">–</div>
           <div class="char-count" id="res-copy-count"></div>
-          <button class="copy-btn" data-target="res-copy" onclick="copyText('res-copy', this, 'Copia copy')">📋 Copia copy</button>
+          <button class="copy-btn" onclick="copyEl('res-copy', this, 'Copia copy')">📋 Copia copy</button>
 
-          <div style="margin-top:18px">
-            <div class="result-label">Hashtag <span style="font-weight:400; text-transform:none; letter-spacing:0">modificabili prima di copiare</span></div>
+          <div style="margin-top:16px">
+            <div class="result-label">Hashtag <span style="font-weight:400;text-transform:none;letter-spacing:0">(modificabili)</span></div>
             <textarea id="res-hashtags" rows="2"></textarea>
-            <button class="copy-btn" onclick="copyTextarea('res-hashtags', this, 'Copia hashtag')">📋 Copia hashtag</button>
+            <button class="copy-btn" onclick="copyTA('res-hashtags', this, 'Copia hashtag')">📋 Copia hashtag</button>
           </div>
 
-          <div style="margin-top:18px">
+          <div style="margin-top:16px">
             <div class="result-label">Brief per il grafico</div>
             <div class="result-box" id="res-visual">–</div>
-            <button class="copy-btn" data-target="res-visual" onclick="copyText('res-visual', this, 'Copia brief visual')">📋 Copia brief visual</button>
+            <button class="copy-btn" onclick="copyEl('res-visual', this, 'Copia brief')">📋 Copia brief visual</button>
           </div>
 
-          <button class="btn btn-rigenera" id="rigenera-btn" onclick="handleGenerate(true)">
+          <div style="margin-top:16px">
+            <div class="result-label">Cerca ispirazione visiva 🔍</div>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:7px">Clicca una keyword per cercare su Pinterest</p>
+            <div class="kw-chips" id="res-kw-chips"></div>
+          </div>
+
+          <button class="btn btn-rigenera" id="rigenera-btn" onclick="handleGenerate(true)" style="margin-top:18px">
             🔄 Non mi piace, rigenera
           </button>
-          <p class="hint" style="margin-top:8px; text-align:center">
-            Rigenerando, il post scartato viene sovrascritto: non sporca lo storico.
+          <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:6px">
+            Rigenerando, il post scartato viene sovrascritto — non sporca lo storico.
           </p>
         </div>
       </div>
 
-      <!-- TAB STORICO -->
+      <!-- ─── TAB TREND ─── -->
+      <div class="tab-panel" id="panel-trend">
+        <div style="margin-bottom:12px">
+          <div class="section-title">Trend del momento</div>
+          <p class="hint">ANGY legge Gambero Rosso, Dissapore, Il Fatto Alimentare e Agrodolce e identifica i trend rilevanti per Angelo Parodi. Seleziona un trend per usarlo nella prossima generazione.</p>
+        </div>
+        <div class="msg msg-error" id="trend-error"></div>
+        <div id="trend-list"><div class="empty-state">Premi "Aggiorna trend" per caricare i dati.</div></div>
+        <button class="btn btn-primary" id="trend-load-btn" onclick="loadTrends()" style="margin-top:14px">
+          📡 Aggiorna trend
+        </button>
+        <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:8px">
+          Dati live da fonti editoriali food italiane · aggiorna quando vuoi
+        </p>
+      </div>
+
+      <!-- ─── TAB STORICO ─── -->
       <div class="tab-panel" id="panel-storico">
-        <p class="hint">Ultimi 20 post generati. Approva quelli pubblicati, scarta quelli abbandonati: ANGY li usa per non ripetersi.</p>
-        <div class="error-msg" id="storico-error"></div>
+        <p class="hint">Ultimi 20 post. Approva i pubblicati, scarta gli abbandonati: ANGY evita di ripetersi.</p>
+        <div class="msg msg-error" id="storico-error"></div>
         <div id="storico-list"><div class="empty-state">Caricamento…</div></div>
       </div>
 
-      <!-- TAB MEMORIA -->
+      <!-- ─── TAB MEMORIA ─── -->
       <div class="tab-panel" id="panel-memoria">
+
+        <!-- AFORISMI INFO -->
+        <div style="background:#fefce8; border:1px solid #fde68a; border-radius:8px; padding:11px 13px; margin-bottom:16px; font-size:13px; color:#92400e; line-height:1.5">
+          💡 <strong>Aforismi</strong>: ANGY ne ha 22 caricati — appaiono a rotazione nel tab Genera come spunto creativo. Vuoi aggiungerne? Scrivici su Supabase → Table Editor → angy_aforismi.
+        </div>
+
+        <!-- STRATEGIA -->
+        <div class="section-title">Strategia editoriale</div>
+        <p class="hint">Queste linee guida vengono iniettate direttamente nel prompt di ANGY ad ogni generazione. Modificale per allinearle al piano operativo corrente.</p>
+        <div id="strat-list"><div class="empty-state">Caricamento…</div></div>
+
+        <div style="margin-top:12px; border:1.5px dashed var(--gray); border-radius:8px; padding:12px">
+          <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px">AGGIUNGI SEZIONE STRATEGIA</div>
+          <input type="text" id="new-strat-sezione" placeholder="Nome sezione (es. Campagna estiva)" style="margin-bottom:7px" />
+          <textarea id="new-strat-contenuto" placeholder="Contenuto della sezione strategica…" rows="3"></textarea>
+          <button class="btn btn-primary btn-sm" onclick="addStrategia()" style="margin-top:8px; padding:8px 16px">Aggiungi</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- REGOLE -->
         <div class="section-title">Regole di ANGY</div>
-        <p class="hint">Tutto ciò che ANGY deve sempre rispettare: tono, parole vietate, indicazioni del brand. Spegni una regola per sospenderla senza cancellarla.</p>
-
+        <p class="hint">Tono, parole vietate, indicazioni di brand. Spegni una regola per sospenderla senza cancellarla.</p>
         <div id="note-list"><div class="empty-state">Caricamento…</div></div>
-
-        <div class="add-row">
+        <div class="add-row" style="margin-top:10px">
           <input type="text" id="new-nota" placeholder="Nuova regola, es: cita sempre la pesca sostenibile" />
         </div>
         <div class="add-row">
-          <div class="select-wrapper" style="flex:1">
+          <div class="select-wrap" style="flex:1">
             <select id="new-nota-tipo">
               <option value="tono">Tono</option>
               <option value="brand">Brand</option>
@@ -609,19 +668,19 @@
 
         <div class="divider"></div>
 
+        <!-- HASHTAG -->
         <div class="section-title">Hashtag fissi del brand</div>
-        <p class="hint">Questi hashtag vengono inclusi automaticamente in ogni post. I colleghi possono aggiungere variazioni qui.</p>
-
+        <p class="hint">Inclusi automaticamente in ogni post. I colleghi possono aggiungere variazioni qui.</p>
         <div id="hashtag-list"><div class="empty-state">Caricamento…</div></div>
-
-        <div class="add-row">
+        <div class="add-row" style="margin-top:10px">
           <input type="text" id="new-hashtag" placeholder="#nuovohashtag" />
           <button class="btn btn-primary" onclick="addHashtag()">Aggiungi</button>
         </div>
 
-        <div class="error-msg" id="memoria-error"></div>
-        <div class="success-msg" id="memoria-success"></div>
+        <div class="msg msg-error" id="memoria-error"></div>
+        <div class="msg msg-success" id="memoria-success"></div>
       </div>
+
     </div>
   </div>
 </main>
@@ -630,37 +689,36 @@
   <div class="loading-card">
     <div class="big-spinner"></div>
     <p>ANGY sta scrivendo…</p>
-    <small>Framework, memoria, storico: tutto sotto controllo</small>
+    <small>Framework · SEO social · Strategia · Memoria</small>
   </div>
 </div>
 
 <footer>ANGY · Angelo Parodi · Solo uso interno team</footer>
 
 <script>
-  // Configurazione — imposta questi valori dopo il deploy
   const CONFIG = {
-    supabaseUrl: "INSERISCI_SUPABASE_URL",          // es. https://xxxx.supabase.co
-    supabaseAnonKey: "INSERISCI_SUPABASE_ANON_KEY", // anon/public key
+    supabaseUrl: "INSERISCI_SUPABASE_URL",
+    supabaseAnonKey: "INSERISCI_SUPABASE_ANON_KEY",
   };
 
-  const FN = (name) => `${CONFIG.supabaseUrl}/functions/v1/${name}`;
+  const FN = (n) => `${CONFIG.supabaseUrl}/functions/v1/${n}`;
 
   let authToken = null;
-  let lastGeneratedId = null;
+  let lastId = null;
+  let aforismi = [];
+  let aforismaIdx = 0;
+  let selectedTrend = null;
 
-  // ---------- SESSIONE ----------
+  // ── SESSIONE ──
 
-  (function initSession() {
-    const saved = sessionStorage.getItem("angy_token");
-    const expiry = sessionStorage.getItem("angy_token_expiry");
-    if (saved && expiry && Date.now() < parseInt(expiry)) {
-      authToken = saved;
-      showApp();
-    }
+  (function init() {
+    const t = sessionStorage.getItem("angy_token");
+    const e = sessionStorage.getItem("angy_token_expiry");
+    if (t && e && Date.now() < parseInt(e)) { authToken = t; showApp(); }
   })();
 
-  async function api(fnName, body) {
-    const res = await fetch(FN(fnName), {
+  async function api(fn, body) {
+    const res = await fetch(FN(fn), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -670,10 +728,7 @@
       body: JSON.stringify(body),
     });
     const data = await res.json();
-    if (res.status === 401) {
-      handleLogout();
-      throw new Error("Sessione scaduta, rifai il login.");
-    }
+    if (res.status === 401) { handleLogout(); throw new Error("Sessione scaduta."); }
     if (!res.ok) throw new Error(data.error || "Errore server");
     return data;
   }
@@ -681,329 +736,435 @@
   async function handleLogin() {
     const input = document.getElementById("password-input");
     const btn = document.getElementById("login-btn");
-    const errorEl = document.getElementById("login-error");
-
-    const password = input.value.trim();
-    if (!password) { showError(errorEl, "Inserisci la password."); return; }
-
+    const err = document.getElementById("login-error");
+    const pw = input.value.trim();
+    if (!pw) { showMsg(err, "Inserisci la password.", "error"); return; }
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Accesso…';
-    hideError(errorEl);
-
+    hideMsg(err);
     try {
-      const data = await api("auth", { password });
+      const data = await api("auth", { password: pw });
       authToken = data.token;
       sessionStorage.setItem("angy_token", data.token);
       sessionStorage.setItem("angy_token_expiry", String(data.expiresAt));
       input.value = "";
       showApp();
-    } catch (err) {
-      showError(errorEl, err.message || "Impossibile contattare il server.");
+    } catch (e) {
+      showMsg(err, e.message || "Impossibile contattare il server.", "error");
     } finally {
       btn.disabled = false;
       btn.innerHTML = "Accedi";
     }
   }
 
-  function showApp() {
+  async function showApp() {
     document.getElementById("login-view").style.display = "none";
     document.getElementById("app-view").style.display = "block";
     document.getElementById("header-logout").style.display = "block";
+    // Carica aforismi in background
+    try {
+      const data = await api("memoria", { action: "list" });
+      aforismi = (data.aforismi || []).filter(a => a.testo);
+      if (aforismi.length) {
+        aforismaIdx = Math.floor(Math.random() * aforismi.length);
+        renderAforisma();
+        document.getElementById("aforisma-box").style.display = "block";
+      }
+    } catch (_) {}
   }
 
   function handleLogout() {
-    authToken = null;
-    lastGeneratedId = null;
-    sessionStorage.removeItem("angy_token");
-    sessionStorage.removeItem("angy_token_expiry");
+    authToken = null; lastId = null; selectedTrend = null;
+    sessionStorage.clear();
     document.getElementById("app-view").style.display = "none";
     document.getElementById("header-logout").style.display = "none";
     document.getElementById("login-view").style.display = "block";
     document.getElementById("results").style.display = "none";
   }
 
-  // ---------- TABS ----------
+  // ── TABS ──
 
   function switchTab(name) {
-    document.querySelectorAll(".tab").forEach((t) =>
-      t.classList.toggle("active", t.dataset.tab === name)
-    );
-    document.querySelectorAll(".tab-panel").forEach((p) =>
-      p.classList.toggle("active", p.id === `panel-${name}`)
-    );
+    document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === `panel-${name}`));
     if (name === "storico") loadStorico();
     if (name === "memoria") loadMemoria();
   }
 
-  // ---------- GENERA ----------
+  // ── AFORISMI ──
+
+  function renderAforisma() {
+    if (!aforismi.length) return;
+    const a = aforismi[aforismaIdx];
+    document.getElementById("aforisma-testo").textContent = `"${a.testo}"`;
+    document.getElementById("aforisma-autore").textContent = `— ${a.autore || "Anonimo"}`;
+  }
+
+  function nextAforisma() {
+    if (!aforismi.length) return;
+    aforismaIdx = (aforismaIdx + 1) % aforismi.length;
+    renderAforisma();
+  }
+
+  // ── TREND ──
+
+  let trendsCache = null;
+
+  async function loadTrends() {
+    const btn = document.getElementById("trend-load-btn");
+    const list = document.getElementById("trend-list");
+    const err = document.getElementById("trend-error");
+    hideMsg(err);
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Lettura feed…';
+    list.innerHTML = '<div class="empty-state">Interrogo Gambero Rosso, Dissapore, Il Fatto Alimentare…</div>';
+
+    try {
+      const data = await api("trends", {});
+      trendsCache = data.trends || [];
+      const aggiornato = data.data_aggiornamento || new Date().toLocaleDateString("it-IT");
+
+      if (!trendsCache.length) {
+        list.innerHTML = '<div class="empty-state">Nessun trend recuperato. Riprova tra un momento.</div>';
+        return;
+      }
+
+      list.innerHTML = `
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px">Aggiornato: ${aggiornato} — clicca un trend per usarlo nella generazione</div>
+        ${trendsCache.map((t, i) => `
+          <div class="trend-chip" id="trend-${i}" onclick="selectTrend(${i})" style="display:block; margin-bottom:8px; width:100%">
+            <span class="chip-title">📌 ${escHtml(t.titolo)}</span>
+            <span class="chip-angolo">${escHtml(t.spunto)}</span>
+            ${t.angolo ? `<span class="chip-angolo" style="color:var(--blue); margin-top:3px; font-style:italic">💡 ${escHtml(t.angolo)}</span>` : ""}
+          </div>
+        `).join("")}
+      `;
+    } catch (e) {
+      showMsg(err, e.message, "error");
+      list.innerHTML = "";
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "📡 Aggiorna trend";
+    }
+  }
+
+  function selectTrend(idx) {
+    const t = trendsCache?.[idx];
+    if (!t) return;
+    selectedTrend = t.titolo + ": " + t.spunto + (t.angolo ? " — " + t.angolo : "");
+    document.querySelectorAll(".trend-chip").forEach((c, i) => c.classList.toggle("selected", i === idx));
+
+    const bar = document.getElementById("trend-selected-bar");
+    const chip = document.getElementById("trend-selected-chip");
+    chip.innerHTML = `<span class="chip-title">${escHtml(t.titolo)}</span>`;
+    bar.style.display = "block";
+
+    // Torna al tab Genera
+    switchTab("genera");
+  }
+
+  function clearTrend() {
+    selectedTrend = null;
+    document.getElementById("trend-selected-bar").style.display = "none";
+    document.querySelectorAll(".trend-chip").forEach(c => c.classList.remove("selected"));
+  }
+
+  // ── GENERA ──
 
   async function handleGenerate(rigenera) {
     const formato = document.getElementById("formato-select").value;
     const genBtn = document.getElementById("gen-btn");
     const rigBtn = document.getElementById("rigenera-btn");
-    const errorEl = document.getElementById("gen-error");
+    const err = document.getElementById("gen-error");
     const overlay = document.getElementById("loading-overlay");
 
-    genBtn.disabled = true;
-    rigBtn.disabled = true;
-    hideError(errorEl);
+    genBtn.disabled = true; rigBtn.disabled = true;
+    hideMsg(err);
     overlay.classList.add("show");
 
     try {
       const body = { formato, cliente: "Angelo Parodi" };
-      if (rigenera && lastGeneratedId) body.rigenera_id = lastGeneratedId;
+      if (rigenera && lastId) body.rigenera_id = lastId;
+      if (selectedTrend) body.trend_selezionato = selectedTrend;
 
       const data = await api("generate", body);
-      lastGeneratedId = data.id;
+      lastId = data.id;
       displayResults(data);
-    } catch (err) {
-      showError(errorEl, err.message || "Errore di rete. Riprova.");
+      // Cambia aforisma ad ogni generazione
+      nextAforisma();
+    } catch (e) {
+      showMsg(err, e.message || "Errore di rete. Riprova.", "error");
     } finally {
-      genBtn.disabled = false;
-      rigBtn.disabled = false;
+      genBtn.disabled = false; rigBtn.disabled = false;
       overlay.classList.remove("show");
     }
   }
 
   function displayResults(data) {
-    const results = document.getElementById("results");
-
     document.getElementById("res-copy").textContent = data.copy;
-
     const len = data.copy.length;
     const countEl = document.getElementById("res-copy-count");
     countEl.textContent = `${len}/220 caratteri`;
     countEl.className = "char-count" + (len > 200 ? " warn" : "");
 
-    const obBadge = document.getElementById("res-obiettivo-badge");
-    obBadge.textContent = data.obiettivo;
-    obBadge.className = `badge badge-${data.obiettivo}`;
+    const ob = document.getElementById("res-ob-badge");
+    ob.textContent = data.obiettivo;
+    ob.className = `badge badge-${data.obiettivo}`;
 
-    document.getElementById("res-framework").textContent = `Framework: ${data.framework}`;
+    document.getElementById("res-fw-badge").textContent = `${data.framework}`;
     document.getElementById("res-hashtags").value = (data.hashtags || []).join(" ");
     document.getElementById("res-visual").textContent = data.brief_visual;
 
-    results.style.display = "block";
-    results.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Keywords visual → link Pinterest
+    const kwContainer = document.getElementById("res-kw-chips");
+    kwContainer.innerHTML = (data.keywords_visual || []).map(kw => {
+      const url = `https://www.pinterest.it/search/pins/?q=${encodeURIComponent(kw)}`;
+      return `<a class="kw-chip" href="${url}" target="_blank" rel="noopener">🔍 ${escHtml(kw)}</a>`;
+    }).join("");
+
+    document.getElementById("results").style.display = "block";
+    document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  // ---------- STORICO ----------
+  // ── STORICO ──
 
   async function loadStorico() {
     const list = document.getElementById("storico-list");
-    const errorEl = document.getElementById("storico-error");
-    hideError(errorEl);
+    const err = document.getElementById("storico-error");
+    hideMsg(err);
     list.innerHTML = '<div class="empty-state">Caricamento…</div>';
-
     try {
       const data = await api("history", { action: "list" });
-      if (!data.posts || data.posts.length === 0) {
-        list.innerHTML = '<div class="empty-state">Nessun post generato finora.</div>';
-        return;
-      }
-      list.innerHTML = data.posts.map((p) => `
-        <div class="post-item" id="post-${p.id}">
-          <div class="post-item-head">
-            <span>${formatDate(p.created_at)}</span>
-            <span>·</span>
-            <span>${escapeHtml(p.formato || "")}</span>
-            ${p.framework ? `<span class="badge badge-framework">${escapeHtml(p.framework)}</span>` : ""}
-            <span class="badge badge-${p.obiettivo || "Interazione"}">${escapeHtml(p.obiettivo || "")}</span>
-            <span class="badge badge-${p.status}" id="status-${p.id}">${escapeHtml(p.status)}</span>
+      if (!data.posts?.length) { list.innerHTML = '<div class="empty-state">Nessun post generato finora.</div>'; return; }
+      list.innerHTML = data.posts.map(p => `
+        <div class="post-item">
+          <div class="post-head">
+            <span>${fmtDate(p.created_at)}</span><span>·</span>
+            <span>${escHtml(p.formato || "")}</span>
+            ${p.framework ? `<span class="badge badge-fw">${escHtml(p.framework)}</span>` : ""}
+            <span class="badge badge-${p.obiettivo || "Interazione"}">${escHtml(p.obiettivo || "")}</span>
+            <span class="badge badge-${p.status}" id="status-${p.id}">${escHtml(p.status)}</span>
           </div>
-          <div class="post-copy">${escapeHtml(p.copy || "")}</div>
-          ${p.hashtags ? `<div class="post-hashtags">${escapeHtml(p.hashtags)}</div>` : ""}
+          <div class="post-copy">${escHtml(p.copy || "")}</div>
+          ${p.hashtags ? `<div class="post-hashtags">${escHtml(p.hashtags)}</div>` : ""}
           <div class="post-actions">
-            <button class="action-btn approve" onclick="setStatus('${p.id}', 'approvato')">✅ Approva</button>
-            <button class="action-btn reject" onclick="setStatus('${p.id}', 'scartato')">❌ Scarta</button>
-            <button class="action-btn" onclick="copyRawText(${JSON.stringify(escapeHtml(p.copy || "")).replace(/"/g, "&quot;")}, this)">📋 Copia</button>
+            <button class="action-btn approve" onclick="setStatus('${p.id}','approvato')">✅ Approva</button>
+            <button class="action-btn reject" onclick="setStatus('${p.id}','scartato')">❌ Scarta</button>
+            <button class="action-btn" onclick="copyRaw('${escHtml(p.copy || "").replace(/'/g,"\\'")}', this)">📋 Copia</button>
           </div>
         </div>
       `).join("");
-    } catch (err) {
-      showError(errorEl, err.message);
-      list.innerHTML = "";
-    }
+    } catch (e) { showMsg(err, e.message, "error"); list.innerHTML = ""; }
   }
 
   async function setStatus(id, status) {
-    const errorEl = document.getElementById("storico-error");
+    const err = document.getElementById("storico-error");
     try {
       await api("history", { action: "status", id, status });
-      const badge = document.getElementById(`status-${id}`);
-      if (badge) {
-        badge.textContent = status;
-        badge.className = `badge badge-${status}`;
-      }
-    } catch (err) {
-      showError(errorEl, err.message);
-    }
+      const b = document.getElementById(`status-${id}`);
+      if (b) { b.textContent = status; b.className = `badge badge-${status}`; }
+    } catch (e) { showMsg(err, e.message, "error"); }
   }
 
-  // ---------- MEMORIA ----------
+  // ── MEMORIA ──
 
   async function loadMemoria() {
-    const noteList = document.getElementById("note-list");
-    const tagList = document.getElementById("hashtag-list");
-    const errorEl = document.getElementById("memoria-error");
-    hideError(errorEl);
-
+    const noteEl = document.getElementById("note-list");
+    const tagEl = document.getElementById("hashtag-list");
+    const stratEl = document.getElementById("strat-list");
+    const err = document.getElementById("memoria-error");
+    hideMsg(err);
     try {
       const data = await api("memoria", { action: "list" });
+      aforismi = (data.aforismi || []).filter(a => a.testo);
 
-      noteList.innerHTML = (data.note || []).length
-        ? data.note.map((n) => `
-            <div class="mem-item ${n.attiva ? "" : "inactive"}" id="nota-${n.id}">
-              <div class="mem-text">
-                ${escapeHtml(n.nota)}
-                <span class="mem-tipo">${escapeHtml(n.tipo)}</span>
+      // Strategia
+      stratEl.innerHTML = (data.strategia || []).length
+        ? data.strategia.map(s => `
+            <div class="strat-item ${s.attiva ? "" : "inactive"}" id="strat-${s.id}">
+              <div class="strat-head">
+                <span class="strat-sezione">${escHtml(s.sezione)}</span>
+                <div style="display:flex;gap:5px">
+                  <button class="strat-btn" onclick="editStrategia('${s.id}')">Modifica</button>
+                  <label class="toggle" title="${s.attiva ? "Disattiva" : "Attiva"}">
+                    <input type="checkbox" ${s.attiva ? "checked" : ""} onchange="toggleStrategia('${s.id}', this.checked)" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
               </div>
+              <div class="strat-contenuto" id="strat-content-${s.id}">${escHtml(s.contenuto)}</div>
+              <div class="strat-actions" id="strat-actions-${s.id}" style="display:none">
+                <button class="strat-btn save" onclick="saveStrategia('${s.id}')">Salva</button>
+                <button class="strat-btn" onclick="cancelEditStrategia('${s.id}')">Annulla</button>
+              </div>
+            </div>
+          `).join("")
+        : '<div class="empty-state">Nessuna sezione strategica. Aggiungine una qui sotto.</div>';
+
+      // Note
+      noteEl.innerHTML = (data.note || []).length
+        ? data.note.map(n => `
+            <div class="mem-item ${n.attiva ? "" : "inactive"}" id="nota-${n.id}">
+              <div class="mem-text">${escHtml(n.nota)}<span class="mem-tipo">${escHtml(n.tipo)}</span></div>
               <label class="toggle">
                 <input type="checkbox" ${n.attiva ? "checked" : ""} onchange="toggleNota('${n.id}', this.checked)" />
                 <span class="slider"></span>
               </label>
-            </div>
-          `).join("")
-        : '<div class="empty-state">Nessuna regola. Aggiungine una qui sotto.</div>';
+            </div>`).join("")
+        : '<div class="empty-state">Nessuna regola. Aggiungine una.</div>';
 
-      tagList.innerHTML = (data.hashtags || []).length
-        ? data.hashtags.map((h) => `
+      // Hashtag
+      tagEl.innerHTML = (data.hashtags || []).length
+        ? data.hashtags.map(h => `
             <span class="tag-pill ${h.attiva ? "" : "inactive"}">
-              ${escapeHtml(h.tag)}
-              <button title="${h.attiva ? "Disattiva" : "Riattiva"}" onclick="toggleHashtag('${h.id}', ${!h.attiva})">${h.attiva ? "✕" : "↺"}</button>
-            </span>
-          `).join("")
+              ${escHtml(h.tag)}
+              <button onclick="toggleHashtag('${h.id}', ${!h.attiva})" title="${h.attiva ? "Disattiva" : "Riattiva"}">${h.attiva ? "✕" : "↺"}</button>
+            </span>`).join("")
         : '<div class="empty-state">Nessun hashtag fisso.</div>';
-    } catch (err) {
-      showError(errorEl, err.message);
-    }
+    } catch (e) { showMsg(err, e.message, "error"); }
+  }
+
+  // Strategia edit
+  function editStrategia(id) {
+    const el = document.getElementById(`strat-content-${id}`);
+    const actions = document.getElementById(`strat-actions-${id}`);
+    el.setAttribute("contenteditable", "true");
+    el.dataset.original = el.textContent;
+    el.focus();
+    actions.style.display = "flex";
+  }
+
+  async function saveStrategia(id) {
+    const el = document.getElementById(`strat-content-${id}`);
+    const err = document.getElementById("memoria-error");
+    const ok = document.getElementById("memoria-success");
+    const contenuto = el.textContent.trim();
+    try {
+      await api("memoria", { action: "update_strategia", id, contenuto });
+      el.removeAttribute("contenteditable");
+      document.getElementById(`strat-actions-${id}`).style.display = "none";
+      flashSuccess(ok, "Sezione strategica aggiornata. ANGY la userà dal prossimo post.");
+    } catch (e) { showMsg(err, e.message, "error"); }
+  }
+
+  function cancelEditStrategia(id) {
+    const el = document.getElementById(`strat-content-${id}`);
+    el.textContent = el.dataset.original || el.textContent;
+    el.removeAttribute("contenteditable");
+    document.getElementById(`strat-actions-${id}`).style.display = "none";
+  }
+
+  async function toggleStrategia(id, attiva) {
+    try { await api("memoria", { action: "toggle_strategia", id, attiva }); }
+    catch (e) { showMsg(document.getElementById("memoria-error"), e.message, "error"); }
+  }
+
+  async function addStrategia() {
+    const sezione = document.getElementById("new-strat-sezione").value.trim();
+    const contenuto = document.getElementById("new-strat-contenuto").value.trim();
+    const err = document.getElementById("memoria-error");
+    const ok = document.getElementById("memoria-success");
+    hideMsg(err);
+    if (!sezione || contenuto.length < 5) { showMsg(err, "Inserisci nome sezione e contenuto.", "error"); return; }
+    try {
+      await api("memoria", { action: "add_strategia", sezione, contenuto });
+      document.getElementById("new-strat-sezione").value = "";
+      document.getElementById("new-strat-contenuto").value = "";
+      flashSuccess(ok, "Sezione aggiunta alla strategia.");
+      loadMemoria();
+    } catch (e) { showMsg(err, e.message, "error"); }
   }
 
   async function addNota() {
-    const input = document.getElementById("new-nota");
+    const nota = document.getElementById("new-nota").value.trim();
     const tipo = document.getElementById("new-nota-tipo").value;
-    const errorEl = document.getElementById("memoria-error");
-    const okEl = document.getElementById("memoria-success");
-    hideError(errorEl);
-
-    const nota = input.value.trim();
-    if (nota.length < 3) { showError(errorEl, "Scrivi una regola più lunga."); return; }
-
+    const err = document.getElementById("memoria-error");
+    const ok = document.getElementById("memoria-success");
+    hideMsg(err);
+    if (nota.length < 3) { showMsg(err, "Scrivi una regola più lunga.", "error"); return; }
     try {
       await api("memoria", { action: "add_nota", nota, tipo });
-      input.value = "";
-      flashSuccess(okEl, "Regola aggiunta: dal prossimo post ANGY la rispetterà.");
+      document.getElementById("new-nota").value = "";
+      flashSuccess(ok, "Regola aggiunta: ANGY la rispetterà dal prossimo post.");
       loadMemoria();
-    } catch (err) {
-      showError(errorEl, err.message);
-    }
+    } catch (e) { showMsg(err, e.message, "error"); }
   }
 
   async function toggleNota(id, attiva) {
     try {
       await api("memoria", { action: "toggle_nota", id, attiva });
       document.getElementById(`nota-${id}`).classList.toggle("inactive", !attiva);
-    } catch (err) {
-      showError(document.getElementById("memoria-error"), err.message);
-    }
+    } catch (e) { showMsg(document.getElementById("memoria-error"), e.message, "error"); }
   }
 
   async function addHashtag() {
-    const input = document.getElementById("new-hashtag");
-    const errorEl = document.getElementById("memoria-error");
-    const okEl = document.getElementById("memoria-success");
-    hideError(errorEl);
-
-    const tag = input.value.trim();
-    if (tag.length < 2) { showError(errorEl, "Hashtag troppo corto."); return; }
-
+    const tag = document.getElementById("new-hashtag").value.trim();
+    const err = document.getElementById("memoria-error");
+    const ok = document.getElementById("memoria-success");
+    hideMsg(err);
+    if (tag.length < 2) { showMsg(err, "Hashtag troppo corto.", "error"); return; }
     try {
       await api("memoria", { action: "add_hashtag", tag });
-      input.value = "";
-      flashSuccess(okEl, "Hashtag aggiunto: verrà incluso nei prossimi post.");
+      document.getElementById("new-hashtag").value = "";
+      flashSuccess(ok, "Hashtag aggiunto: verrà incluso nei prossimi post.");
       loadMemoria();
-    } catch (err) {
-      showError(errorEl, err.message);
-    }
+    } catch (e) { showMsg(err, e.message, "error"); }
   }
 
   async function toggleHashtag(id, attiva) {
-    try {
-      await api("memoria", { action: "toggle_hashtag", id, attiva });
-      loadMemoria();
-    } catch (err) {
-      showError(document.getElementById("memoria-error"), err.message);
-    }
+    try { await api("memoria", { action: "toggle_hashtag", id, attiva }); loadMemoria(); }
+    catch (e) { showMsg(document.getElementById("memoria-error"), e.message, "error"); }
   }
 
-  // ---------- UTILITY ----------
+  // ── UTILITY ──
 
-  async function copyToClipboard(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
+  async function clipboardCopy(text) {
+    try { await navigator.clipboard.writeText(text); }
+    catch {
       const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
+      ta.value = text; ta.style.cssText = "position:fixed;opacity:0";
+      document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
     }
   }
 
-  async function copyText(elementId, btn, label) {
-    await copyToClipboard(document.getElementById(elementId).textContent);
-    feedbackCopied(btn, label);
+  function feedbackBtn(btn, label) {
+    const orig = btn.innerHTML;
+    btn.innerHTML = "✅ Copiato!"; btn.classList.add("copied");
+    setTimeout(() => { btn.innerHTML = `📋 ${label}`; btn.classList.remove("copied"); }, 2000);
   }
 
-  async function copyTextarea(elementId, btn, label) {
-    await copyToClipboard(document.getElementById(elementId).value);
-    feedbackCopied(btn, label);
-  }
-
-  async function copyRawText(text, btn) {
-    const tmp = document.createElement("textarea");
-    tmp.innerHTML = text;
-    await copyToClipboard(tmp.value);
-    const orig = btn.textContent;
-    btn.textContent = "✅ Copiato!";
+  async function copyEl(id, btn, label) { await clipboardCopy(document.getElementById(id).textContent); feedbackBtn(btn, label); }
+  async function copyTA(id, btn, label) { await clipboardCopy(document.getElementById(id).value); feedbackBtn(btn, label); }
+  async function copyRaw(text, btn) {
+    const div = document.createElement("div"); div.innerHTML = text;
+    await clipboardCopy(div.textContent);
+    const orig = btn.textContent; btn.textContent = "✅ Copiato!";
     setTimeout(() => { btn.textContent = orig; }, 1500);
   }
 
-  function feedbackCopied(btn, label) {
-    btn.textContent = "✅ Copiato!";
-    btn.classList.add("copied");
-    setTimeout(() => {
-      btn.innerHTML = `📋 ${label}`;
-      btn.classList.remove("copied");
-    }, 2000);
-  }
-
-  function formatDate(iso) {
+  function fmtDate(iso) {
     if (!iso) return "";
     const d = new Date(iso);
-    return d.toLocaleDateString("it-IT", { day: "2-digit", month: "short" }) +
-      " " + d.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
+    return d.toLocaleDateString("it-IT", { day: "2-digit", month: "short" }) + " " +
+      d.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
   }
 
-  function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+  function escHtml(s) {
+    const d = document.createElement("div"); d.textContent = s ?? ""; return d.innerHTML;
   }
 
-  function showError(el, msg) { el.textContent = msg; el.classList.add("show"); }
-  function hideError(el) { el.classList.remove("show"); el.textContent = ""; }
-
-  function flashSuccess(el, msg) {
+  function showMsg(el, msg, type) {
     el.textContent = msg;
-    el.classList.add("show");
-    setTimeout(() => el.classList.remove("show"), 3500);
+    el.className = `msg msg-${type} show`;
+  }
+  function hideMsg(el) { el.className = "msg"; el.textContent = ""; }
+  function flashSuccess(el, msg) {
+    showMsg(el, msg, "success");
+    setTimeout(() => hideMsg(el), 4000);
   }
 
-  document.getElementById("password-input").addEventListener("keydown", (e) => {
+  document.getElementById("password-input").addEventListener("keydown", e => {
     if (e.key === "Enter") handleLogin();
   });
 </script>

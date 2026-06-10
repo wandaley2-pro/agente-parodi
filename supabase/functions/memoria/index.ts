@@ -24,7 +24,6 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
-
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405,
@@ -57,30 +56,31 @@ serve(async (req) => {
     const { action, cliente = "Angelo Parodi" } = body;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // ---- NOTE / REGOLE ----
+    // ───── CARICAMENTO DATI ─────
 
     if (action === "list") {
-      const [note, hashtags] = await Promise.all([
-        supabase
-          .from("angy_memoria")
-          .select("id, nota, tipo, attiva")
-          .eq("cliente", cliente)
-          .order("tipo"),
-        supabase
-          .from("angy_hashtags")
-          .select("id, tag, attiva")
-          .eq("cliente", cliente)
-          .order("created_at"),
+      const [note, hashtags, strategia, aforisma] = await Promise.all([
+        supabase.from("angy_memoria").select("id, nota, tipo, attiva").eq("cliente", cliente).order("tipo"),
+        supabase.from("angy_hashtags").select("id, tag, attiva").eq("cliente", cliente).order("created_at"),
+        supabase.from("angy_strategia").select("id, sezione, contenuto, attiva, ordine").eq("cliente", cliente).order("ordine"),
+        supabase.from("angy_aforismi").select("id, testo, autore, categoria").eq("attiva", true),
       ]);
-
       if (note.error) throw note.error;
       if (hashtags.error) throw hashtags.error;
 
-      return new Response(JSON.stringify({ note: note.data, hashtags: hashtags.data }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      // Aforisma casuale client-side (mandiamo tutti, il frontend pesca uno)
+      return new Response(
+        JSON.stringify({
+          note: note.data,
+          hashtags: hashtags.data,
+          strategia: strategia.data ?? [],
+          aforismi: aforisma.data ?? [],
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
+
+    // ───── REGOLE ─────
 
     if (action === "add_nota") {
       const { nota, tipo = "da_ricordare" } = body;
@@ -90,92 +90,86 @@ serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const { error } = await supabase
-        .from("angy_memoria")
-        .insert({ cliente, nota: nota.trim(), tipo, attiva: true });
+      const { error } = await supabase.from("angy_memoria").insert({ cliente, nota: nota.trim(), tipo, attiva: true });
       if (error) throw error;
-      return new Response(JSON.stringify({ ok: true }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     if (action === "toggle_nota") {
       const { id, attiva } = body;
       if (!id || typeof attiva !== "boolean") {
-        return new Response(JSON.stringify({ error: "Parametri non validi" }), {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({ error: "Parametri non validi" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
-      const { error } = await supabase
-        .from("angy_memoria")
-        .update({ attiva })
-        .eq("id", id);
+      const { error } = await supabase.from("angy_memoria").update({ attiva }).eq("id", id);
       if (error) throw error;
-      return new Response(JSON.stringify({ ok: true }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // ---- HASHTAG ----
+    // ───── HASHTAG ─────
 
     if (action === "add_hashtag") {
       let { tag } = body;
       if (!tag || tag.trim().length < 2) {
-        return new Response(JSON.stringify({ error: "Hashtag troppo corto" }), {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({ error: "Hashtag troppo corto" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       tag = tag.trim().replace(/\s+/g, "");
       if (!tag.startsWith("#")) tag = `#${tag}`;
-
-      const { error } = await supabase
-        .from("angy_hashtags")
-        .insert({ cliente, tag, attiva: true });
+      const { error } = await supabase.from("angy_hashtags").insert({ cliente, tag, attiva: true });
       if (error) throw error;
-      return new Response(JSON.stringify({ ok: true, tag }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({ ok: true, tag }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     if (action === "toggle_hashtag") {
       const { id, attiva } = body;
       if (!id || typeof attiva !== "boolean") {
-        return new Response(JSON.stringify({ error: "Parametri non validi" }), {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({ error: "Parametri non validi" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
-      const { error } = await supabase
-        .from("angy_hashtags")
-        .update({ attiva })
-        .eq("id", id);
+      const { error } = await supabase.from("angy_hashtags").update({ attiva }).eq("id", id);
       if (error) throw error;
-      return new Response(JSON.stringify({ ok: true }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    // ───── STRATEGIA ─────
+
+    if (action === "update_strategia") {
+      const { id, contenuto } = body;
+      if (!id || !contenuto || contenuto.trim().length < 5) {
+        return new Response(JSON.stringify({ error: "Contenuto strategia troppo corto" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      const { error } = await supabase.from("angy_strategia").update({ contenuto: contenuto.trim() }).eq("id", id);
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    if (action === "toggle_strategia") {
+      const { id, attiva } = body;
+      if (!id || typeof attiva !== "boolean") {
+        return new Response(JSON.stringify({ error: "Parametri non validi" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      const { error } = await supabase.from("angy_strategia").update({ attiva }).eq("id", id);
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    if (action === "add_strategia") {
+      const { sezione, contenuto } = body;
+      if (!sezione || !contenuto || contenuto.trim().length < 5) {
+        return new Response(JSON.stringify({ error: "Sezione o contenuto mancante" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      const { error } = await supabase.from("angy_strategia").insert({ cliente, sezione: sezione.trim(), contenuto: contenuto.trim(), attiva: true });
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     return new Response(
-      JSON.stringify({ error: "Azione non valida. Usa: list, add_nota, toggle_nota, add_hashtag, toggle_hashtag" }),
-      {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      JSON.stringify({ error: "Azione non valida" }),
+      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
     console.error("Errore memoria:", err);
     return new Response(
       JSON.stringify({ error: err instanceof Error ? err.message : "Errore interno" }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
