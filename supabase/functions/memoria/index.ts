@@ -59,11 +59,12 @@ serve(async (req) => {
     // ───── CARICAMENTO DATI ─────
 
     if (action === "list") {
-      const [note, hashtags, strategia, aforisma] = await Promise.all([
+      const [note, hashtags, strategia, aforisma, giornate] = await Promise.all([
         supabase.from("angy_memoria").select("id, nota, tipo, attiva").eq("cliente", cliente).order("tipo"),
         supabase.from("angy_hashtags").select("id, tag, attiva").eq("cliente", cliente).order("created_at"),
         supabase.from("angy_strategia").select("id, sezione, contenuto, attiva, ordine").eq("cliente", cliente).order("ordine"),
         supabase.from("angy_aforismi").select("id, testo, autore, categoria").eq("attiva", true),
+        supabase.from("angy_giornate").select("id, mese, giorno, nome, idea, rilevanza").eq("attiva", true).order("mese").order("giorno"),
       ]);
       if (note.error) throw note.error;
       if (hashtags.error) throw hashtags.error;
@@ -75,6 +76,7 @@ serve(async (req) => {
           hashtags: hashtags.data,
           strategia: strategia.data ?? [],
           aforismi: aforisma.data ?? [],
+          giornate: giornate.data ?? [],
         }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );

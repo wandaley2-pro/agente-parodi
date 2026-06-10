@@ -15,6 +15,8 @@
 3. Vai su **SQL Editor** e incolla il contenuto di `supabase/migrations/001_init.sql`
 4. Clicca **Run** — verifica che le tabelle siano state create in **Table Editor**
 5. Ripeti con `supabase/migrations/002_hashtags_framework.sql` (hashtag del team + framework tracking)
+6. Ripeti con `supabase/migrations/003_strategia_aforismi.sql` (strategia editoriale + aforismi)
+7. Ripeti con `supabase/migrations/004_giornate.sql` (calendario giornate mondiali/nazionali)
 
 ---
 

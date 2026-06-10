@@ -253,6 +253,79 @@
       transition: all 0.15s;
     }
     .trend-load-btn:hover { border-color: var(--blue); color: var(--blue); }
+    /* ── GIORNATE ── */
+    .giornata-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 2px;
+    }
+    .giornata-item:hover { background: var(--gray-light); }
+    .giornata-item .dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+      background: var(--gray);
+    }
+    .giornata-item .dot.alta { background: var(--yellow); border: 1.5px solid #d4af00; }
+    .giornata-item.is-today { background: #f0f4ff; border: 1.5px solid var(--blue); }
+    .giornata-item.is-today .dot { background: var(--blue); }
+    .giornata-item .g-data { font-weight: 700; color: var(--blue); white-space: nowrap; font-size: 12px; min-width: 48px; }
+    .giornata-item .g-nome { font-weight: 600; }
+    .giornata-item .g-idea { font-size: 11px; color: var(--text-muted); display: block; margin-top: 1px; }
+    /* ── NEWS ── */
+    .news-item {
+      border: 1.5px solid var(--gray);
+      border-radius: 10px;
+      padding: 12px 13px;
+      margin-bottom: 9px;
+    }
+    .news-item .n-fonte {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--purple);
+      margin-bottom: 4px;
+    }
+    .news-item .n-titolo {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--text);
+      text-decoration: none;
+      display: block;
+    }
+    .news-item .n-titolo:hover { color: var(--blue); text-decoration: underline; }
+    .news-item .n-perche { font-size: 12px; color: var(--text-muted); margin-top: 5px; line-height: 1.4; }
+    .news-item .n-idea {
+      font-size: 12px;
+      color: var(--blue);
+      margin-top: 5px;
+      font-style: italic;
+      line-height: 1.4;
+    }
+    .news-item .n-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-top: 6px;
+      border: 1px solid var(--gray);
+      border-radius: 5px;
+      padding: 3px 9px;
+      transition: all 0.15s;
+    }
+    .news-item .n-link:hover { border-color: var(--blue); color: var(--blue); }
     /* ── RESULTS ── */
     #results { margin-top: 22px; display: none; }
     .result-label {
@@ -522,7 +595,7 @@
     <div class="card">
       <div class="tabs">
         <button class="tab active" data-tab="genera" onclick="switchTab('genera')">✨ Genera</button>
-        <button class="tab" data-tab="trend" onclick="switchTab('trend')">📈 Trend</button>
+        <button class="tab" data-tab="trend" onclick="switchTab('trend')">📰 Oggi</button>
         <button class="tab" data-tab="storico" onclick="switchTab('storico')">📋 Storico</button>
         <button class="tab" data-tab="memoria" onclick="switchTab('memoria')">🧠 Memoria</button>
       </div>
@@ -535,6 +608,13 @@
           <button class="next-btn" onclick="nextAforisma()" title="Prossimo">↻</button>
           <div class="quote" id="aforisma-testo"></div>
           <div class="autore" id="aforisma-autore"></div>
+        </div>
+
+        <!-- Promemoria giornata -->
+        <div id="giornata-banner" style="display:none; margin-bottom:14px; background:#f0f4ff; border:1.5px solid var(--blue); border-radius:10px; padding:12px 14px">
+          <div style="font-size:13px; font-weight:700; color:var(--blue); margin-bottom:3px" id="giornata-banner-title"></div>
+          <div style="font-size:12px; color:var(--text); line-height:1.5; margin-bottom:8px" id="giornata-banner-idea"></div>
+          <button class="btn-sm btn btn-primary" style="padding:6px 14px; margin:0" onclick="useGiornataBanner()">✨ Usa per questo post</button>
         </div>
 
         <!-- Trend selezionato (chip compatta) -->
@@ -602,20 +682,39 @@
         </div>
       </div>
 
-      <!-- ─── TAB TREND ─── -->
+      <!-- ─── TAB OGGI (giornate + news + trend) ─── -->
       <div class="tab-panel" id="panel-trend">
-        <div style="margin-bottom:12px">
-          <div class="section-title">Trend del momento</div>
-          <p class="hint">ANGY legge Gambero Rosso, Dissapore, Il Fatto Alimentare e Agrodolce e identifica i trend rilevanti per Angelo Parodi. Seleziona un trend per usarlo nella prossima generazione.</p>
-        </div>
+
+        <!-- GIORNATE -->
+        <div class="section-title">📅 Giornate da non perdere</div>
+        <p class="hint">Calendario delle giornate nazionali e internazionali rilevanti per Angelo Parodi. Clicca una giornata vicina per usarla come tema del prossimo post.</p>
+        <div id="giornate-oggi"></div>
+        <div id="giornate-list"><div class="empty-state">Caricamento…</div></div>
+        <button class="btn-sm btn btn-rigenera" id="giornate-toggle-btn" onclick="toggleCalendario()" style="margin-top:6px; padding:7px 14px">
+          📆 Mostra calendario completo
+        </button>
+
+        <div class="divider"></div>
+
+        <!-- NEWS -->
+        <div class="section-title">📰 News del giorno</div>
+        <p class="hint">Notizie verificate con link ufficiale da <strong>Gambero Rosso</strong> (food), <strong>Il Fatto Alimentare</strong> (settore) e <strong>Ninja Marketing</strong> (social media). Filtrate da ANGY per rilevanza — niente politica, solo ciò che serve al team.</p>
+        <div class="msg msg-error" id="news-error"></div>
+        <div id="news-list"><div class="empty-state">Premi "Aggiorna news" per le notizie di oggi.</div></div>
+        <button class="btn btn-primary" id="news-load-btn" onclick="loadNews()" style="margin-top:12px">
+          📡 Aggiorna news
+        </button>
+
+        <div class="divider"></div>
+
+        <!-- TREND -->
+        <div class="section-title">📈 Trend creativi</div>
+        <p class="hint">ANGY legge le fonti food italiane e identifica i trend da cavalcare. Seleziona un trend per usarlo nella prossima generazione.</p>
         <div class="msg msg-error" id="trend-error"></div>
         <div id="trend-list"><div class="empty-state">Premi "Aggiorna trend" per caricare i dati.</div></div>
-        <button class="btn btn-primary" id="trend-load-btn" onclick="loadTrends()" style="margin-top:14px">
+        <button class="btn btn-primary" id="trend-load-btn" onclick="loadTrends()" style="margin-top:12px">
           📡 Aggiorna trend
         </button>
-        <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:8px">
-          Dati live da fonti editoriali food italiane · aggiorna quando vuoi
-        </p>
       </div>
 
       <!-- ─── TAB STORICO ─── -->
@@ -708,6 +807,9 @@
   let aforismi = [];
   let aforismaIdx = 0;
   let selectedTrend = null;
+  let giornate = [];
+  let calendarioEsteso = false;
+  let giornataOggi = null;
 
   // ── SESSIONE ──
 
@@ -761,7 +863,7 @@
     document.getElementById("login-view").style.display = "none";
     document.getElementById("app-view").style.display = "block";
     document.getElementById("header-logout").style.display = "block";
-    // Carica aforismi in background
+    // Carica aforismi + giornate in background
     try {
       const data = await api("memoria", { action: "list" });
       aforismi = (data.aforismi || []).filter(a => a.testo);
@@ -770,6 +872,9 @@
         renderAforisma();
         document.getElementById("aforisma-box").style.display = "block";
       }
+      giornate = data.giornate || [];
+      renderGiornataBanner();
+      renderGiornate();
     } catch (_) {}
   }
 
@@ -789,6 +894,7 @@
     document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === `panel-${name}`));
     if (name === "storico") loadStorico();
     if (name === "memoria") loadMemoria();
+    if (name === "trend") renderGiornate();
   }
 
   // ── AFORISMI ──
@@ -804,6 +910,139 @@
     if (!aforismi.length) return;
     aforismaIdx = (aforismaIdx + 1) % aforismi.length;
     renderAforisma();
+  }
+
+  // ── GIORNATE ──
+
+  const MESI = ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
+
+  // Distanza in giorni dalla data odierna (gestisce il passaggio d'anno)
+  function giorniMancanti(mese, giorno) {
+    const oggi = new Date();
+    const anno = oggi.getFullYear();
+    let target = new Date(anno, mese - 1, giorno);
+    const oggiMezzanotte = new Date(anno, oggi.getMonth(), oggi.getDate());
+    if (target < oggiMezzanotte) target = new Date(anno + 1, mese - 1, giorno);
+    return Math.round((target - oggiMezzanotte) / 86400000);
+  }
+
+  function renderGiornataBanner() {
+    // Promemoria nel tab Genera: giornata di oggi o nei prossimi 3 giorni
+    const imminenti = giornate
+      .map(g => ({ ...g, mancano: giorniMancanti(g.mese, g.giorno) }))
+      .filter(g => g.mancano <= 3)
+      .sort((a, b) => a.mancano - b.mancano);
+
+    if (!imminenti.length) return;
+    giornataOggi = imminenti[0];
+
+    const banner = document.getElementById("giornata-banner");
+    const title = document.getElementById("giornata-banner-title");
+    const idea = document.getElementById("giornata-banner-idea");
+
+    const quando = giornataOggi.mancano === 0 ? "OGGI è" :
+                   giornataOggi.mancano === 1 ? "DOMANI è" :
+                   `Tra ${giornataOggi.mancano} giorni:`;
+    title.textContent = `📅 ${quando} ${giornataOggi.nome}`;
+    idea.textContent = giornataOggi.idea || "";
+    banner.style.display = "block";
+  }
+
+  function useGiornataBanner() {
+    if (!giornataOggi) return;
+    selectedTrend = `Giornata: ${giornataOggi.nome} — ${giornataOggi.idea || ""}`;
+    const bar = document.getElementById("trend-selected-bar");
+    const chip = document.getElementById("trend-selected-chip");
+    chip.innerHTML = `<span class="chip-title">📅 ${escHtml(giornataOggi.nome)}</span>`;
+    bar.style.display = "block";
+    document.getElementById("giornata-banner").style.display = "none";
+  }
+
+  function renderGiornate() {
+    const oggiEl = document.getElementById("giornate-oggi");
+    const listEl = document.getElementById("giornate-list");
+    if (!giornate.length) {
+      listEl.innerHTML = '<div class="empty-state">Calendario non caricato. Esegui la migrazione 004 su Supabase.</div>';
+      return;
+    }
+
+    const conDistanza = giornate
+      .map(g => ({ ...g, mancano: giorniMancanti(g.mese, g.giorno) }))
+      .sort((a, b) => a.mancano - b.mancano);
+
+    const visibili = calendarioEsteso ? conDistanza : conDistanza.slice(0, 5);
+
+    oggiEl.innerHTML = "";
+    listEl.innerHTML = visibili.map(g => {
+      const isToday = g.mancano === 0;
+      const quando = isToday ? "OGGI" : g.mancano === 1 ? "domani" : `${String(g.giorno).padStart(2,"0")} ${MESI[g.mese-1]}`;
+      return `
+        <div class="giornata-item ${isToday ? "is-today" : ""}" onclick="selectGiornata('${g.id}')" title="Clicca per usarla come tema">
+          <span class="dot ${g.rilevanza === "alta" ? "alta" : ""}"></span>
+          <span class="g-data">${quando}</span>
+          <span style="flex:1">
+            <span class="g-nome">${escHtml(g.nome)}</span>
+            ${g.idea ? `<span class="g-idea">💡 ${escHtml(g.idea)}</span>` : ""}
+          </span>
+        </div>`;
+    }).join("");
+  }
+
+  function toggleCalendario() {
+    calendarioEsteso = !calendarioEsteso;
+    document.getElementById("giornate-toggle-btn").textContent =
+      calendarioEsteso ? "📆 Mostra solo le prossime" : "📆 Mostra calendario completo";
+    renderGiornate();
+  }
+
+  function selectGiornata(id) {
+    const g = giornate.find(x => x.id === id);
+    if (!g) return;
+    selectedTrend = `Giornata: ${g.nome} — ${g.idea || ""}`;
+    const bar = document.getElementById("trend-selected-bar");
+    const chip = document.getElementById("trend-selected-chip");
+    chip.innerHTML = `<span class="chip-title">📅 ${escHtml(g.nome)}</span>`;
+    bar.style.display = "block";
+    switchTab("genera");
+  }
+
+  // ── NEWS ──
+
+  async function loadNews() {
+    const btn = document.getElementById("news-load-btn");
+    const list = document.getElementById("news-list");
+    const err = document.getElementById("news-error");
+    hideMsg(err);
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Lettura fonti…';
+    list.innerHTML = '<div class="empty-state">Interrogo Gambero Rosso, Il Fatto Alimentare, Ninja Marketing…</div>';
+
+    try {
+      const data = await api("trends", { action: "news" });
+      const news = data.news || [];
+      if (!news.length) {
+        list.innerHTML = `<div class="empty-state">${escHtml(data.errore || "Nessuna news rilevante trovata ora. Riprova più tardi.")}</div>`;
+        return;
+      }
+      list.innerHTML = `
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:9px">Aggiornato: ${escHtml(data.aggiornato || "")}</div>
+        ${news.map(n => `
+          <div class="news-item">
+            <div class="n-fonte">${escHtml(n.fonte)}</div>
+            <a class="n-titolo" href="${encodeURI(n.link)}" target="_blank" rel="noopener noreferrer">${escHtml(n.titolo)}</a>
+            ${n.perche ? `<div class="n-perche">📌 ${escHtml(n.perche)}</div>` : ""}
+            ${n.idea_post ? `<div class="n-idea">💡 ${escHtml(n.idea_post)}</div>` : ""}
+            <a class="n-link" href="${encodeURI(n.link)}" target="_blank" rel="noopener noreferrer">🔗 Leggi la fonte ufficiale</a>
+          </div>
+        `).join("")}
+      `;
+    } catch (e) {
+      showMsg(err, e.message, "error");
+      list.innerHTML = "";
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "📡 Aggiorna news";
+    }
   }
 
   // ── TREND ──
