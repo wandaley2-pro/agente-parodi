@@ -10,6 +10,20 @@ port = 54322
 [studio]
 port = 54323
 
-[functions]
-# Le Edge Functions sono in supabase/functions/
-verify_jwt = false  # Usiamo il nostro sistema di auth
+[functions.auth]
+verify_jwt = false
+
+[functions.generate]
+verify_jwt = false
+
+[functions.history]
+verify_jwt = false
+
+[functions.memoria]
+verify_jwt = false
+
+[functions.transcribe]
+verify_jwt = false
+
+[functions.trends]
+verify_jwt = false
