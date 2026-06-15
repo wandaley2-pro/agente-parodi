@@ -85,7 +85,7 @@ serve(async (req) => {
 
     // 3. Estrazione ricetta con Gemini 1.5 Pro (multimodale, supporto nativo video)
     const extractRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${geminiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
