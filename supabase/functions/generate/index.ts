@@ -152,6 +152,8 @@ serve(async (req) => {
       note_chef,
       occasione,
       n_idee = 5,
+      // brief libero (tutti i tipi)
+      brief_libero,
     } = body;
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -191,7 +193,7 @@ VOCE: familiare, caldo, ironia leggera quando viene naturale. MAI: formale, salu
 TEMA NEWSLETTER: ${tema}
 PRODOTTO IN PRIMO PIANO: ${prodotto}
 STAGIONE/OCCASIONE: ${stagione || "Non specificata"}
-TONO: ${tono_newsletter || "Caldo e narrativo"}
+TONO: ${tono_newsletter || "Caldo e narrativo"}${brief_libero ? `\nINDICAZIONI SPECIFICHE DEL TEAM: ${brief_libero}` : ""}
 
 ESEMPI DI STILE NEWSLETTER AP (analizza la voce, ritmo e struttura):
 ${esempiTesto}
@@ -241,7 +243,7 @@ Il team ha bisogno di idee di ricette originali da sviluppare per social e sito.
 
 PRODOTTO PRINCIPALE: ${prodotto}
 OCCASIONE/STAGIONE: ${occasione}
-NUMERO IDEE RICHIESTE: ${n_idee}
+NUMERO IDEE RICHIESTE: ${n_idee}${brief_libero ? `\nINDICAZIONI SPECIFICHE DEL TEAM: ${brief_libero}` : ""}
 
 CRITERI CREATIVI:
 - Ricette pratiche (15-35 minuti), adatte alla cucina italiana di tutti i giorni
@@ -345,6 +347,10 @@ Rispondi ESCLUSIVAMENTE con JSON valido, niente testo prima o dopo:
       ? `\nTREND DI ATTUALITÀ DA CAVALCARE (il team lo ha selezionato come contesto per questo post):\n"${trend_selezionato}"\nIntegralo in modo naturale se pertinente — non forzarlo.\n`
       : "";
 
+    const briefBlock = brief_libero
+      ? `\nINDICAZIONI SPECIFICHE DEL TEAM (priorità assoluta — rispetta queste indicazioni sopra ogni altra cosa):\n"${brief_libero}"\n`
+      : "";
+
     const prompt = `Sei ANGY, il copywriter senior di Angelo Parodi — brand italiano di conserve ittiche premium fondato a Genova nel 1888.
 
 IDENTITÀ DEL BRAND
@@ -375,7 +381,7 @@ Per questo post, il framework ${framework.nome} significa: segui la struttura in
 
 ═══ FORMATO: ${formato} ═══
 ${formatoGuida[formato]}
-${trendBlock}
+${trendBlock}${briefBlock}
 ═══ REGOLE SEO SOCIAL — TUTTE OBBLIGATORIE ═══
 1. HOOK: le prime 8-10 parole devono agganciare e contenere una keyword di prodotto naturale ("tonno", "sgombro", "acciughe", "filetti"). Instagram mostra solo i primi 125 caratteri prima del "Altro": in quei 125 ci deve essere già tutto il valore.
 2. KEYWORD NATURALE: nomina il prodotto specifico in modo che suoni come conversazione, non come pubblicità.

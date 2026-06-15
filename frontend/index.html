@@ -333,6 +333,10 @@
               </select>
             </div>
           </div>
+          <div style="margin-bottom:16px;">
+            <label for="social-brief">Brief libero <span style="font-weight:500;font-size:11px;color:var(--text-muted);">(opzionale)</span></label>
+            <textarea id="social-brief" rows="3" placeholder="es. Post divertente sul tonno per l'estate, con riferimento alla spiaggia…"></textarea>
+          </div>
           <div class="msg msg-error" id="gen-error"></div>
           <button class="btn btn-generate" id="gen-btn" onclick="handleGenerate(false)">✨ Genera il post</button>
         </div>
@@ -445,6 +449,10 @@
                 </select>
               </div>
             </div>
+            <div style="margin-bottom:13px;">
+              <label>Brief libero <span style="font-weight:500;font-size:11px;color:var(--text-muted);">(opzionale)</span></label>
+              <textarea id="nl-brief" rows="3" placeholder="es. Voglio una newsletter che parli di una ricetta estiva con il salmone, tono fresco e leggero…"></textarea>
+            </div>
             <div class="msg msg-error" id="nl-error"></div>
             <button class="btn btn-generate" id="nl-gen-btn" onclick="handleGenerateNewsletter()">✉️ Genera newsletter</button>
           </div>
@@ -524,6 +532,10 @@
             <label style="display:inline;margin:0;font-size:13px;font-weight:700;">N. idee:</label>
             <label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;cursor:pointer;margin:0;"><input type="radio" name="n-idee" value="3" checked style="width:auto;"> 3</label>
             <label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;cursor:pointer;margin:0;"><input type="radio" name="n-idee" value="5" style="width:auto;"> 5</label>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label>Brief libero <span style="font-weight:500;font-size:11px;color:var(--text-muted);">(opzionale)</span></label>
+            <textarea id="idee-brief" rows="2" placeholder="es. Voglio ricette veloci da fare in 10 minuti, ispirate alla cucina siciliana…"></textarea>
           </div>
           <div class="msg msg-error" id="idee-error"></div>
           <button class="btn btn-generate" id="idee-btn" onclick="handleGeneraIdee()">💡 Genera idee</button>
@@ -1015,7 +1027,9 @@
     hideMsg(err);
     setLoading(true, "ANGY sta scrivendo…", "Strategia · Framework · SEO · Memoria");
     try {
+      const brief = document.getElementById("social-brief").value.trim();
       const body = { tipo: "social", formato, cliente: "Angelo Parodi" };
+      if (brief) body.brief_libero = brief;
       if (rigenera && lastId) body.rigenera_id = lastId;
       if (selectedTrend) body.trend_selezionato = selectedTrend;
       const data = await api("generate", body);
@@ -1105,7 +1119,10 @@
     btn.disabled = true;
     setLoading(true, "ANGY sta scrivendo…", "Newsletter · Stile · Struttura");
     try {
-      const data = await api("generate", { tipo: "newsletter", tema, prodotto, stagione, tono_newsletter });
+      const nl_brief = document.getElementById("nl-brief").value.trim();
+      const nlBody = { tipo: "newsletter", tema, prodotto, stagione, tono_newsletter };
+      if (nl_brief) nlBody.brief_libero = nl_brief;
+      const data = await api("generate", nlBody);
       lastNlData = data;
       displayNewsletter(data);
     } catch (e) { showMsg(err, e.message || "Errore di rete.", "error"); }
@@ -1144,7 +1161,10 @@
     btn.disabled = true;
     setLoading(true, "ANGY genera idee…", "Creatività · Prodotto · Stagione");
     try {
-      const data = await api("generate", { tipo: "ricetta_idea", prodotto, occasione, n_idee });
+      const idee_brief = document.getElementById("idee-brief").value.trim();
+      const ideeBody = { tipo: "ricetta_idea", prodotto, occasione, n_idee };
+      if (idee_brief) ideeBody.brief_libero = idee_brief;
+      const data = await api("generate", ideeBody);
       displayIdee(data.idee || []);
     } catch (e) { showMsg(err, e.message || "Errore di rete.", "error"); }
     finally { btn.disabled = false; setLoading(false); }
