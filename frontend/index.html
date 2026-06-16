@@ -68,9 +68,9 @@
     @media (max-width: 640px) { #storico-list { grid-template-columns: 1fr; } }
 
     /* SECTION CARD */
-    .section-card { background: white; border-radius: 28px; border: 1px solid rgba(0,51,153,0.07); box-shadow: 0 4px 24px rgba(0,51,153,0.07); padding: 24px; transition: transform 0.2s, box-shadow 0.2s; }
+    .section-card { background: white; border-radius: 28px; border: 1px solid rgba(0,51,153,0.07); border-top: 3px solid rgba(0,51,153,0.18); box-shadow: 0 4px 24px rgba(0,51,153,0.07); padding: 24px; transition: transform 0.2s, box-shadow 0.2s; }
     .section-card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,51,153,0.12); }
-    .section-card-header { font-size: 15px; font-weight: 800; color: var(--blue); margin-bottom: 6px; letter-spacing: -0.3px; }
+    .section-card-header { font-size: 15px; font-weight: 800; color: var(--blue); margin-bottom: 8px; letter-spacing: -0.3px; padding-bottom: 10px; border-bottom: 1.5px solid rgba(0,51,153,0.07); }
     .section-card-hint { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; font-weight: 500; }
 
     /* FORMS */
@@ -148,8 +148,8 @@
     .results-placeholder p { font-size: 15px; font-weight: 700; color: var(--blue); opacity: 0.5; }
     .results-placeholder small { font-size: 12px; color: var(--text-muted); font-weight: 500; }
     .result-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
-    .result-box { background: #F8FAFC; border: 1.5px solid rgba(0,51,153,0.10); border-radius: 16px; padding: 14px; font-size: 14px; line-height: 1.7; margin-bottom: 4px; word-break: break-word; font-weight: 500; }
-    .result-box.copy-box { border-color: rgba(0,51,153,0.18); background: rgba(0,51,153,0.03); font-size: 15px; }
+    .result-box { background: white; border: 1.5px solid rgba(0,51,153,0.12); border-left: 4px solid rgba(0,51,153,0.30); border-radius: 16px; padding: 14px; font-size: 14px; line-height: 1.7; margin-bottom: 4px; word-break: break-word; font-weight: 500; }
+    .result-box.copy-box { border-left-color: var(--yellow); border-left-width: 4px; background: #fffef0; font-size: 15px; }
     .copy-btn { display: inline-flex; align-items: center; gap: 4px; background: white; border: 1.5px solid rgba(0,51,153,0.12); border-radius: 999px; padding: 5px 14px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--text-muted); margin-top: 5px; font-family: inherit; transition: all 0.15s; }
     .copy-btn:hover { border-color: var(--blue); color: var(--blue); }
     .copy-btn.copied { border-color: var(--green); color: var(--green); background: #f0fdf4; }
@@ -280,6 +280,16 @@
     #login-view .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; font-weight: 500; line-height: 1.55; }
     #login-view .subtitle strong { color: var(--blue); }
     #login-view .btn-primary { border-radius: 999px; font-size: 15px; padding: 14px; }
+
+    /* TAB HERO */
+    .tab-hero-full { position: relative; overflow: hidden; background: linear-gradient(135deg, #002a80 0%, #003399 45%, #0044cc 75%, #001a4d 100%); }
+    .tab-hero-full::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px); background-size: 22px 22px; pointer-events: none; }
+    .tab-hero-inner { max-width: 1280px; margin: 0 auto; padding: 22px 24px 4px; display: flex; align-items: center; gap: 18px; position: relative; z-index: 1; }
+    .tab-hero-emoji { font-size: 52px; line-height: 1; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.2)); flex-shrink: 0; }
+    .tab-hero-text h1 { font-size: 22px; font-weight: 900; color: white; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .tab-hero-text p { font-size: 13px; color: rgba(255,255,255,0.70); font-weight: 500; line-height: 1.5; }
+    .tab-hero-wave { display: block; width: 100%; height: 36px; }
+    @media (max-width: 640px) { .tab-hero-inner { padding: 16px 12px 4px; gap: 12px; } .tab-hero-emoji { font-size: 36px; } .tab-hero-text h1 { font-size: 17px; } .tab-hero-wave { height: 22px; } }
   </style>
 </head>
 <body>
@@ -298,18 +308,38 @@
 </header>
 
 <!-- LOGIN -->
-<div id="login-view" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#F8FAFC;z-index:60;padding:20px;">
-  <div class="login-card">
-    <div class="login-icon">AN</div>
-    <h2>Ciao, team 👋</h2>
-    <p class="subtitle">Inserisci la password condivisa per accedere ad <strong>ANGY</strong>, il tuo copywriter AI.</p>
-    <label for="password-input">Password</label>
-    <input type="password" id="password-input" placeholder="••••••••" autocomplete="current-password" />
-    <div class="msg msg-error" id="login-error"></div>
-    <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Accedi →</button>
-    <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;font-weight:500;">
-      ANGY · Angelo Parodi · Solo uso interno team
-    </p>
+<div id="login-view" style="position:fixed;inset:0;z-index:60;overflow:hidden;">
+  <!-- Ocean gradient background -->
+  <div style="position:absolute;inset:0;background:linear-gradient(160deg,#002a80 0%,#003399 35%,#0044cc 65%,#001a4d 100%);"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.07) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;"></div>
+  <!-- Ocean waves SVG -->
+  <svg style="position:absolute;bottom:0;left:0;width:100%;height:200px;" viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="rgba(255,255,255,0.04)" d="M0,100 C240,160 480,50 720,100 C960,150 1200,60 1440,100 L1440,200 L0,200 Z"/>
+    <path fill="rgba(255,255,255,0.06)" d="M0,150 C360,100 720,175 1080,130 C1260,108 1380,145 1440,150 L1440,200 L0,200 Z"/>
+  </svg>
+  <!-- Decorative floating elements -->
+  <div style="position:absolute;font-size:56px;opacity:0.12;top:8%;left:5%;animation:float 7s ease-in-out infinite;pointer-events:none;">🐟</div>
+  <div style="position:absolute;font-size:44px;opacity:0.10;top:18%;right:7%;animation:float 6s ease-in-out infinite 1.5s;pointer-events:none;">🌊</div>
+  <div style="position:absolute;font-size:50px;opacity:0.12;bottom:22%;left:4%;animation:float 8s ease-in-out infinite 1s;pointer-events:none;">🐠</div>
+  <div style="position:absolute;font-size:38px;opacity:0.10;bottom:28%;right:6%;animation:float 5.5s ease-in-out infinite 2s;pointer-events:none;">🎣</div>
+  <div style="position:absolute;font-size:32px;opacity:0.08;top:45%;left:12%;animation:float 6.5s ease-in-out infinite 0.5s;pointer-events:none;">🐡</div>
+  <div style="position:absolute;font-size:36px;opacity:0.08;top:35%;right:14%;animation:float 7.5s ease-in-out infinite 3s;pointer-events:none;">🦐</div>
+  <!-- Login card -->
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div style="position:relative;z-index:1;width:100%;max-width:400px;">
+      <div class="login-card">
+        <div class="login-icon">AN</div>
+        <h2>Ciao, team 👋</h2>
+        <p class="subtitle">Inserisci la password condivisa per accedere ad <strong>ANGY</strong>, il tuo copywriter AI.</p>
+        <label for="password-input">Password</label>
+        <input type="password" id="password-input" placeholder="••••••••" autocomplete="current-password" />
+        <div class="msg msg-error" id="login-error"></div>
+        <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Accedi →</button>
+        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;font-weight:500;">
+          ANGY · Angelo Parodi · Solo uso interno team
+        </p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -318,6 +348,16 @@
 
   <!-- ── TAB SOCIAL ── -->
   <div class="tab-panel active" id="panel-social">
+    <div class="tab-hero-full">
+      <div class="tab-hero-inner">
+        <span class="tab-hero-emoji">📱</span>
+        <div class="tab-hero-text">
+          <h1>Crea contenuti social</h1>
+          <p>Post · Hashtag · Brief visuale · Instagram &amp; Facebook</p>
+        </div>
+      </div>
+      <svg class="tab-hero-wave" viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,36 C200,8 400,28 600,18 C800,8 1000,30 1200,14 L1200,36 Z" fill="#F5F8FF"/></svg>
+    </div>
     <div class="panel-container">
       <div class="genera-grid">
         <div>
@@ -395,6 +435,16 @@
 
   <!-- ── TAB NEWSLETTER ── -->
   <div class="tab-panel" id="panel-newsletter">
+    <div class="tab-hero-full">
+      <div class="tab-hero-inner">
+        <span class="tab-hero-emoji">✉️</span>
+        <div class="tab-hero-text">
+          <h1>Crea newsletter</h1>
+          <p>Oggetto · Corpo email · CTA · Tono Angelo Parodi</p>
+        </div>
+      </div>
+      <svg class="tab-hero-wave" viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,36 C300,10 600,30 900,15 C1050,8 1150,28 1200,20 L1200,36 Z" fill="#F5F8FF"/></svg>
+    </div>
     <div class="panel-container">
       <div class="genera-grid">
         <div>
@@ -508,6 +558,16 @@
 
   <!-- ── TAB RICETTE ── -->
   <div class="tab-panel" id="panel-ricette">
+    <div class="tab-hero-full">
+      <div class="tab-hero-inner">
+        <span class="tab-hero-emoji">🍝</span>
+        <div class="tab-hero-text">
+          <h1>Ricette &amp; idee</h1>
+          <p>Spunti creativi · Ricette complete · Trascrizione video chef</p>
+        </div>
+      </div>
+      <svg class="tab-hero-wave" viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,20 C150,36 350,10 600,24 C850,36 1050,12 1200,22 L1200,36 L0,36 Z" fill="#F5F8FF"/></svg>
+    </div>
     <div class="panel-container">
       <div class="ricette-grid">
 
@@ -608,6 +668,16 @@
 
   <!-- ── TAB CALENDARIO ── -->
   <div class="tab-panel" id="panel-calendario">
+    <div class="tab-hero-full">
+      <div class="tab-hero-inner">
+        <span class="tab-hero-emoji">📅</span>
+        <div class="tab-hero-text">
+          <h1>Calendario editoriale</h1>
+          <p>Giornate rilevanti · News del giorno · Trend creativi</p>
+        </div>
+      </div>
+      <svg class="tab-hero-wave" viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,36 C200,8 400,28 600,18 C800,8 1000,30 1200,14 L1200,36 Z" fill="#F5F8FF"/></svg>
+    </div>
     <div class="panel-container">
       <div class="oggi-grid">
 
@@ -642,6 +712,16 @@
 
   <!-- ── TAB STORICO ── -->
   <div class="tab-panel" id="panel-storico">
+    <div class="tab-hero-full">
+      <div class="tab-hero-inner">
+        <span class="tab-hero-emoji">📋</span>
+        <div class="tab-hero-text">
+          <h1>Storico post</h1>
+          <p>Approva, scarta e archivia · ANGY non si ripete mai</p>
+        </div>
+      </div>
+      <svg class="tab-hero-wave" viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,36 C300,10 600,30 900,15 C1050,8 1150,28 1200,20 L1200,36 Z" fill="#F5F8FF"/></svg>
+    </div>
     <div class="panel-container">
       <p class="hint">Ultimi 20 post. Approva i pubblicati, scarta gli abbandonati: ANGY evita di ripetersi.</p>
       <div class="msg msg-error" id="storico-error"></div>
@@ -651,6 +731,16 @@
 
   <!-- ── TAB MEMORIA ── -->
   <div class="tab-panel" id="panel-memoria">
+    <div class="tab-hero-full">
+      <div class="tab-hero-inner">
+        <span class="tab-hero-emoji">🧠</span>
+        <div class="tab-hero-text">
+          <h1>Memoria del brand</h1>
+          <p>Strategia · Regole · Hashtag · Tono di voce Angelo Parodi</p>
+        </div>
+      </div>
+      <svg class="tab-hero-wave" viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,20 C150,36 350,10 600,24 C850,36 1050,12 1200,22 L1200,36 L0,36 Z" fill="#F5F8FF"/></svg>
+    </div>
     <div class="panel-container">
       <div class="memoria-grid">
         <div>
