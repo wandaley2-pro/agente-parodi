@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ANGY Demo – Angelo Parodi</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -12,7 +13,8 @@
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#F5F8FF;color:#0f172a;min-height:100vh;-webkit-font-smoothing:antialiased;}
     body.app-active{padding-bottom:74px;}
-    /* LOGIN */
+
+    /* ── LOGIN ─────────────────────────────────────────────────── */
     #login-view{position:fixed;inset:0;z-index:60;overflow:hidden;display:flex;align-items:center;justify-content:center;
       background:linear-gradient(160deg,#001a4d 0%,#002a80 40%,#003399 70%,#0022aa 100%);}
     #login-view::before{content:'';position:absolute;inset:0;
@@ -30,101 +32,158 @@
     .btn-primary{width:100%;margin-top:14px;background:var(--blue);color:#fff;border:none;border-radius:999px;padding:14px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;transition:opacity .2s;}
     .btn-primary:hover{opacity:.88;}
     .msg-err{color:#dc2626;font-size:13px;margin-top:8px;min-height:20px;}
-    /* HEADER */
+
+    /* ── HEADER ────────────────────────────────────────────────── */
     header{background:rgba(255,255,255,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,51,153,.10);height:64px;position:sticky;top:0;z-index:50;display:none;}
-    .header-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+    .header-inner{max-width:1280px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between;}
     .logo-badge{background:var(--blue);color:#fff;font-weight:900;font-size:13px;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;}
     .brand-name{font-size:17px;font-weight:800;color:var(--blue);}
     .brand-tag{font-size:11px;color:#64748b;}
     .demo-chip{background:var(--yellow);color:var(--blue);font-size:11px;font-weight:900;padding:4px 10px;border-radius:999px;letter-spacing:.5px;}
+    .hdr-icon-btn{background:rgba(0,51,153,.07);border:1px solid rgba(0,51,153,.12);color:var(--blue);font-size:13px;font-weight:700;cursor:pointer;padding:7px 13px;border-radius:20px;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+    .hdr-icon-btn:hover{background:rgba(0,51,153,.14);}
+    .hdr-icon-btn.active-panel{background:var(--blue);color:#fff;border-color:var(--blue);}
     .logout-btn{background:rgba(0,51,153,.06);border:1px solid rgba(0,51,153,.12);color:var(--blue);font-size:12px;font-weight:700;cursor:pointer;padding:7px 14px;border-radius:20px;font-family:inherit;}
-    /* NAV */
+
+    /* ── BOTTOM NAV ────────────────────────────────────────────── */
     #main-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(0,51,153,.10);padding:6px 8px 8px;grid-template-columns:repeat(6,1fr);gap:2px;}
     .nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 2px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;color:#64748b;border-radius:10px;transition:all .15s;}
     .nav-btn .ni{font-size:20px;line-height:1;}
     .nav-btn.active{color:var(--blue);}
-    /* PANELS */
+
+    /* ── PANELS ────────────────────────────────────────────────── */
     .tab-panel{display:none;}
     .tab-panel.active{display:block;}
     .pc{max-width:1280px;margin:0 auto;padding:28px 24px 40px;}
     @media(max-width:640px){.pc{padding:14px 12px 32px;}}
-    /* HERO */
-    .tab-hero{background:linear-gradient(135deg,#002a80,#003399,#0044cc,#001a4d);overflow:hidden;}
+
+    /* ── OVERLAY PANELS (Analytics + PED) ─────────────────────── */
+    .overlay-panel{display:none;position:fixed;inset:0;z-index:55;background:rgba(0,10,40,.55);backdrop-filter:blur(4px);}
+    .overlay-panel.open{display:flex;align-items:flex-start;justify-content:flex-end;}
+    .overlay-drawer{background:#fff;height:100%;width:min(680px,100%);overflow-y:auto;box-shadow:-8px 0 48px rgba(0,20,80,.18);display:flex;flex-direction:column;}
+    .drawer-hdr{background:linear-gradient(135deg,#002a80,#003399);color:#fff;padding:24px 24px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+    .drawer-hdr h2{font-size:18px;font-weight:900;letter-spacing:-.3px;}
+    .drawer-hdr p{font-size:12px;opacity:.75;margin-top:3px;}
+    .drawer-close{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .drawer-body{padding:24px;flex:1;}
+
+    /* ── ANALYTICS STYLES ──────────────────────────────────────── */
+    .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px;}
+    @media(max-width:480px){.kpi-grid{grid-template-columns:1fr;}}
+    .kpi-card{background:#f8faff;border:1.5px solid rgba(0,51,153,.09);border-radius:16px;padding:16px;}
+    .kpi-label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;}
+    .kpi-val{font-size:28px;font-weight:900;color:var(--blue);line-height:1.1;margin-top:4px;}
+    .kpi-trend{font-size:12px;font-weight:700;margin-top:4px;}
+    .kpi-trend.up{color:#16a34a;}
+    .kpi-trend.down{color:#dc2626;}
+    .kpi-trend.flat{color:#64748b;}
+    .perf-section-title{font-size:13px;font-weight:900;color:var(--blue);text-transform:uppercase;letter-spacing:.8px;margin:20px 0 12px;display:flex;align-items:center;gap:8px;}
+    .perf-section-title::after{content:'';flex:1;height:1px;background:rgba(0,51,153,.1);}
+    .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+    .bar-label{font-size:12px;font-weight:700;width:110px;flex-shrink:0;color:#374151;}
+    .bar-track{flex:1;height:8px;background:rgba(0,51,153,.08);border-radius:999px;overflow:hidden;}
+    .bar-fill{height:100%;border-radius:999px;background:var(--blue);transition:width 1s ease;}
+    .bar-val{font-size:12px;font-weight:800;color:var(--blue);width:50px;text-align:right;flex-shrink:0;}
+    .budget-ring{text-align:center;padding:20px 0;}
+    .budget-ring svg{overflow:visible;}
+    .nl-stat{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9;}
+    .nl-stat:last-child{border-bottom:none;}
+    .nl-stat span{font-size:13px;color:#374151;}
+    .nl-stat strong{font-size:16px;font-weight:900;color:var(--blue);}
+    .insight-box{background:#f8faff;border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:12px 14px;margin-bottom:10px;font-size:13px;line-height:1.5;color:#374151;}
+    .insight-box strong{display:block;font-weight:800;color:var(--blue);margin-bottom:3px;}
+
+    /* ── PED STYLES ────────────────────────────────────────────── */
+    .drop-zone{border:2.5px dashed rgba(0,51,153,.25);border-radius:16px;padding:36px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#f8faff;}
+    .drop-zone:hover,.drop-zone.dragover{border-color:var(--blue);background:rgba(0,51,153,.04);}
+    .drop-zone .dz-icon{font-size:48px;margin-bottom:12px;}
+    .drop-zone h4{font-size:15px;font-weight:800;color:var(--blue);}
+    .drop-zone p{font-size:12px;color:#64748b;margin-top:6px;}
+    .ped-status{display:none;background:#dcfce7;border:1.5px solid #86efac;border-radius:12px;padding:12px 16px;margin-top:14px;font-size:13px;font-weight:700;color:#15803d;display:flex;align-items:center;gap:8px;}
+    .ped-table-wrap{margin-top:18px;overflow-x:auto;border-radius:12px;border:1.5px solid #e2e8f0;}
+    .ped-table{width:100%;border-collapse:collapse;font-size:12px;}
+    .ped-table th{background:var(--blue);color:#fff;padding:9px 12px;text-align:left;font-weight:800;font-size:11px;letter-spacing:.3px;}
+    .ped-table td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;line-height:1.4;}
+    .ped-table tr:hover td{background:#f8faff;}
+    .ped-table tr:last-child td{border-bottom:none;}
+    .status-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;display:inline-block;}
+    .status-approvato{background:#dcfce7;color:#16a34a;}
+    .status-revisione{background:#fef9c3;color:#854d0e;}
+    .status-bozza{background:#f1f5f9;color:#64748b;}
+    .ped-active-banner{display:none;background:linear-gradient(90deg,#002a80,#003399);color:#fff;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:700;align-items:center;gap:10px;}
+
+    /* ── TAB HERO ──────────────────────────────────────────────── */
+    .tab-hero{background:linear-gradient(135deg,#002a80,#003399,#0044cc,#001a4d);overflow:hidden;position:relative;}
     .tab-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.07) 1.5px,transparent 1.5px);background-size:26px 26px;pointer-events:none;}
-    .tab-hero{position:relative;}
     .tab-hero-in{padding:22px 24px 4px;display:flex;align-items:center;gap:18px;}
     .tab-emoji{font-size:52px;filter:drop-shadow(0 4px 16px rgba(0,0,0,.3));}
     .tab-hero h1{color:#fff;font-size:22px;font-weight:900;letter-spacing:-.4px;}
     .tab-hero p{color:rgba(255,255,255,.75);font-size:13px;margin-top:3px;}
     .tab-wave{height:36px;display:block;width:100%;}
-    /* CARDS */
+
+    /* ── CARDS ─────────────────────────────────────────────────── */
     .card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border-top:3px solid rgba(0,51,153,.15);}
     .card-hdr{padding:18px 20px 12px;border-bottom:1.5px solid rgba(0,51,153,.07);display:flex;align-items:center;justify-content:space-between;}
     .card-hdr h3{font-size:14px;font-weight:800;color:var(--blue);}
     .card-body{padding:18px 20px;}
-    .grid2{display:grid;grid-template-columns:400px 1fr;gap:28px;align-items:start;}
+    .grid2{display:grid;grid-template-columns:420px 1fr;gap:28px;align-items:start;}
     @media(max-width:900px){.grid2{grid-template-columns:1fr;}}
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:start;}
     @media(max-width:960px){.grid3{grid-template-columns:1fr 1fr;}}
     @media(max-width:600px){.grid3{grid-template-columns:1fr;}}
-    /* FORM ELEMENTS */
+
+    /* ── FORM ──────────────────────────────────────────────────── */
     label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:5px;}
     select,textarea,input[type=text]{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-family:inherit;font-size:14px;outline:none;background:#fff;transition:border-color .2s;resize:vertical;}
     select:focus,textarea:focus,input[type=text]:focus{border-color:var(--blue);}
     .fld{margin-bottom:14px;}
+    .fld-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
     .btn-gen{background:var(--blue);color:#fff;border:none;border-radius:999px;padding:12px 24px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;width:100%;transition:opacity .2s;margin-top:4px;}
     .btn-gen:hover{opacity:.87;}
     .btn-gen:disabled{opacity:.5;cursor:not-allowed;}
     .btn-sm{background:rgba(0,51,153,.07);border:none;border-radius:999px;padding:8px 16px;font-family:inherit;font-size:12px;font-weight:700;color:var(--blue);cursor:pointer;transition:all .2s;}
     .btn-sm:hover{background:rgba(0,51,153,.13);}
     .btn-sm.copied{background:#dcfce7;color:#16a34a;}
-    /* RESULT */
-    .result-box{background:#fff;border-radius:16px;border:1.5px solid #e2e8f0;border-left:4px solid rgba(0,51,153,.3);padding:18px;margin-top:16px;min-height:80px;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word;}
+
+    /* ── RESULT BOX ────────────────────────────────────────────── */
+    .result-box{background:#fff;border-radius:16px;border:1.5px solid #e2e8f0;border-left:4px solid rgba(0,51,153,.3);padding:18px;margin-top:14px;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word;}
     .result-box.copy-box{border-left-color:var(--yellow);background:#fffef0;}
+    .result-box.brief-box{border-left-color:#a855f7;background:#faf5ff;font-size:13px;color:#374151;}
     .result-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-    .spin-wrap{text-align:center;padding:32px;color:#64748b;font-size:14px;}
-    .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(0,51,153,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:10px;}
+    .result-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+    .spin-wrap{text-align:center;padding:40px;color:#64748b;font-size:14px;}
+    .spin{display:inline-block;width:30px;height:30px;border:3px solid rgba(0,51,153,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:12px;}
     @keyframes spin{to{transform:rotate(360deg);}}
-    /* CALENDAR */
+
+    /* ── CALENDAR ──────────────────────────────────────────────── */
     .cal-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f1f5f9;}
     .cal-item:last-child{border-bottom:none;}
-    .cal-date{background:var(--blue);color:#fff;border-radius:10px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;}
-    .cal-date span{font-size:18px;line-height:1;}
-    .cal-event{flex:1;}
+    .cal-date{background:var(--blue);color:#fff;border-radius:10px;width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;}
+    .cal-date span{font-size:19px;line-height:1;}
     .cal-event strong{font-size:13px;font-weight:800;color:#0f172a;}
     .cal-event p{font-size:12px;color:#64748b;margin-top:2px;}
     .badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;}
     .badge-blue{background:rgba(0,51,153,.10);color:var(--blue);}
     .badge-yellow{background:rgba(255,214,0,.25);color:#7a6a00;}
     .badge-green{background:#dcfce7;color:#16a34a;}
-    /* STORICO / MEMORIA */
+    .badge-purple{background:#f3e8ff;color:#7c3aed;}
+
+    /* ── STORICO / MEMORIA ─────────────────────────────────────── */
     .storico-item{padding:14px 16px;border:1.5px solid #e8edf5;border-radius:14px;margin-bottom:10px;background:#fff;}
     .storico-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
     .storico-hdr strong{font-size:13px;font-weight:800;}
     .storico-preview{font-size:13px;color:#374151;line-height:1.5;}
     .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(0,51,153,.08);color:var(--blue);margin-right:4px;}
-    /* NEWS */
-    .news-card{border:1.5px solid #e8edf5;border-radius:16px;background:#fff;overflow:hidden;margin-bottom:12px;}
-    .news-card-body{padding:14px 16px;}
-    .news-src{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;}
-    .news-title{font-size:14px;font-weight:800;margin-top:4px;color:#0f172a;line-height:1.4;}
-    .news-desc{font-size:12px;color:#64748b;margin-top:6px;line-height:1.5;}
-    .trend-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f1f5f9;}
-    .trend-item:last-child{border-bottom:none;}
-    .trend-num{font-size:20px;font-weight:900;color:rgba(0,51,153,.2);width:28px;flex-shrink:0;}
-    .trend-info strong{font-size:13px;font-weight:800;}
-    .trend-info p{font-size:12px;color:#64748b;margin-top:2px;}
-    /* MEMORY */
     .mem-item{background:#f8faff;border:1.5px solid rgba(0,51,153,.08);border-radius:12px;padding:12px 14px;margin-bottom:8px;}
     .mem-item strong{font-size:12px;font-weight:800;color:var(--blue);}
     .mem-item p{font-size:13px;color:#374151;margin-top:4px;line-height:1.5;}
     .hash-cloud{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0;}
     .hash-tag{background:rgba(0,51,153,.08);color:var(--blue);font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;}
-    /* AFORISMI */
     .aforisma-card{background:linear-gradient(135deg,#002a80,#003399);color:#fff;border-radius:var(--radius);padding:24px;text-align:center;margin-bottom:20px;}
-    .aforisma-card p{font-size:16px;font-weight:700;line-height:1.6;font-style:italic;}
+    .aforisma-card p{font-size:16px;font-weight:700;line-height:1.6;font-style:italic;transition:opacity .4s;}
     .aforisma-card span{font-size:12px;opacity:.7;margin-top:10px;display:block;}
-    /* TABS */
+
+    /* ── INNER TABS ────────────────────────────────────────────── */
     .inner-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
     .inner-tab{background:rgba(0,51,153,.07);border:none;border-radius:999px;padding:8px 18px;font-family:inherit;font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;}
     .inner-tab.active{background:var(--blue);color:#fff;}
@@ -134,20 +193,20 @@
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ═══════════════════════ LOGIN ═══════════════════════ -->
 <div id="login-view">
   <span class="login-fish" style="top:12%;left:8%;animation-delay:0s">🐟</span>
   <span class="login-fish" style="top:20%;right:10%;animation-delay:1.5s">🌊</span>
   <span class="login-fish" style="bottom:25%;left:5%;animation-delay:3s">🐠</span>
   <span class="login-fish" style="bottom:18%;right:6%;animation-delay:2s">🦐</span>
   <span class="login-fish" style="top:55%;left:15%;animation-delay:4s">🐡</span>
-  <svg class="login-wave" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <svg class="login-wave" viewBox="0 0 1440 120" preserveAspectRatio="none">
     <path d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z" fill="rgba(255,255,255,.06)"/>
   </svg>
   <div class="login-card">
     <div class="login-logo">AP</div>
     <div class="login-title">ANGY</div>
-    <div class="login-sub">AI Assistant · Angelo Parodi</div>
+    <div class="login-sub">AI Content Assistant · Angelo Parodi</div>
     <div class="demo-hint">🎯 Demo — password: <span style="font-size:16px;letter-spacing:1px">demo123</span></div>
     <input class="inp" id="pw" type="password" placeholder="Inserisci la password…" autocomplete="current-password"/>
     <button class="btn-primary" onclick="doLogin()">Accedi →</button>
@@ -155,24 +214,27 @@
   </div>
 </div>
 
-<!-- HEADER -->
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
 <header id="hdr">
   <div class="header-inner">
     <div style="display:flex;align-items:center;gap:12px;">
       <div class="logo-badge">AP</div>
       <div>
         <div class="brand-name">ANGY</div>
-        <div class="brand-tag">Angelo Parodi Assistant</div>
+        <div class="brand-tag">Angelo Parodi · AI Content</div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="ped-active-badge" style="display:none;background:#dcfce7;color:#15803d;font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px;">📋 PED attivo</div>
       <span class="demo-chip">DEMO</span>
+      <button class="hdr-icon-btn" id="btn-ped" onclick="togglePanel('ped')">📋 PED Excel</button>
+      <button class="hdr-icon-btn" id="btn-analytics" onclick="togglePanel('analytics')">📊 Analytics</button>
       <button class="logout-btn" onclick="doLogout()">Esci</button>
     </div>
   </div>
 </header>
 
-<!-- BOTTOM NAV -->
+<!-- ═══════════════════════ BOTTOM NAV ═══════════════════ -->
 <nav id="main-nav">
   <button class="nav-btn active" onclick="showTab('social',this)"><span class="ni">📱</span>Social</button>
   <button class="nav-btn" onclick="showTab('newsletter',this)"><span class="ni">📧</span>Newsletter</button>
@@ -182,39 +244,99 @@
   <button class="nav-btn" onclick="showTab('memoria',this)"><span class="ni">🧠</span>Memoria</button>
 </nav>
 
-<!-- ===== TAB: SOCIAL ===== -->
-<div id="tab-social" class="tab-panel active">
-  <div class="tab-hero">
-    <div class="tab-hero-in">
-      <span class="tab-emoji">📱</span>
-      <div><h1>Crea contenuti social</h1><p>Post · Hashtag · Brief visuale · Instagram &amp; Facebook</p></div>
+<!-- ═══════════════════════ OVERLAY: ANALYTICS ═══════════ -->
+<div class="overlay-panel" id="panel-analytics" onclick="closePanel('analytics',event)">
+  <div class="overlay-drawer">
+    <div class="drawer-hdr">
+      <div><h2>📊 Performance</h2><p>Analisi social e newsletter · ultimi 30 giorni</p></div>
+      <button class="drawer-close" onclick="togglePanel('analytics')">✕</button>
     </div>
-    <svg class="tab-wave" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,36 C200,8 400,28 600,18 C800,8 1000,30 1200,14 L1200,36 Z" fill="#F5F8FF"/></svg>
-  </div>
-  <div class="pc">
-    <div class="grid2">
-      <div class="card">
-        <div class="card-hdr"><h3>⚙️ Parametri</h3></div>
-        <div class="card-body">
-          <div class="fld"><label>Tipo prodotto</label>
-            <select id="s-prodotto"><option>Tonno all'olio d'oliva</option><option>Filetti di salmone</option><option>Sardine in salsa</option><option>Sgombro al naturale</option><option>Gamberetti cotti</option></select></div>
-          <div class="fld"><label>Tono comunicativo</label>
-            <select id="s-tono"><option>Storytelling autentico</option><option>Nostalgia e tradizione</option><option>Educativo e informativo</option><option>How-to pratico</option><option>Community e partecipazione</option></select></div>
-          <div class="fld"><label>Obiettivo</label>
-            <select id="s-obiettivo"><option>Awareness brand</option><option>Engagement</option><option>Conversione</option><option>Educazione</option></select></div>
-          <div class="fld"><label>Brief libero (opzionale)</label>
-            <textarea id="s-brief" rows="3" placeholder="Aggiungi note specifiche, stagionalità, eventi in corso…"></textarea></div>
-          <button class="btn-gen" id="s-btn" onclick="doSocial()">✨ Genera contenuto</button>
-        </div>
-      </div>
-      <div>
-        <div id="s-result"></div>
-      </div>
+    <div class="drawer-body" id="analytics-body">
+      <!-- filled by JS -->
     </div>
   </div>
 </div>
 
-<!-- ===== TAB: NEWSLETTER ===== -->
+<!-- ═══════════════════════ OVERLAY: PED EXCEL ═══════════ -->
+<div class="overlay-panel" id="panel-ped" onclick="closePanel('ped',event)">
+  <div class="overlay-drawer">
+    <div class="drawer-hdr">
+      <div><h2>📋 Importa PED Excel</h2><p>Piano Editoriale Digitale · collega il tuo file .xlsx</p></div>
+      <button class="drawer-close" onclick="togglePanel('ped')">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="ped-active-banner" id="ped-active-banner">
+        <span style="font-size:20px">✅</span>
+        <div><div style="font-size:13px;font-weight:900">PED attivo</div><div id="ped-banner-name" style="font-size:11px;opacity:.8;margin-top:2px"></div></div>
+      </div>
+      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('ped-file').click()"
+           ondragover="event.preventDefault();this.classList.add('dragover')"
+           ondragleave="this.classList.remove('dragover')"
+           ondrop="handleDrop(event)">
+        <div class="dz-icon">📊</div>
+        <h4>Trascina il file PED qui</h4>
+        <p>oppure clicca per selezionare · Supporta .xlsx, .xls, .csv</p>
+      </div>
+      <input type="file" id="ped-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="loadPedFile(event)"/>
+      <div id="ped-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ TAB: SOCIAL ═══════════════════ -->
+<div id="tab-social" class="tab-panel active">
+  <div class="tab-hero">
+    <div class="tab-hero-in">
+      <span class="tab-emoji">📱</span>
+      <div><h1>Crea contenuti social</h1><p>Post Instagram &amp; Facebook · Carosello · Reel · Singolo · Brief visuale</p></div>
+    </div>
+    <svg class="tab-wave" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,36 C200,8 400,28 600,18 C800,8 1000,30 1200,14 L1200,36 Z" fill="#F5F8FF"/></svg>
+  </div>
+  <div class="pc">
+    <div id="ped-social-context" style="display:none;background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#15803d;font-weight:700;">
+      📋 PED attivo: i contenuti vengono generati in linea con il piano editoriale caricato.
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-hdr"><h3>⚙️ Parametri contenuto</h3></div>
+        <div class="card-body">
+          <div class="fld-row">
+            <div><label>Formato</label>
+              <select id="s-formato"><option>Carosello</option><option>Reel</option><option>Singolo</option><option>Stories</option></select></div>
+            <div><label>Obiettivo ADV</label>
+              <select id="s-obiettivo"><option>Interazione</option><option>Copertura</option><option>Traffico al profilo</option><option>Conversione</option></select></div>
+          </div>
+          <div class="fld"><label>Prodotto protagonista</label>
+            <select id="s-prodotto">
+              <option>Filetti di Acciughe del Mar Cantabrico</option>
+              <option>Tonno all'olio d'oliva extravergine</option>
+              <option>Filetti di Salmone Atlantico</option>
+              <option>Sgombro al naturale</option>
+              <option>Gamberetti cotti</option>
+              <option>Sardine in salsa</option>
+            </select></div>
+          <div class="fld"><label>Tono comunicativo</label>
+            <select id="s-tono">
+              <option>Ricetta step-by-step</option>
+              <option>Storytelling autentico</option>
+              <option>Nostalgia e tradizione</option>
+              <option>Educativo e informativo</option>
+              <option>Community e partecipazione</option>
+              <option>Sondaggio / domanda</option>
+            </select></div>
+          <div class="fld"><label>Budget ADV suggerito</label>
+            <select id="s-adv"><option>60€</option><option>70€</option><option>80€</option><option>100€</option><option>Nessuna sponsorizzazione</option></select></div>
+          <div class="fld"><label>Brief libero</label>
+            <textarea id="s-brief" rows="3" placeholder="Es. Stiamo per iniziare l'estate, vogliamo una ricetta fresca. Menzioniamo le giornate mondiali…"></textarea></div>
+          <button class="btn-gen" id="s-btn" onclick="doSocial()">✨ Genera contenuto social</button>
+        </div>
+      </div>
+      <div id="s-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ TAB: NEWSLETTER ═══════════════ -->
 <div id="tab-newsletter" class="tab-panel">
   <div class="tab-hero">
     <div class="tab-hero-in">
@@ -226,14 +348,18 @@
   <div class="pc">
     <div class="grid2">
       <div class="card">
-        <div class="card-hdr"><h3>⚙️ Parametri</h3></div>
+        <div class="card-hdr"><h3>⚙️ Parametri newsletter</h3></div>
         <div class="card-body">
-          <div class="fld"><label>Mese</label>
-            <select id="nl-mese"><option>Giugno 2025</option><option>Luglio 2025</option><option>Agosto 2025</option></select></div>
+          <div class="fld-row">
+            <div><label>Mese</label>
+              <select id="nl-mese"><option>Giugno 2026</option><option>Luglio 2026</option><option>Agosto 2026</option></select></div>
+            <div><label>N. iscritti target</label>
+              <select id="nl-list"><option>Lista principale (4.200)</option><option>Lista prospect (1.800)</option><option>Lista VIP (350)</option></select></div>
+          </div>
           <div class="fld"><label>Focus tematico</label>
-            <select id="nl-focus"><option>Estate e leggerezza</option><option>Grigliate e outdoor</option><option>Ricette veloci</option><option>Sostenibilità</option></select></div>
-          <div class="fld"><label>Brief libero (opzionale)</label>
-            <textarea id="nl-brief" rows="3" placeholder="Aggiungi note per questa newsletter…"></textarea></div>
+            <select id="nl-focus"><option>Estate e leggerezza</option><option>Grigliate e outdoor</option><option>Ricette veloci in 10 minuti</option><option>Sostenibilità e filiera</option><option>Nuovi prodotti</option></select></div>
+          <div class="fld"><label>Brief libero</label>
+            <textarea id="nl-brief" rows="3" placeholder="Es. Vogliamo menzionare la Giornata della Gastronomia Sostenibile, include un'offerta speciale estiva…"></textarea></div>
           <button class="btn-gen" id="nl-btn" onclick="doNl()">✨ Genera newsletter</button>
         </div>
       </div>
@@ -242,7 +368,7 @@
   </div>
 </div>
 
-<!-- ===== TAB: RICETTE ===== -->
+<!-- ═══════════════════════ TAB: RICETTE ══════════════════ -->
 <div id="tab-ricette" class="tab-panel">
   <div class="tab-hero">
     <div class="tab-hero-in">
@@ -262,11 +388,11 @@
           <div class="card-hdr"><h3>⚙️ Parametri ricetta</h3></div>
           <div class="card-body">
             <div class="fld"><label>Prodotto principale</label>
-              <select id="r-prodotto"><option>Tonno all'olio d'oliva</option><option>Salmone al naturale</option><option>Sgombro affumicato</option></select></div>
+              <select id="r-prodotto"><option>Tonno all'olio d'oliva extravergine</option><option>Filetti di Acciughe del Mar Cantabrico</option><option>Salmone Atlantico al naturale</option><option>Sgombro affumicato</option></select></div>
             <div class="fld"><label>Stagione / occasione</label>
-              <select id="r-stagione"><option>Estate – piatto freddo</option><option>Aperitivo veloce</option><option>Pranzo in 10 minuti</option><option>Cena romantica</option></select></div>
-            <div class="fld"><label>Brief libero (opzionale)</label>
-              <textarea id="r-brief" rows="3" placeholder="Stile, dieta, numero persone…"></textarea></div>
+              <select id="r-stagione"><option>Estate – piatto freddo</option><option>Aperitivo veloce</option><option>Pranzo in 10 minuti</option><option>Cena da chef</option><option>Picnic &amp; outdoor</option></select></div>
+            <div class="fld"><label>Brief libero</label>
+              <textarea id="r-brief" rows="3" placeholder="Stile, dieta, numero persone, preferenze…"></textarea></div>
             <button class="btn-gen" id="r-btn" onclick="doRicetta()">✨ Genera ricetta</button>
           </div>
         </div>
@@ -276,11 +402,11 @@
     <div id="r-idee" class="inner-panel">
       <div class="grid2">
         <div class="card">
-          <div class="card-hdr"><h3>⚙️ Genera idee ricette</h3></div>
+          <div class="card-hdr"><h3>💡 Genera idee ricette</h3></div>
           <div class="card-body">
             <div class="fld"><label>Categoria prodotto</label>
-              <select id="id-cat"><option>Pesce in scatola</option><option>Frutti di mare</option><option>Affumicati</option></select></div>
-            <div class="fld"><label>N. idee</label>
+              <select id="id-cat"><option>Pesce in scatola</option><option>Frutti di mare</option><option>Affumicati</option><option>Acciughe e specialità</option></select></div>
+            <div class="fld"><label>Numero idee</label>
               <select id="id-num"><option>3 idee</option><option>5 idee</option></select></div>
             <button class="btn-gen" id="id-btn" onclick="doIdee()">💡 Genera idee</button>
           </div>
@@ -291,49 +417,46 @@
   </div>
 </div>
 
-<!-- ===== TAB: CALENDARIO ===== -->
+<!-- ═══════════════════════ TAB: CALENDARIO ═══════════════ -->
 <div id="tab-oggi" class="tab-panel">
   <div class="tab-hero">
     <div class="tab-hero-in">
       <span class="tab-emoji">📅</span>
-      <div><h1>Calendario editoriale</h1><p>Giornate mondiali · Anniversari · Occasioni di contenuto</p></div>
+      <div><h1>Calendario editoriale</h1><p>Giornate mondiali · Anniversari · Opportunità di contenuto</p></div>
     </div>
     <svg class="tab-wave" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,36 C200,8 400,28 600,18 C800,8 1000,30 1200,14 L1200,36 Z" fill="#F5F8FF"/></svg>
   </div>
   <div class="pc">
     <div class="grid3">
-      <div class="card" style="grid-column:1/-1;">
-        <div class="aforisma-card">
-          <p id="aforisma-txt">"La qualità non è un caso — è il risultato di ogni scelta, dal mare alla tavola."</p>
-          <span>— Angelo Parodi</span>
-        </div>
+      <div style="grid-column:1/-1;">
+        <div class="aforisma-card"><p id="aforisma-txt"></p><span>— Angelo Parodi</span></div>
       </div>
       <div class="card" style="grid-column:1/-1;">
-        <div class="card-hdr"><h3>📅 Prossime giornate mondiali</h3></div>
+        <div class="card-hdr"><h3>📅 Giornate mondiali · Giugno – Settembre 2026</h3></div>
         <div class="card-body" id="cal-list"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== TAB: STORICO ===== -->
+<!-- ═══════════════════════ TAB: STORICO ══════════════════ -->
 <div id="tab-storico" class="tab-panel">
   <div class="tab-hero">
     <div class="tab-hero-in">
       <span class="tab-emoji">📚</span>
-      <div><h1>Storico generazioni</h1><p>Archivio contenuti · Ricerca · Export</p></div>
+      <div><h1>Storico generazioni</h1><p>Archivio contenuti · Cerca · Riutilizza</p></div>
     </div>
     <svg class="tab-wave" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,36 C200,8 400,28 600,18 C800,8 1000,30 1200,14 L1200,36 Z" fill="#F5F8FF"/></svg>
   </div>
   <div class="pc" id="storico-list"></div>
 </div>
 
-<!-- ===== TAB: MEMORIA ===== -->
+<!-- ═══════════════════════ TAB: MEMORIA ══════════════════ -->
 <div id="tab-memoria" class="tab-panel">
   <div class="tab-hero">
     <div class="tab-hero-in">
       <span class="tab-emoji">🧠</span>
-      <div><h1>Memoria brand</h1><p>Identità · Tono di voce · Hashtag · Linee guida</p></div>
+      <div><h1>Memoria brand</h1><p>Identità · Tono di voce · Hashtag · Linee guida operative</p></div>
     </div>
     <svg class="tab-wave" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,36 C200,8 400,28 600,18 C800,8 1000,30 1200,14 L1200,36 Z" fill="#F5F8FF"/></svg>
   </div>
@@ -355,103 +478,286 @@
   </div>
 </div>
 
+<!-- ═══════════════════════ JAVASCRIPT ════════════════════ -->
 <script>
-// ── MOCK DATA ──────────────────────────────────────────────────────────────
+// ── MOCK DATA ────────────────────────────────────────────────────────────
+
 const AFORISMI=[
   "La qualità non è un caso — è il risultato di ogni scelta, dal mare alla tavola.",
   "Sessant'anni di passione per il mare, perché il sapore autentico non si inventa.",
-  "Il mare ci dà le sue migliori risorse. Noi le rispettiamo.",
+  "Il mare ci dà le sue migliori risorse. Noi le rispettiamo con cura e con amore.",
   "Ogni lattina Angelo Parodi racconta una storia di sapore, cura e tradizione.",
   "Buono per natura, scelto con cura: il pesce che ami da sempre."
 ];
 
 const GIORNATE=[
-  {g:"8",m:"GIU",nome:"Giornata Mondiale degli Oceani",emoji:"🌊",tag:"blue",hint:"Posta su sostenibilità e rispetto del mare"},
-  {g:"18",m:"GIU",nome:"Giornata Gastronomia Sostenibile",emoji:"🌱",tag:"green",hint:"Perfetta per parlare di filiera corta"},
-  {g:"21",m:"GIU",nome:"Solstizio d'Estate",emoji:"☀️",tag:"yellow",hint:"Ricette estive leggere con tonno"},
-  {g:"3",m:"LUG",nome:"Giornata Internazionale del Pesce",emoji:"🐟",tag:"blue",hint:"Il tuo giorno: stories, reel, carousel"},
-  {g:"25",m:"LUG",nome:"Giornata del Gelato Artigianale",emoji:"🍦",tag:"yellow",hint:"Abbina creativamente con i tuoi prodotti"},
-  {g:"10",m:"AGO",nome:"San Lorenzo – Notte delle Stelle",emoji:"🌟",tag:"blue",hint:"Contenuto poetico sulla pesca notturna"},
-  {g:"20",m:"AGO",nome:"Giornata Mondiale del Salmone",emoji:"🐟",tag:"green",hint:"Metti in evidenza i tuoi filetti di salmone"},
-  {g:"15",m:"SET",nome:"Giornata del Tonno in Scatola",emoji:"🥫",tag:"blue",hint:"Il prodotto core: ricette, storia, qualità"},
+  {g:"8",m:"GIU",nome:"Giornata Mondiale degli Oceani",emoji:"🌊",tag:"blue",hint:"Perfetta per parlare di pesca sostenibile e rispetto del mare. Carousel storytelling."},
+  {g:"18",m:"GIU",nome:"Giornata della Gastronomia Sostenibile",emoji:"🌱",tag:"green",hint:"Collegala alla filiera corta e certificazione MSC. Reel educativo ad alto engagement."},
+  {g:"21",m:"GIU",nome:"Solstizio d'Estate",emoji:"☀️",tag:"yellow",hint:"Ricette estive fresche. Singolo con piatto iconico + copy leggero."},
+  {g:"3",m:"LUG",nome:"Giornata Internazionale del Pesce",emoji:"🐟",tag:"blue",hint:"Il tuo giorno: stories, reel, carousel. Budget ADV massimale."},
+  {g:"16",m:"LUG",nome:"Giornata Mondiale dell'Alimentazione Fresca",emoji:"🥗",tag:"green",hint:"Posizionamento salutistico: Omega-3, proteine, dieta mediterranea."},
+  {g:"10",m:"AGO",nome:"San Lorenzo – Notte delle Stelle",emoji:"🌟",tag:"purple",hint:"Contenuto poetico sulla pesca notturna. Engagement altissimo con sondaggio."},
+  {g:"20",m:"AGO",nome:"Giornata Mondiale del Salmone",emoji:"🐟",tag:"blue",hint:"Metti in evidenza i filetti di salmone. Ricetta estiva carousel."},
+  {g:"15",m:"SET",nome:"Giornata Mondiale del Tonno in Scatola",emoji:"🥫",tag:"yellow",hint:"Il prodotto core. Dedicagli un piano editoriale intero: storia, ricette, qualità."},
 ];
 
 const SOCIAL_POSTS=[
-  {tipo:"Storytelling autentico",testo:"Da oltre 60 anni, ogni alba sul mare è una promessa di qualità che Angelo Parodi mantiene con passione. 🌅\n\nIl nostro tonno nasce dalla selezione rigorosa, dalla filiera controllata, dall'amore per un prodotto che rispetta il mare e chi lo mangia.\n\nPerché «buono» non è mai abbastanza: deve essere autentico. 🐟✨\n\n#AngeloParodi #QualitàDalMare #PescaSostenibile #TonnoItaliano",hashtag:"#AngeloParodi #QualitàDalMare #PescaSostenibile"},
-  {tipo:"Nostalgia e tradizione",testo:"Ti ricordi la schiscetta della nonna? Pane, pomodoro e tonno Angelo Parodi. 🥖❤️\n\nAlcune cose non cambiano. La stessa ricetta di sempre, la stessa qualità di sempre.\n\nQuali sono i tuoi sapori di infanzia? Raccontaceli nei commenti! 👇\n\n#AngeloParodi #Tradizione #SaporiDiUnTempo #TonnoItaliano",hashtag:"#AngeloParodi #Tradizione #SaporiDiUnTempo"},
-  {tipo:"Educativo e informativo",testo:"Lo sapevi? Il tonno è una delle fonti proteiche più complete: 28g di proteine per 100g, con pochissimi grassi saturi. 💪\n\n✅ Omega-3 per il cuore\n✅ Vitamina D per le ossa\n✅ Zero carboidrati\n✅ Pronto in 30 secondi\n\nAngelo Parodi: il tuo alleato per una dieta equilibrata. 🐟\n\n#AngeloParodi #Nutrizione #CiboBuono #Salute",hashtag:"#AngeloParodi #Nutrizione #CiboBuono"},
-  {tipo:"How-to pratico",testo:"🔥 Insalata tonno e fagioli in 5 minuti:\n\n1️⃣ Scola il tuo tonno Angelo Parodi\n2️⃣ Aggiungi fagioli cannellini\n3️⃣ Cipolla rossa a fette sottili\n4️⃣ Olio EVO, limone, sale\n5️⃣ Prezzemolo fresco e via!\n\nPranzo sano, veloce, e senza sporcare nulla. Chi lo prova? 🙋\n\n#AngeloParodi #Ricetta #PranzoVeloce #FoodHack",hashtag:"#AngeloParodi #Ricetta #PranzoVeloce"},
-  {tipo:"Community e partecipazione",testo:"📸 CONTEST: come usi il tonno Angelo Parodi?\n\nCondividi la tua ricetta preferita con #MioParodi e potresti essere il prossimo protagonista dei nostri canali! 🏆\n\n100 ricette caricate ogni mese dalla nostra community — la creatività non finisce mai! 🌟\n\n#AngeloParodi #MioParodi #FoodCommunity #Contest",hashtag:"#AngeloParodi #MioParodi #FoodCommunity"},
+  {
+    formato:"Carosello",
+    prodotto:"Spaghettoni con burrata e Filetti di Acciughe",
+    testo:`Voglia di un primo piatto che sappia d'estate? 🍋
+
+Bastano 10 minuti e i giusti ingredienti per trasformare una semplice pasta in un capolavoro.
+
+Scorri le foto per scoprire tutti i passaggi! 👉
+
+#angeloparodi #incucinaconangeloparodi #ricettafacile #pastaestiva #acciughe`,
+    hashtag:"#angeloparodi #incucinaconangeloparodi #ricettafacile #pastaestiva",
+    adv:"70€",obiettivo:"Interazione",status:"Approvato",
+    brief_visuale:"Foto step-by-step in cucina naturale, light background. Slide 1: piatto finito hero shot. Slide 2–6: passaggi. Slide 7: prodotto Angelo Parodi in evidenza. Font bianco su overlay blu scuro."
+  },
+  {
+    formato:"Reel",
+    prodotto:"Tonno all'olio d'oliva extravergine",
+    testo:`Sono irresistibili! 😋 In tutte le versioni! Qual è la tua preferita?
+
+Il tonno Angelo Parodi è buono in ogni modo: in insalata, sulla bruschetta, nel poke… o direttamente dal barattolo (lo sappiamo che lo fate 👀).
+
+Commenta qui sotto la tua ricetta del cuore! 👇
+
+#angeloparodi #incucinaconangeloparodi #tonno #ricetteitaliane`,
+    hashtag:"#angeloparodi #incucinaconangeloparodi #tonno #ricetteitaliane",
+    adv:"70€",obiettivo:"Copertura",status:"Approvato",
+    brief_visuale:"Reel 15–30 sec. Transizioni rapide tra piatti diversi a base tonno. Musica trend. Testo animato in sovrapposizione. Chiusura con logo AP e prodotto."
+  },
+  {
+    formato:"Singolo",
+    prodotto:"Fettuccine con sugo alla ligure e filetti di tonno",
+    testo:`Pochi ingredienti, ma di altissima qualità. 😋
+
+Salvate questa idea per il vostro weekend: Fettuccine con sugo alla ligure e filetti di tonno Angelo Parodi.
+
+Scopri la ricetta completa: link in bio ✨
+
+#angeloparodi #incucinaconangeloparodi #ricetta #pasta #cucinaitaliana`,
+    hashtag:"#angeloparodi #incucinaconangeloparodi #ricetta #pasta",
+    adv:"60€",obiettivo:"Traffico al profilo",status:"Approvato",
+    brief_visuale:"Singolo verticale 4:5. Piatto su tovagliolo di lino, erbe fresche a lato. Luce naturale morbida. Overlay minimo con testo ricetta + logo."
+  },
+  {
+    formato:"Singolo",
+    prodotto:"Tonno Angelo Parodi – Sondaggio",
+    testo:`Sondaggio: Team Acciughe o Team Tonno? 🤔
+
+Cosa porteresti oggi in tavola? Rispondi nelle stories o commenta qui sotto!
+
+Noi non prendiamo posizione... ma diciamo che entrambi sono irresistibili 😄🐟
+
+#angeloparodi #incucinaconangeloparodi #sondaggio #italianfood`,
+    hashtag:"#angeloparodi #incucinaconangeloparodi #sondaggio",
+    adv:"Nessuna",obiettivo:"Interazione",status:"Approvato",
+    brief_visuale:"Grafica duale: sinistra acciughe, destra tonno. Stile 'VS' con colori brand. Alta leggibilità, nessuna foto food."
+  },
+  {
+    formato:"Carosello",
+    prodotto:"Speravamo di mantenere il segreto… Gamberetti Angelo Parodi",
+    testo:`Speravamo di mantenere il segreto, ma... è confermato: sono irresistibili! 🦐
+
+In tutte le versioni! Gamberetti Angelo Parodi: al naturale, in olio, cocktail…
+
+Quale versione scegli tu? Scorri e scopri tutte le idee! 👉
+
+#angeloparodi #incucinaconangeloparodi #gamberetti #aperitivo #estate`,
+    hashtag:"#angeloparodi #incucinaconangeloparodi #gamberetti #aperitivo",
+    adv:"70€",obiettivo:"Copertura",status:"In revisione",
+    brief_visuale:"Carousel 5 slide. Ogni slide = una versione/ricetta gamberetti. Fondo chiaro, props estivi. Ultima slide: tutti i prodotti gamberetti Angelo Parodi."
+  },
 ];
 
 const NL_VARIANTI=[
-  {oggetto:"🌊 Estate in tavola con Angelo Parodi — Giugno 2025",body:`Ciao!
+  {
+    oggetto:"🌊 Estate in tavola con Angelo Parodi — Giugno 2026",
+    body:`Ciao!
 
-L'estate è arrivata e con lei la voglia di piatti freschi, veloci e gustosi.
+L'estate è arrivata e con lei la voglia di piatti freschi, veloci e soprattutto gustosi.
 
-🐟 **La nostra selezione del mese**
-Scopri il tonno all'olio d'oliva extra vergine, perfetto per insalate estive che fanno innamorare.
+🐟 LA SELEZIONE DEL MESE
+Questo giugno ti consigliamo il nostro tonno all'olio d'oliva extravergine, protagonista indiscusso delle insalate estive. Cremoso, saporito, pronto in 30 secondi.
 
-🍽️ **Ricetta del mese: Panzanella di tonno**
-Pane raffermo, pomodori maturi, tonno Angelo Parodi, basilico e un filo d'olio. 5 minuti, risultato garantito.
+🍽️ RICETTA DELLA SETTIMANA: Panzanella di tonno
+Ingredienti: pane raffermo, pomodori maturi, tonno Angelo Parodi, basilico, cipolla rossa, olio EVO, aceto.
+In 5 minuti hai un piatto da applauso. Salva la ricetta! 🔖
 
-🌱 **Il nostro impegno**
-Continuiamo a lavorare con fornitori certificati MSC per garantirti pesce pescato in modo responsabile.
+🌱 IL NOSTRO IMPEGNO
+Continuiamo a lavorare con fornitori certificati MSC per garantirti pesce pescato in modo responsabile. Qualità che puoi vedere — e gustare.
 
-Buona estate dal team Angelo Parodi! ☀️`},
-  {oggetto:"🎣 Sapori autentici: la newsletter di luglio",body:`Buongiorno!
+📅 IL 18 GIUGNO È LA GIORNATA DELLA GASTRONOMIA SOSTENIBILE
+Un'occasione per riflettere su cosa mettiamo nel piatto e come lo scegliamo. Angelo Parodi è con te, da sempre.
+
+Buona estate,
+Il team Angelo Parodi 🐠`
+  },
+  {
+    oggetto:"🎣 Sapori autentici: la newsletter di luglio — Angelo Parodi",
+    body:`Buongiorno!
 
 Luglio è il mese del mare, della spensieratezza e dei sapori che non dimentichi.
 
-🥗 **Idee grill-friendly con Angelo Parodi**
-Sgombro alla griglia, gamberetti saltati, salmone in crosta di erbe. Il mare a casa tua.
+🥗 IDEE GRILL-FRIENDLY CON ANGELO PARODI
+Sgombro alla griglia, gamberetti saltati con aglio e prezzemolo, salmone in crosta di erbe aromatiche. Il mare a casa tua, senza complicazioni.
 
-📖 **La storia di questo mese**
-Come nasce il nostro tonno: dalla pesca al confezionamento, un percorso di qualità lungo decenni.
+📖 LA STORIA DI QUESTO MESE
+Come nasce il nostro tonno: dalla pesca alla conserva, un percorso lungo decenni, fatto di selezione rigorosa e rispetto del prodotto. Pochi segreti, molta sostanza.
 
-🔥 **Offerta riservata agli iscritti**
-Questo mese: 3x2 sul tonno in olio d'oliva. Solo per te!
+🔥 OFFERTA RISERVATA AGLI ISCRITTI
+Per tutto luglio: scopri la nuova linea di filetti di acciughe del Mar Cantabrico. Il prodotto più amato dai nostri chef partner.
 
-Un abbraccio e buone vacanze,
-Team Angelo Parodi 🐟`},
+Ti aspettiamo nei nostri store e online.
+Un abbraccio dal team Angelo Parodi 🐟`
+  },
 ];
 
 const RICETTE_VARIANTI=[
-  {titolo:"Insalata Nizzarda con Tonno Angelo Parodi",tempo:"15 min",difficolta:"Facile",ingredienti:["1 lattina tonno Angelo Parodi all'olio d'oliva","200g fagiolini cotti","4 uova sode","8 olive nere","Pomodorini, cipollotto","Acciughe (opzionale)","Vinaigrette: olio EVO, aceto di vino, senape, sale"],preparazione:"Lessia i fagiolini al dente. Taglia i pomodorini a metà. Affetta le uova sode. Disponi tutto su un letto di lattuga. Adagia il tonno sgocciolato al centro. Aggiungi olive e acciughe. Condisci con vinaigrette e servi subito.",note:"Perfetta come pranzo estivo completo. Il tonno Angelo Parodi all'olio d'oliva dona cremosità naturale senza aggiungere grassi extra."},
-  {titolo:"Pasta al Tonno con Capperi e Limone",tempo:"20 min",difficolta:"Facile",ingredienti:["280g spaghetti","1 lattina tonno Angelo Parodi","2 cucchiai capperi sotto sale","1 limone bio (scorza e succo)","Aglio, prezzemolo, peperoncino","Olio EVO, sale"],preparazione:"Cuoci la pasta. In padella scalda olio con aglio e peperoncino. Aggiungi capperi sciacquati e tonno sbriciolato. Spegni, aggiungi succo di limone e scorza. Scola la pasta al dente e manteca con il condimento. Finisci con prezzemolo fresco abbondante.",note:"Il segreto è non cuocere il tonno: si aggiunge a fuoco spento per mantenere morbidezza e sapore."},
-  {titolo:"Bruschette di Salmone Affumicato Angelo Parodi",tempo:"10 min",difficolta:"Facile",ingredienti:["1 confezione salmone affumicato Angelo Parodi","4 fette pane rustico","Crème fraîche o formaggio spalmabile","Aneto fresco","Capperi, cipolla rossa","Limone"],preparazione:"Tosta il pane. Spalma generosamente con crème fraîche. Adagia le fette di salmone. Aggiungi capperi e cipolla rossa a rondelle sottilissime. Decora con aneto e una spruzzata di limone. Servi subito come antipasto o aperitivo.",note:"Ideale per aperitivi veloci. Il salmone Angelo Parodi ha una marmorizzazione perfetta che garantisce gusto e consistenza."},
+  {
+    titolo:"Spaghettoni con burrata, pistacchi e Filetti di Acciughe",
+    tempo:"15 min",difficolta:"Facile",persone:"2",
+    ingredienti:[
+      "180g spaghettoni trafilati al bronzo",
+      "8 filetti di Acciughe del Mar Cantabrico Angelo Parodi",
+      "1 burrata fresca da 125g",
+      "40g pistacchi sgusciati non salati",
+      "1 limone bio (scorza)",
+      "Olio EVO, sale grosso, pepe nero"
+    ],
+    preparazione:`Tosta i pistacchi in padella a secco per 2–3 minuti, poi tritali grossolanamente.
+
+Cuoci gli spaghettoni in abbondante acqua salata. Nel frattempo, scalda leggermente 3 cucchiai di olio EVO in padella e scioglivici dentro 5 filetti di acciughe a fuoco basso — non friggerli, devono disfarsi nell'olio creando una crema saporitissima.
+
+Scola la pasta al dente (tieni 1 mestolo d'acqua di cottura) e manteca nell'olio alle acciughe aggiungendo l'acqua di cottura per creare cremosità.
+
+Impiatta: pasta nel piatto, strappa la burrata sopra, aggiungi i pistacchi tritati, i 3 filetti di acciughe rimasti interi, la scorza di limone e una macinata di pepe.`,
+    note:"Ricetta viral — perfetta per Carosello Instagram. Fotografa il contrasto bianco della burrata con il verde pistacchio. Il segreto è sciogliere le acciughe nell'olio: crea una base umami intensa senza risultare saporita."
+  },
+  {
+    titolo:"Fettuccine con sugo alla ligure e Tonno Angelo Parodi",
+    tempo:"20 min",difficolta:"Facile",persone:"4",
+    ingredienti:[
+      "320g fettuccine fresche (o tagliatelle)",
+      "2 lattine tonno Angelo Parodi all'olio d'oliva",
+      "300g pomodori datterino",
+      "Olive taggiasche q.b.",
+      "2 cucchiai capperi sotto sale sciacquati",
+      "Aglio, prezzemolo, basilico",
+      "Olio EVO, peperoncino, sale"
+    ],
+    preparazione:`In una padella ampia scalda l'olio con l'aglio e un pizzico di peperoncino. Aggiungi i pomodorini tagliati a metà e falli appassire a fuoco medio per 8 minuti.
+
+Unisci le olive taggiasche e i capperi. Cuoci ancora 3 minuti.
+
+Scola la pasta al dente, versala nella padella con il sugo. Spegni il fuoco e aggiungi il tonno sgocciolato in pezzi — così mantiene la sua consistenza.
+
+Finisci con prezzemolo e basilico freschi, un filo di olio a crudo.`,
+    note:"Sugo alla ligure: la combinazione olive-capperi-pomodoro è la firma del territorio. Il tonno si aggiunge sempre a fuoco spento. Ottimo per il blog: fotografia bene, ingredienti riconoscibili."
+  },
+  {
+    titolo:"Bruschette di Salmone Affumicato e Avocado",
+    tempo:"10 min",difficolta:"Facilissima",persone:"4 (aperitivo)",
+    ingredienti:[
+      "1 conf. salmone affumicato Angelo Parodi (100g)",
+      "4 fette di pane rustico o baguette",
+      "1 avocado maturo",
+      "Succo di 1/2 limone",
+      "Capperi, cipolla rossa",
+      "Aneto o erba cipollina",
+      "Pepe nero, sale marino"
+    ],
+    preparazione:`Tosta il pane al grill o in padella finché è croccante.
+
+Schiaccia l'avocado con una forchetta, aggiungi succo di limone, sale e pepe — deve rimanere rustico, non cremoso.
+
+Spalma l'avocado sul pane. Adagia le fettine di salmone Angelo Parodi. Aggiungi capperi, cipolla rossa a rondelle sottilissime, aneto spezzettato e un giro di olio EVO.
+
+Servi subito come aperitivo o antipasto.`,
+    note:"Il salmone affumicato Angelo Parodi ha una marmorizzazione perfetta e un fumo delicato che non copre gli altri sapori. Perfetto per foto aperitivo."
+  },
 ];
 
 const IDEE_SETS=[
-  [{titolo:"Tartare di tonno con avocado",desc:"Tonno fresco e conserva Angelo Parodi, avocado, lime, sesamo. Trend sushi-fusion.",tag:"🥑 Fusion"},{titolo:"Frittelle di baccalà e tonno",desc:"Mix croccante da antipasto. Maionese al limone per accompagnare.",tag:"🍳 Croccante"},{titolo:"Poke bowl Mediterranean",desc:"Riso, tonno Angelo Parodi, olive, pomodoro, cetriolo. La poke all'italiana.",tag:"🥗 Healthy"}],
-  [{titolo:"Pasta fredda al tonno e basilico",desc:"Perfetta per l'estate: farfalle, tonno, basilico fresco, pomodorini confit.",tag:"🍝 Estate"},{titolo:"Crostini con sgombro e burro salato",desc:"Antipasto nordico con sgombro Angelo Parodi, rafano, aneto.",tag:"🥖 Aperitivo"},{titolo:"Quiche al salmone e porri",desc:"Torta salata cremosa con salmone affumicato Angelo Parodi.",tag:"🥧 Brunch"}],
+  [
+    {titolo:"Poke bowl alla mediterranea",desc:"Riso, tonno Angelo Parodi, olive, pomodorino confit, cetriolo, sesamo. La poke che non ti aspetti — tutta italiana.",tag:"🥗 Trend"},
+    {titolo:"Tartare di acciughe e avocado",desc:"Acciughe del Cantabrico sminuzzate, avocado, lime, cipollotto. Finger food da aperitivo top.",tag:"🥑 Fusion"},
+    {titolo:"Frittelle di sgombro e patate",desc:"Sgombro al naturale, patata lessa, erbe aromatiche. Croccante fuori, morbido dentro. Perfetto per Carosello ricetta.",tag:"🍳 Family"}
+  ],
+  [
+    {titolo:"Pasta fredda gamberetti e limone",desc:"Farfalle, gamberetti Angelo Parodi, zucchine, limone, menta fresca. Il primo piatto dell'estate.",tag:"🍝 Estate"},
+    {titolo:"Bruschetta gourmet acciughe e burro",desc:"Pane di grano duro, burro salato, acciughe del Cantabrico, pepe rosa. Aperitivo in stile bistrot francese.",tag:"🥖 Aperitivo"},
+    {titolo:"Quiche salmone e porri",desc:"Torta salata con salmone affumicato Angelo Parodi, porri stufati, crème fraîche. Da brunch a cena elegante.",tag:"🥧 Brunch"}
+  ],
 ];
 
 const MOCK_STORICO=[
-  {tipo:"Social",prodotto:"Tonno all'olio",tono:"Storytelling",data:"Oggi 10:23",preview:"Da oltre 60 anni, ogni alba sul mare è una promessa…",status:"success"},
-  {tipo:"Newsletter",prodotto:"Estate 2025",tono:"—",data:"Ieri 16:45",preview:"L'estate è arrivata e con lei la voglia di piatti freschi…",status:"success"},
-  {tipo:"Ricetta",prodotto:"Salmone affumicato",tono:"—",data:"Ieri 09:12",preview:"Bruschette di salmone affumicato con crème fraîche…",status:"success"},
-  {tipo:"Social",prodotto:"Tonno al naturale",tono:"How-to",data:"14 Jun 14:30",preview:"🔥 Insalata tonno e fagioli in 5 minuti…",status:"success"},
+  {tipo:"Carosello",prodotto:"Spaghettoni con Acciughe del Cantabrico",data:"Oggi 10:23",
+    preview:"Voglia di un primo piatto che sappia d'estate? 🍋 Bastano 10 minuti…",adv:"70€",obiettivo:"Interazione",status:"Approvato"},
+  {tipo:"Newsletter",prodotto:"Giugno 2026 – Estate in tavola",data:"Ieri 16:45",
+    preview:"L'estate è arrivata e con lei la voglia di piatti freschi e gustosi…",adv:"—",obiettivo:"Fidelizzazione",status:"Inviata"},
+  {tipo:"Ricetta",prodotto:"Fettuccine al sugo ligure e tonno",data:"Ieri 09:12",
+    preview:"Fettuccine con sugo alla ligure: olive taggiasche, capperi, tonno…",adv:"—",obiettivo:"Blog SEO",status:"Pubblicata"},
+  {tipo:"Singolo",prodotto:"Sondaggio – Acciughe vs Tonno",data:"16 Giu 14:30",
+    preview:"Sondaggio: Team Acciughe o Team Tonno? 🤔 Cosa porteresti oggi in tavola?",adv:"Nessuna",obiettivo:"Interazione",status:"Approvato"},
+  {tipo:"Reel",prodotto:"Gamberetti – Segreto irresistibile",data:"15 Giu 11:00",
+    preview:"Speravamo di mantenere il segreto, ma… è confermato: sono irresistibili! 🦐",adv:"70€",obiettivo:"Copertura",status:"In revisione"},
 ];
 
 const MOCK_STRATEGIA=[
-  {tit:"Brand Positioning",txt:"Leader italiano nel segmento pesce conservato premium. Qualità artigianale su scala industriale."},
-  {tit:"Target primario",txt:"Famiglie 30-55 anni, attente alla qualità e alla provenienza. Amanti della cucina mediterranea."},
-  {tit:"Tone of voice",txt:"Caldo, autentico, esperto ma accessibile. Mai freddo o corporate. Racconta storie vere."},
-  {tit:"Valori core",txt:"Tradizione (60+ anni), Sostenibilità (filiera MSC), Qualità (selezione rigorosa), Italianità."},
+  {tit:"Brand Positioning",txt:"Leader italiano nel pesce conservato premium. Qualità artigianale su scala industriale. 60+ anni di storia autentica."},
+  {tit:"Target primario",txt:"Famiglie 30–55 anni, attente alla qualità e alla provenienza. Appassionate di cucina mediterranea. Pronte a pagare di più per il prodotto giusto."},
+  {tit:"Tone of voice",txt:"Caldo, autentico, esperto ma mai distante. Racconta storie vere, parla di ingredienti, valorizza la tradizione senza essere polveroso."},
+  {tit:"Pilastri contenuto",txt:"1. Ricette (40%) · 2. Storytelling brand (25%) · 3. Educazione/nutrizionale (20%) · 4. Community & UGC (15%)"},
 ];
-
 const MOCK_NOTE=[
-  {tit:"Evita",txt:"Toni aggressivi, confronti diretti con competitor, claim salutistici non certificati."},
-  {tit:"Usa sempre",txt:"Il nome completo 'Angelo Parodi' almeno una volta per post. Mai solo 'Parodi'."},
-  {tit:"Hashtag limite",txt:"Max 5-7 hashtag per Instagram. Qualità > quantità. Includi sempre #AngeloParodi."},
-  {tit:"Immagini",txt:"Preferire light background, props naturali (legno, lino, erbe fresche), luce naturale."},
+  {tit:"Hashtag obbligatori",txt:"Includi sempre #angeloparodi e #incucinaconangeloparodi. Max 5–7 hashtag totali su Instagram."},
+  {tit:"Nomina il brand",txt:"Scrivi sempre 'Angelo Parodi' per esteso almeno una volta nel copy. Mai solo 'Parodi' o 'AP'."},
+  {tit:"Visual guidelines",txt:"Light background preferito (legno chiaro, lino, marmo bianco). Luce naturale morbida. Niente sfondi scuri salvo campagne speciali."},
+  {tit:"Evita",txt:"Claim salutistici non certificati, toni aggressivi, confronti espliciti con competitor, prezzi nel copy organico."},
 ];
+const MOCK_HASH=["#angeloparodi","#incucinaconangeloparodi","#PescaSostenibile","#CucinaItaliana","#QualitàDalMare","#RicetteItaliane","#MediterraneanFood","#PescaResponsabile","#TonnoItaliano","#MangiaBene"];
 
-const MOCK_HASH=["#AngeloParodi","#PescaSostenibile","#CucinaItaliana","#QualitàDalMare","#MangiaBene","#TonnoItaliano","#MediterraneanFood","#PescaResponsabile","#RicetteFacili","#FoodItalia"];
+const ANALYTICS={
+  ig:{
+    reach:12400,reach_delta:"+8.3%",reach_up:true,
+    impressioni:38200,
+    interazioni:1847,eng_rate:"4.2%",eng_up:true,
+    like:1234,commenti:213,salvataggi:400,condivisioni:287,
+    nuovi_follower:234,follower_delta:"+5.1%",
+    best_formato:"Reel",best_reach_mult:"2.3×",
+    top_post:"Spaghettoni con burrata e Acciughe",top_post_reach:8200
+  },
+  fb:{
+    reach:8100,reach_delta:"+3.1%",reach_up:true,
+    interazioni:892,eng_rate:"3.1%",
+    reazioni:634,commenti:108,condivisioni:150,
+    copertura_pagina:22400
+  },
+  nl:{
+    inviate:4200,consegnate:4165,tasso_apertura:"28.4%",apertura_delta:"+2.1pt",
+    ctr:"6.7%",ctr_delta:"+0.4pt",
+    disiscritti:12,
+    top_oggetto:"🌊 Estate in tavola con Angelo Parodi"
+  },
+  budget:{
+    pianificato:1500,speso:920,
+    breakdown:[
+      {label:"Copertura",val:200,max:400},
+      {label:"Interazione",val:420,max:600},
+      {label:"Traffico",val:300,max:350},
+      {label:"Flessibile",val:0,max:150},
+    ]
+  }
+};
 
-// ── COUNTERS ─────────────────────────────────────────────────────────────
+// ── STATE ────────────────────────────────────────────────────────────────
 let sIdx=0,nlIdx=0,rIdx=0,idIdx=0,afIdx=0;
+let pedData=null, pedFileName="";
 
 // ── AUTH ─────────────────────────────────────────────────────────────────
 function doLogin(){
@@ -472,9 +778,7 @@ function doLogin(){
     }
   },800);
 }
-function doLogout(){
-  location.reload();
-}
+function doLogout(){ location.reload(); }
 document.getElementById("pw").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
 
 // ── NAV ──────────────────────────────────────────────────────────────────
@@ -491,22 +795,269 @@ function showInner(id,btn){
   if(btn)btn.classList.add("active");
 }
 
+// ── OVERLAY PANELS ───────────────────────────────────────────────────────
+function togglePanel(name){
+  const el=document.getElementById("panel-"+name);
+  const btn=document.getElementById("btn-"+name);
+  const isOpen=el.classList.contains("open");
+  // close all panels first
+  document.querySelectorAll(".overlay-panel").forEach(p=>p.classList.remove("open"));
+  document.querySelectorAll(".hdr-icon-btn").forEach(b=>b.classList.remove("active-panel"));
+  if(!isOpen){
+    el.classList.add("open");
+    btn.classList.add("active-panel");
+    if(name==="analytics") renderAnalytics();
+  }
+}
+function closePanel(name,e){
+  if(e.target===document.getElementById("panel-"+name)){
+    document.getElementById("panel-"+name).classList.remove("open");
+    document.getElementById("btn-"+name).classList.remove("active-panel");
+  }
+}
+
+// ── ANALYTICS RENDER ─────────────────────────────────────────────────────
+function renderAnalytics(){
+  const a=ANALYTICS;
+  const pct=(v,m)=>Math.round(v/m*100);
+  document.getElementById("analytics-body").innerHTML=`
+
+    <div class="perf-section-title">📸 Instagram · ultimi 30 giorni</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Reach</div>
+        <div class="kpi-val">${fmt(a.ig.reach)}</div>
+        <div class="kpi-trend up">↑ ${a.ig.reach_delta} vs mese prec.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Interazioni totali</div>
+        <div class="kpi-val">${fmt(a.ig.interazioni)}</div>
+        <div class="kpi-trend up">Eng. rate ${a.ig.eng_rate}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Nuovi follower</div>
+        <div class="kpi-val">+${a.ig.nuovi_follower}</div>
+        <div class="kpi-trend up">↑ ${a.ig.follower_delta}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Salvataggi</div>
+        <div class="kpi-val">${a.ig.salvataggi}</div>
+        <div class="kpi-trend flat">Alta intenzione d'uso</div>
+      </div>
+    </div>
+    <div class="bar-row"><span class="bar-label">👍 Like</span><div class="bar-track"><div class="bar-fill" style="width:${pct(a.ig.like,a.ig.interazioni)}%"></div></div><span class="bar-val">${fmt(a.ig.like)}</span></div>
+    <div class="bar-row"><span class="bar-label">💬 Commenti</span><div class="bar-track"><div class="bar-fill" style="width:${pct(a.ig.commenti,a.ig.interazioni)}%"></div></div><span class="bar-val">${a.ig.commenti}</span></div>
+    <div class="bar-row"><span class="bar-label">🔖 Salvataggi</span><div class="bar-track"><div class="bar-fill" style="width:${pct(a.ig.salvataggi,a.ig.interazioni)}%"></div></div><span class="bar-val">${a.ig.salvataggi}</span></div>
+    <div class="bar-row"><span class="bar-label">↗ Condivisioni</span><div class="bar-track"><div class="bar-fill" style="width:${pct(a.ig.condivisioni,a.ig.interazioni)}%"></div></div><span class="bar-val">${a.ig.condivisioni}</span></div>
+
+    <div class="insight-box" style="margin-top:16px">
+      <strong>🏆 Post migliore del mese</strong>
+      "${a.ig.top_post}" → ${fmt(a.ig.top_post_reach)} reach organici
+    </div>
+    <div class="insight-box">
+      <strong>📊 Formato top</strong>
+      I ${a.ig.best_formato} performano ${a.ig.best_reach_mult} rispetto ai Singoli. Aumenta la frequenza.
+    </div>
+
+    <div class="perf-section-title">📘 Facebook · ultimi 30 giorni</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Reach post</div>
+        <div class="kpi-val">${fmt(a.fb.reach)}</div>
+        <div class="kpi-trend up">↑ ${a.fb.reach_delta}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Copertura pagina</div>
+        <div class="kpi-val">${fmt(a.fb.copertura_pagina)}</div>
+        <div class="kpi-trend flat">Eng. rate ${a.fb.eng_rate}</div>
+      </div>
+    </div>
+    <div class="bar-row"><span class="bar-label">❤️ Reazioni</span><div class="bar-track"><div class="bar-fill" style="width:${pct(a.fb.reazioni,a.fb.interazioni)}%"></div></div><span class="bar-val">${a.fb.reazioni}</span></div>
+    <div class="bar-row"><span class="bar-label">💬 Commenti</span><div class="bar-track"><div class="bar-fill" style="width:${pct(a.fb.commenti,a.fb.interazioni)}%"></div></div><span class="bar-val">${a.fb.commenti}</span></div>
+    <div class="bar-row"><span class="bar-label">↗ Condivisioni</span><div class="bar-track"><div class="bar-fill" style="width:${pct(a.fb.condivisioni,a.fb.interazioni)}%"></div></div><span class="bar-val">${a.fb.condivisioni}</span></div>
+
+    <div class="perf-section-title">📧 Newsletter · ultima campagna</div>
+    <div class="nl-stat"><span>📨 Email inviate</span><strong>${fmt(a.nl.inviate)}</strong></div>
+    <div class="nl-stat"><span>📬 Consegnate</span><strong>${fmt(a.nl.consegnate)}</strong></div>
+    <div class="nl-stat"><span>👁️ Tasso apertura</span><strong style="color:#16a34a">${a.nl.tasso_apertura} <small style="font-size:11px;font-weight:600">${a.nl.apertura_delta}</small></strong></div>
+    <div class="nl-stat"><span>🔗 CTR (click)</span><strong style="color:#16a34a">${a.nl.ctr} <small style="font-size:11px;font-weight:600">${a.nl.ctr_delta}</small></strong></div>
+    <div class="nl-stat"><span>❌ Disiscritti</span><strong style="color:#64748b">${a.nl.disiscritti}</strong></div>
+    <div class="insight-box" style="margin-top:12px">
+      <strong>✉️ Oggetto con più aperture</strong>
+      "${a.nl.top_oggetto}"
+    </div>
+
+    <div class="perf-section-title">💰 Budget ADV · ${fmt(a.budget.speso)}€ / ${fmt(a.budget.pianificato)}€</div>
+    ${a.budget.breakdown.map(b=>`
+    <div class="bar-row">
+      <span class="bar-label">${b.label}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct(b.val,b.max)}%"></div></div>
+      <span class="bar-val">${b.val}€</span>
+    </div>`).join("")}
+    <div style="text-align:center;margin-top:12px;font-size:13px;color:#64748b">
+      Residuo disponibile: <strong style="color:var(--blue)">${fmt(a.budget.pianificato-a.budget.speso)}€</strong>
+    </div>
+  `;
+}
+
+// ── PED EXCEL ────────────────────────────────────────────────────────────
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById("drop-zone").classList.remove("dragover");
+  const file=e.dataTransfer.files[0];
+  if(file) parsePed(file);
+}
+function loadPedFile(e){
+  const file=e.target.files[0];
+  if(file) parsePed(file);
+}
+function parsePed(file){
+  if(!window.XLSX){
+    document.getElementById("ped-result").innerHTML=`<div style="color:#dc2626;font-size:13px;margin-top:12px">⚠️ Libreria Excel non caricata. Verifica la connessione internet.</div>`;
+    return;
+  }
+  pedFileName=file.name;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const wb=XLSX.read(e.target.result,{type:"array"});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
+      pedData=rows;
+      renderPedTable(rows);
+      setPedActive(true);
+    }catch(err){
+      document.getElementById("ped-result").innerHTML=`<div style="color:#dc2626;font-size:13px;margin-top:12px">❌ Errore lettura file: ${err.message}</div>`;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+function renderPedTable(rows){
+  if(!rows||rows.length===0){
+    document.getElementById("ped-result").innerHTML=`<div style="color:#64748b;font-size:13px;margin-top:12px">Nessun dato trovato nel file.</div>`;
+    return;
+  }
+  // Try to detect header row (look for keywords like data/formato/copy)
+  let headerIdx=0;
+  for(let i=0;i<Math.min(5,rows.length);i++){
+    const row=rows[i].join(" ").toLowerCase();
+    if(row.includes("data")||row.includes("formato")||row.includes("copy")){headerIdx=i;break;}
+  }
+  const headers=rows[headerIdx];
+  const dataRows=rows.slice(headerIdx+1).filter(r=>r.some(c=>String(c).trim()!==""));
+
+  // Map columns to known PED fields
+  const colData=findCol(headers,["data","date","giorno"]);
+  const colFormato=findCol(headers,["formato","format","tipo"]);
+  const colCopy=findCol(headers,["copy","testo","caption","post"]);
+  const colAdv=findCol(headers,["adv","budget","€","euro","sponsorizzazione"]);
+  const colObiettivo=findCol(headers,["obiettivo","objective","obiett","goal"]);
+  const colStatus=findCol(headers,["status","stato","approvato"]);
+  const colNote=findCol(headers,["note","notes","commenti"]);
+
+  // Build table with detected or all columns
+  const showCols=headers.map((h,i)=>({h,i})).filter(c=>String(c.h).trim()!=="");
+
+  let html=`
+  <div style="margin-top:16px;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--blue)">
+    ✅ File caricato: <em>${esc(pedFileName)}</em> · ${dataRows.length} righe trovate
+  </div>
+  <div style="font-size:12px;color:#64748b;margin-bottom:12px">
+    Colonne rilevate: ${showCols.map(c=>`<strong>${esc(String(c.h))}</strong>`).join(", ")}
+  </div>
+  <div class="ped-table-wrap">
+    <table class="ped-table">
+      <thead><tr>${showCols.map(c=>`<th>${esc(String(c.h))}</th>`).join("")}</tr></thead>
+      <tbody>
+        ${dataRows.map(row=>{
+          const statusVal=colStatus>=0?String(row[colStatus]||"").trim():"";
+          const statusClass=statusVal.toLowerCase().includes("approv")?"status-approvato":
+                            statusVal.toLowerCase().includes("revis")?"status-revisione":"status-bozza";
+          return `<tr>${showCols.map(c=>{
+            const val=String(row[c.i]||"").trim();
+            if(c.i===colStatus&&val){return `<td><span class="status-pill ${statusClass}">${esc(val)}</span></td>`;}
+            if(c.i===colFormato&&val){return `<td><span class="tag">${esc(val)}</span></td>`;}
+            return `<td>${esc(val.length>120?val.slice(0,120)+"…":val)}</td>`;
+          }).join("")}</tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+    <button class="btn-sm" onclick="exportPedSummary()">📝 Esporta sintesi</button>
+    <button class="btn-sm" onclick="setPedActive(true);alert('PED impostato come attivo per le generazioni!')">✅ Usa come PED attivo</button>
+  </div>`;
+  document.getElementById("ped-result").innerHTML=html;
+}
+function findCol(headers,keywords){
+  for(let i=0;i<headers.length;i++){
+    const h=String(headers[i]||"").toLowerCase();
+    if(keywords.some(k=>h.includes(k)))return i;
+  }
+  return -1;
+}
+function setPedActive(active){
+  const banner=document.getElementById("ped-active-banner");
+  const badge=document.getElementById("ped-active-badge");
+  const socialCtx=document.getElementById("ped-social-context");
+  banner.style.display=active?"flex":"none";
+  badge.style.display=active?"block":"none";
+  if(socialCtx)socialCtx.style.display=active?"block":"none";
+  document.getElementById("ped-banner-name").textContent=pedFileName;
+}
+function exportPedSummary(){
+  if(!pedData)return;
+  const text=pedData.map(r=>r.join(" | ")).join("\n");
+  const el=document.createElement("a");
+  el.href="data:text/plain;charset=utf-8,"+encodeURIComponent(text);
+  el.download="PED_sintesi.txt";
+  el.click();
+}
+
 // ── GENERATE: SOCIAL ─────────────────────────────────────────────────────
 function doSocial(){
   const btn=document.getElementById("s-btn");
   btn.disabled=true;btn.textContent="✨ Generando…";
-  document.getElementById("s-result").innerHTML=spinner();
+  document.getElementById("s-result").innerHTML=spinner("Elaboro il contenuto social…");
+  const formato=document.getElementById("s-formato").value;
+  const obiettivo=document.getElementById("s-obiettivo").value;
+  const adv=document.getElementById("s-adv").value;
   setTimeout(()=>{
     const post=SOCIAL_POSTS[sIdx%SOCIAL_POSTS.length];sIdx++;
+    const pedCtx=pedData?`<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 12px;font-size:11px;color:#15803d;font-weight:700;margin-bottom:10px">📋 Generato in coerenza con il PED attivo</div>`:"";
     document.getElementById("s-result").innerHTML=`
-      <div class="card"><div class="card-hdr"><h3>📝 Post generato</h3><span style="font-size:11px;color:#64748b">${post.tipo}</span></div>
-      <div class="card-body">
-        <div class="result-box" id="s-txt">${esc(post.testo)}</div>
-        <div class="result-actions"><button class="btn-sm" onclick="copyText('s-txt',this,'Post')">📋 Copia post</button></div>
-        <div class="result-box copy-box" id="s-hash" style="margin-top:12px">${esc(post.hashtag)}</div>
-        <div class="result-actions"><button class="btn-sm" onclick="copyText('s-hash',this,'Hashtag')">📋 Copia hashtag</button></div>
-      </div></div>`;
-    btn.disabled=false;btn.textContent="✨ Genera contenuto";
+      <div class="card">
+        <div class="card-hdr">
+          <h3>📝 Contenuto generato</h3>
+          <div style="display:flex;gap:6px">
+            <span class="badge badge-blue">${esc(formato)}</span>
+            <span class="badge badge-yellow">${esc(obiettivo)}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          ${pedCtx}
+          <div class="result-meta">
+            <span class="badge badge-green">ADV: ${esc(adv)}</span>
+            <span class="badge badge-blue">Obiettivo: ${esc(obiettivo)}</span>
+          </div>
+          <div class="result-box" id="s-txt">${esc(post.testo)}</div>
+          <div class="result-actions">
+            <button class="btn-sm" onclick="copyText('s-txt',this,'Post')">📋 Copia post</button>
+          </div>
+          <div class="result-box copy-box" id="s-hash" style="margin-top:12px">${esc(post.hashtag)}</div>
+          <div class="result-actions">
+            <button class="btn-sm" onclick="copyText('s-hash',this,'Hashtag')">📋 Copia hashtag</button>
+          </div>
+          <div class="result-box brief-box" id="s-brief-out" style="margin-top:12px">
+            <strong style="display:block;font-weight:800;color:#7c3aed;font-size:12px;margin-bottom:6px">🎨 Brief visuale per il grafico</strong>
+            ${esc(post.brief_visuale)}
+          </div>
+          <div class="result-actions">
+            <button class="btn-sm" onclick="copyText('s-brief-out',this,'Brief')">📋 Copia brief</button>
+          </div>
+        </div>
+      </div>`;
+    btn.disabled=false;btn.textContent="✨ Genera contenuto social";
   },1400+Math.random()*400);
 }
 
@@ -514,17 +1065,19 @@ function doSocial(){
 function doNl(){
   const btn=document.getElementById("nl-btn");
   btn.disabled=true;btn.textContent="✨ Generando…";
-  document.getElementById("nl-result").innerHTML=spinner();
+  document.getElementById("nl-result").innerHTML=spinner("Scrivo la newsletter…");
   setTimeout(()=>{
     const nl=NL_VARIANTI[nlIdx%NL_VARIANTI.length];nlIdx++;
     document.getElementById("nl-result").innerHTML=`
-      <div class="card"><div class="card-hdr"><h3>📧 Newsletter generata</h3></div>
-      <div class="card-body">
-        <div class="result-box" id="nl-ogg"><strong>Oggetto:</strong> ${esc(nl.oggetto)}</div>
-        <div class="result-actions"><button class="btn-sm" onclick="copyText('nl-ogg',this,'Oggetto')">📋 Copia oggetto</button></div>
-        <div class="result-box" id="nl-body" style="margin-top:12px">${esc(nl.body)}</div>
-        <div class="result-actions"><button class="btn-sm" onclick="copyText('nl-body',this,'Email')">📋 Copia email</button></div>
-      </div></div>`;
+      <div class="card">
+        <div class="card-hdr"><h3>📧 Newsletter generata</h3></div>
+        <div class="card-body">
+          <div class="result-box" id="nl-ogg"><strong>Oggetto:</strong> ${esc(nl.oggetto)}</div>
+          <div class="result-actions"><button class="btn-sm" onclick="copyText('nl-ogg',this,'Oggetto')">📋 Copia oggetto</button></div>
+          <div class="result-box" id="nl-body" style="margin-top:12px">${esc(nl.body)}</div>
+          <div class="result-actions"><button class="btn-sm" onclick="copyText('nl-body',this,'Email')">📋 Copia email</button></div>
+        </div>
+      </div>`;
     btn.disabled=false;btn.textContent="✨ Genera newsletter";
   },1500+Math.random()*300);
 }
@@ -533,16 +1086,24 @@ function doNl(){
 function doRicetta(){
   const btn=document.getElementById("r-btn");
   btn.disabled=true;btn.textContent="✨ Generando…";
-  document.getElementById("r-result").innerHTML=spinner();
+  document.getElementById("r-result").innerHTML=spinner("Preparo la ricetta…");
   setTimeout(()=>{
     const r=RICETTE_VARIANTI[rIdx%RICETTE_VARIANTI.length];rIdx++;
     document.getElementById("r-result").innerHTML=`
-      <div class="card"><div class="card-hdr"><h3>🍴 ${esc(r.titolo)}</h3>
-        <div style="display:flex;gap:8px"><span class="badge badge-blue">⏱ ${r.tempo}</span><span class="badge badge-green">${r.difficolta}</span></div>
-      </div><div class="card-body">
-        <div class="result-box" id="r-txt">🛒 Ingredienti:\n${r.ingredienti.map(i=>"• "+i).join("\n")}\n\n👨‍🍳 Preparazione:\n${r.preparazione}\n\n💡 Nota: ${r.note}</div>
-        <div class="result-actions"><button class="btn-sm" onclick="copyText('r-txt',this,'Ricetta')">📋 Copia ricetta</button></div>
-      </div></div>`;
+      <div class="card">
+        <div class="card-hdr">
+          <h3>🍴 ${esc(r.titolo)}</h3>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-blue">⏱ ${r.tempo}</span>
+            <span class="badge badge-green">${r.difficolta}</span>
+            <span class="badge badge-yellow">👥 ${r.persone} pers.</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="result-box" id="r-txt">🛒 INGREDIENTI\n${r.ingredienti.map(i=>"• "+i).join("\n")}\n\n👨‍🍳 PREPARAZIONE\n${r.preparazione}\n\n📸 NOTA FOTOGRAFICA\n${r.note}</div>
+          <div class="result-actions"><button class="btn-sm" onclick="copyText('r-txt',this,'Ricetta')">📋 Copia ricetta completa</button></div>
+        </div>
+      </div>`;
     btn.disabled=false;btn.textContent="✨ Genera ricetta";
   },1500+Math.random()*300);
 }
@@ -551,17 +1112,19 @@ function doRicetta(){
 function doIdee(){
   const btn=document.getElementById("id-btn");
   btn.disabled=true;btn.textContent="💡 Generando…";
-  document.getElementById("id-result").innerHTML=spinner();
+  document.getElementById("id-result").innerHTML=spinner("Sto pensando a nuove idee…");
   setTimeout(()=>{
     const set=IDEE_SETS[idIdx%IDEE_SETS.length];idIdx++;
     const cards=set.map(i=>`
       <div class="mem-item">
-        <strong>${i.titolo}</strong>
-        <span class="badge badge-blue" style="margin-left:8px">${i.tag}</span>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <strong>${esc(i.titolo)}</strong>
+          <span class="badge badge-blue">${esc(i.tag)}</span>
+        </div>
         <p>${esc(i.desc)}</p>
       </div>`).join("");
     document.getElementById("id-result").innerHTML=`
-      <div class="card"><div class="card-hdr"><h3>💡 Idee ricette</h3></div>
+      <div class="card"><div class="card-hdr"><h3>💡 Idee ricette generate</h3></div>
       <div class="card-body">${cards}</div></div>`;
     btn.disabled=false;btn.textContent="💡 Genera idee";
   },1200+Math.random()*300);
@@ -578,8 +1141,7 @@ function initApp(){
   },6000);
 
   // Calendario
-  const cal=document.getElementById("cal-list");
-  cal.innerHTML=GIORNATE.map(g=>`
+  document.getElementById("cal-list").innerHTML=GIORNATE.map(g=>`
     <div class="cal-item">
       <div class="cal-date"><span>${g.g}</span>${g.m}</div>
       <div class="cal-event">
@@ -590,32 +1152,39 @@ function initApp(){
     </div>`).join("");
 
   // Storico
-  document.getElementById("storico-list").innerHTML=MOCK_STORICO.map(s=>`
+  document.getElementById("storico-list").innerHTML=`<div style="display:flex;flex-direction:column;gap:10px;">`+
+    MOCK_STORICO.map(s=>`
     <div class="storico-item">
       <div class="storico-hdr">
-        <strong>${s.tipo} — ${s.prodotto}</strong>
+        <strong>${s.tipo} — ${esc(s.prodotto)}</strong>
         <span style="font-size:11px;color:#64748b">${s.data}</span>
       </div>
       <div class="storico-preview">${esc(s.preview)}</div>
-      <div style="margin-top:8px"><span class="tag">${s.tipo}</span><span class="badge badge-green">✅ Completato</span></div>
-    </div>`).join("");
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+        <span class="tag">${s.tipo}</span>
+        ${s.adv&&s.adv!=="—"?`<span class="badge badge-yellow">ADV: ${s.adv}</span>`:""}
+        <span class="badge badge-blue">${s.obiettivo}</span>
+        <span class="badge ${s.status==="Approvato"||s.status==="Inviata"||s.status==="Pubblicata"?"badge-green":"badge-yellow"}">${s.status}</span>
+      </div>
+    </div>`).join("")+`</div>`;
 
   // Memoria
   document.getElementById("mem-strategia").innerHTML=MOCK_STRATEGIA.map(m=>`
-    <div class="mem-item"><strong>${m.tit}</strong><p>${m.txt}</p></div>`).join("");
+    <div class="mem-item"><strong>${esc(m.tit)}</strong><p>${esc(m.txt)}</p></div>`).join("");
   document.getElementById("mem-note").innerHTML=MOCK_NOTE.map(m=>`
-    <div class="mem-item"><strong>${m.tit}</strong><p>${m.txt}</p></div>`).join("");
-  document.getElementById("mem-hash").innerHTML=MOCK_HASH.map(h=>`<span class="hash-tag">${h}</span>`).join("");
+    <div class="mem-item"><strong>${esc(m.tit)}</strong><p>${esc(m.txt)}</p></div>`).join("");
+  document.getElementById("mem-hash").innerHTML=MOCK_HASH.map(h=>`<span class="hash-tag">${esc(h)}</span>`).join("");
 }
 
 // ── UTILS ────────────────────────────────────────────────────────────────
-function spinner(){return`<div class="spin-wrap"><div class="spin"></div><br>Generando con AI…</div>`;}
+function spinner(msg="Generando con AI…"){return`<div class="spin-wrap"><div class="spin"></div><br>${esc(msg)}</div>`;}
 function esc(s){const d=document.createElement("div");d.textContent=s??"";return d.innerHTML;}
+function fmt(n){return n>=1000?(n/1000).toFixed(1).replace(".0","")+"K":String(n);}
 function copyText(id,btn,label){
   const txt=document.getElementById(id).textContent;
   navigator.clipboard.writeText(txt).then(()=>{
     const o=btn.innerHTML;btn.innerHTML="✅ Copiato!";btn.classList.add("copied");
-    setTimeout(()=>{btn.innerHTML=`📋 ${label}`;btn.classList.remove("copied");},2000);
+    setTimeout(()=>{btn.innerHTML=`📋 ${esc(label)}`;btn.classList.remove("copied");},2000);
   });
 }
 </script>
