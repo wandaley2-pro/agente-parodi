@@ -58,7 +58,7 @@ async function callGemini(
   apiKey: string,
   maxTokens = 896,
   temperature = 0.9
-): Promise<string> {
+): Promise<{ text: string; promptTokens: number; outputTokens: number }> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
   const body = {
     contents: [{ parts: [{ text: prompt }] }],
@@ -84,13 +84,26 @@ async function callGemini(
       const data = await res.json();
       const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!text) throw new Error("Risposta Gemini vuota");
-      return text;
+      const promptTokens: number = data?.usageMetadata?.promptTokenCount ?? 0;
+      const outputTokens: number = data?.usageMetadata?.candidatesTokenCount ?? 0;
+      return { text, promptTokens, outputTokens };
     } catch (err) {
       lastError = err as Error;
       console.error(`Tentativo ${attempt + 1} fallito:`, err);
     }
   }
   throw lastError ?? new Error("Gemini non disponibile");
+}
+
+// deno-lint-ignore no-explicit-any
+function logUsage(supabase: any, cliente: string, tipo: string, promptTokens: number, outputTokens: number): void {
+  const totalTokens = promptTokens + outputTokens;
+  const costUsd = ((promptTokens * 0.1) + (outputTokens * 0.4)) / 1_000_000;
+  supabase
+    .from("angy_usage")
+    .insert({ cliente, tipo, prompt_tokens: promptTokens, output_tokens: outputTokens, total_tokens: totalTokens, cost_usd: costUsd.toFixed(6) })
+    .then(() => {})
+    .catch((e: Error) => console.error("Usage log error:", e?.message));
 }
 
 function parseJson<T>(raw: string): T {
@@ -210,7 +223,8 @@ REGOLE NEWSLETTER ANGELO PARODI:
 Rispondi ESCLUSIVAMENTE con JSON valido, niente testo prima o dopo:
 {"oggetto":"...","preview_text":"...","saluto":"...","paragrafi":["paragrafo 1","paragrafo 2","paragrafo 3"],"cta_testo":"...","firma":"..."}`;
 
-      const raw = await callGemini(prompt, geminiKey, 800, 0.85);
+      const { text: raw, promptTokens: nlPT, outputTokens: nlOT } = await callGemini(prompt, geminiKey, 800, 0.85);
+      logUsage(supabase, cliente, "newsletter", nlPT, nlOT);
       const parsed = parseJson<{
         oggetto: string;
         preview_text: string;
@@ -255,7 +269,8 @@ CRITERI CREATIVI:
 Rispondi ESCLUSIVAMENTE con JSON valido:
 {"idee":[{"titolo":"Nome originale e appetitoso","descrizione":"Una frase che fa venire voglia","difficolta":"Facile","tempo_minuti":20,"angolo":"Perché funziona per i social/sito — max 10 parole"}]}`;
 
-      const raw = await callGemini(prompt, geminiKey, 1000, 0.95);
+      const { text: raw, promptTokens: riPT, outputTokens: riOT } = await callGemini(prompt, geminiKey, 1000, 0.95);
+      logUsage(supabase, cliente, "ricetta_idea", riPT, riOT);
       const parsed = parseJson<{ idee: object[] }>(raw);
 
       console.log(`GENERATE RICETTA_IDEA OK | ${cliente} | ip=${ip}`);
@@ -301,7 +316,8 @@ Rispondi ESCLUSIVAMENTE con JSON valido, niente testo prima o dopo:
   "consiglio_chef": "Un consiglio che sorprende o insegna qualcosa"
 }`;
 
-      const raw = await callGemini(prompt, geminiKey, 1200, 0.75);
+      const { text: raw, promptTokens: rPT, outputTokens: rOT } = await callGemini(prompt, geminiKey, 1200, 0.75);
+      logUsage(supabase, cliente, "ricetta", rPT, rOT);
       const parsed = parseJson<object>(raw);
 
       console.log(`GENERATE RICETTA OK | ${cliente} | ${titolo_ricetta} | ip=${ip}`);
@@ -410,7 +426,8 @@ ${hashtagsFissi.join(" ") || "nessuno ancora"}
 Rispondi ESCLUSIVAMENTE con JSON valido. Niente markdown, niente commenti, niente testo prima o dopo:
 {"copy":"...","obiettivo":"Interazione|Traffico|Copertura","brief_visual":"...","hashtags":["#..."],"keywords_visual":["...","..."]}`;
 
-    const raw = await callGemini(prompt, geminiKey);
+    const { text: raw, promptTokens: sPT, outputTokens: sOT } = await callGemini(prompt, geminiKey);
+    logUsage(supabase, cliente, "social", sPT, sOT);
 
     let parsed: {
       copy: string;

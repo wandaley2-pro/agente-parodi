@@ -273,6 +273,10 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(0,51,153,0.15); border-radius: 3px; }
 
+    /* USAGE BTN */
+    .usage-btn { background: rgba(0,51,153,0.06); border: 1.5px solid rgba(0,51,153,0.12); color: var(--blue); font-size: 16px; cursor: pointer; width: 36px; height: 36px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+    .usage-btn:hover { background: rgba(0,51,153,0.12); transform: translateY(-1px); }
+
     /* LOGIN */
     .login-card { background: white; border-radius: 36px; box-shadow: 0 24px 64px rgba(0,51,153,0.15); border: 1px solid rgba(0,51,153,0.06); padding: 36px 30px; width: 100%; max-width: 400px; }
     .login-icon { width: 68px; height: 68px; background: linear-gradient(135deg, #003399, #001a4d); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: white; margin-bottom: 20px; box-shadow: 0 12px 32px rgba(0,51,153,0.30); animation: float 4s ease-in-out infinite; }
@@ -303,7 +307,10 @@
         <div class="brand-tag">Copywriter AI · Angelo Parodi</div>
       </div>
     </div>
-    <button class="logout-btn" id="header-logout" style="display:none;" onclick="handleLogout()">Esci</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="usage-btn" id="header-usage" style="display:none;" onclick="openUsageModal()" title="Utilizzo API">📊</button>
+      <button class="logout-btn" id="header-logout" style="display:none;" onclick="handleLogout()">Esci</button>
+    </div>
   </div>
 </header>
 
@@ -813,6 +820,40 @@
   </div>
 </div>
 
+<!-- USAGE MODAL -->
+<div id="usage-modal" style="display:none;position:fixed;inset:0;z-index:80;background:rgba(10,20,60,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)closeUsageModal()">
+  <div style="background:white;border-radius:32px;box-shadow:0 32px 80px rgba(0,51,153,0.18);border:1px solid rgba(0,51,153,0.08);padding:32px;width:100%;max-width:460px;position:relative;max-height:85vh;overflow-y:auto;">
+    <button onclick="closeUsageModal()" style="position:absolute;top:16px;right:16px;background:rgba(0,51,153,0.06);border:1.5px solid rgba(0,51,153,0.12);width:32px;height:32px;border-radius:10px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--blue);">✕</button>
+    <div style="font-size:22px;font-weight:900;color:var(--blue);margin-bottom:4px;letter-spacing:-0.5px;">📊 Utilizzo API</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px;font-weight:500;" id="usage-month-label">Questo mese</div>
+    <div id="usage-loading" style="text-align:center;padding:24px 0;color:var(--text-muted);font-size:13px;font-weight:500;">
+      <span class="spinner spinner-blue" style="display:inline-block;margin-right:8px;"></span>Caricamento…
+    </div>
+    <div id="usage-content" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div style="background:rgba(0,51,153,0.05);border-radius:18px;padding:14px;text-align:center;">
+          <div style="font-size:24px;font-weight:900;color:var(--blue);" id="usage-calls">0</div>
+          <div style="font-size:10px;color:var(--text-muted);font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Chiamate</div>
+        </div>
+        <div style="background:rgba(0,51,153,0.05);border-radius:18px;padding:14px;text-align:center;">
+          <div style="font-size:24px;font-weight:900;color:var(--blue);" id="usage-tokens">0</div>
+          <div style="font-size:10px;color:var(--text-muted);font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Token totali</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#fefce8,#fff8e0);border:1.5px solid rgba(255,214,0,0.3);border-radius:18px;padding:14px;text-align:center;">
+          <div style="font-size:24px;font-weight:900;color:#92400e;" id="usage-cost">$0</div>
+          <div style="font-size:10px;color:var(--text-muted);font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Costo stimato</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Per tipo</div>
+      <div id="usage-breakdown" style="border:1px solid rgba(0,51,153,0.07);border-radius:16px;overflow:hidden;"></div>
+      <div style="background:rgba(0,51,153,0.04);border-radius:14px;padding:12px 14px;font-size:12px;color:var(--text-muted);line-height:1.6;font-weight:500;margin-top:16px;">
+        💡 Gemini 2.0 Flash: $0.10/1M token input · $0.40/1M token output. I dati vengono registrati dal momento del deploy della nuova versione.
+      </div>
+    </div>
+    <div id="usage-error" class="msg" style="margin-top:10px;"></div>
+  </div>
+</div>
+
 <script>
   const CONFIG = {
     supabaseUrl: "https://ecgpfwiojhdtcmzqbtdd.supabase.co",
@@ -886,6 +927,7 @@
     document.getElementById("login-view").style.display = "none";
     document.getElementById("app-view").style.display = "block";
     document.getElementById("header-logout").style.display = "block";
+    document.getElementById("header-usage").style.display = "inline-flex";
     document.getElementById("main-nav").style.display = "grid";
     document.body.classList.add("app-active");
     try {
@@ -907,8 +949,10 @@
   function handleLogout() {
     authToken = null; lastId = null; selectedTrend = null;
     sessionStorage.clear();
+    closeUsageModal();
     document.getElementById("app-view").style.display = "none";
     document.getElementById("header-logout").style.display = "none";
+    document.getElementById("header-usage").style.display = "none";
     document.getElementById("main-nav").style.display = "none";
     document.body.classList.remove("app-active");
     document.getElementById("results").style.display = "none";
@@ -1649,6 +1693,65 @@
   function flashSuccess(el, msg) { showMsg(el, msg, "success"); setTimeout(() => hideMsg(el), 4000); }
 
   document.getElementById("password-input").addEventListener("keydown", e => { if (e.key === "Enter") handleLogin(); });
+
+  // ── USAGE MODAL ──
+
+  async function openUsageModal() {
+    const modal = document.getElementById("usage-modal");
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    await loadUsageStats();
+  }
+
+  function closeUsageModal() {
+    const modal = document.getElementById("usage-modal");
+    if (modal) { modal.style.display = "none"; document.body.style.overflow = ""; }
+  }
+
+  async function loadUsageStats() {
+    const loading = document.getElementById("usage-loading");
+    const content = document.getElementById("usage-content");
+    const err = document.getElementById("usage-error");
+    loading.style.display = "block";
+    content.style.display = "none";
+    hideMsg(err);
+    try {
+      const data = await api("usage", {});
+      const now = new Date();
+      const mese = now.toLocaleDateString("it-IT", { month: "long", year: "numeric" });
+      document.getElementById("usage-month-label").textContent = mese.charAt(0).toUpperCase() + mese.slice(1);
+      document.getElementById("usage-calls").textContent = (data.total_calls || 0).toLocaleString("it-IT");
+      document.getElementById("usage-tokens").textContent = fmtTokens(data.total_tokens || 0);
+      const cost = data.total_cost_usd || 0;
+      document.getElementById("usage-cost").textContent = cost < 0.001 ? "< $0.001" : "$" + cost.toFixed(3);
+      const types = { social: "📱 Social", newsletter: "📧 Newsletter", ricetta: "🍝 Ricetta", ricetta_idea: "💡 Idee ricette" };
+      const breakdown = data.by_tipo || [];
+      const bdEl = document.getElementById("usage-breakdown");
+      if (!breakdown.length) {
+        bdEl.innerHTML = '<div class="empty-state" style="padding:14px;">Nessuna generazione registrata ancora.</div>';
+      } else {
+        bdEl.innerHTML = breakdown.map((b, i) => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;${i < breakdown.length - 1 ? "border-bottom:1px solid rgba(0,51,153,0.06);" : ""}font-size:13px;">
+            <span style="font-weight:700;color:var(--text);">${escHtml(types[b.tipo] || b.tipo)}</span>
+            <div style="display:flex;gap:14px;align-items:center;">
+              <span style="color:var(--text-muted);font-weight:600;">${b.calls} ${b.calls === 1 ? "chiamata" : "chiamate"}</span>
+              <span style="color:var(--text-muted);font-weight:600;font-size:12px;">${fmtTokens(b.total_tokens)}</span>
+            </div>
+          </div>`).join("");
+      }
+      loading.style.display = "none";
+      content.style.display = "block";
+    } catch (e) {
+      loading.style.display = "none";
+      showMsg(err, e.message || "Impossibile caricare i dati di utilizzo.", "error");
+    }
+  }
+
+  function fmtTokens(n) {
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+    if (n >= 1_000) return (n / 1_000).toFixed(1) + "k";
+    return n.toLocaleString("it-IT");
+  }
 </script>
 </body>
 </html>

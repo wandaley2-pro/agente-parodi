@@ -17,6 +17,7 @@
 5. Ripeti con `supabase/migrations/002_hashtags_framework.sql` (hashtag del team + framework tracking)
 6. Ripeti con `supabase/migrations/003_strategia_aforismi.sql` (strategia editoriale + aforismi)
 7. Ripeti con `supabase/migrations/004_giornate.sql` (calendario giornate mondiali/nazionali)
+8. Ripeti con `supabase/migrations/006_usage.sql` (tabella tracciamento utilizzo API)
 
 ---
 
@@ -48,6 +49,7 @@ supabase functions deploy generate
 supabase functions deploy history
 supabase functions deploy memoria
 supabase functions deploy trends
+supabase functions deploy usage
 ```
 
 ### Verifica
